@@ -1,0 +1,84 @@
+{"id": "fa-01", "library": "fastapi", "question": "How do I run some code after the response is sent, like emailing the user?", "expected": ["https://fastapi.tiangolo.com/tutorial/background-tasks/"]}
+{"id": "fa-02", "library": "fastapi", "question": "My app is getting huge, how do I split endpoints across several modules?", "expected": ["https://fastapi.tiangolo.com/tutorial/bigger-applications/"]}
+{"id": "fa-03", "library": "fastapi", "question": "Add validation and a description to one attribute of a request body model", "expected": ["https://fastapi.tiangolo.com/tutorial/body-fields/"]}
+{"id": "fa-04", "library": "fastapi", "question": "Accept two separate JSON objects, an item and a user, in one request", "expected": ["https://fastapi.tiangolo.com/tutorial/body-multiple-params/"]}
+{"id": "fa-05", "library": "fastapi", "question": "Only change the fields the client actually sent when updating a record", "expected": ["https://fastapi.tiangolo.com/tutorial/body-updates/"]}
+{"id": "fa-06", "library": "fastapi", "question": "Read a value the browser stored as a cookie in my endpoint", "expected": ["https://fastapi.tiangolo.com/tutorial/cookie-params/", "https://fastapi.tiangolo.com/tutorial/cookie-param-models/"]}
+{"id": "fa-07", "library": "fastapi", "question": "My React app on localhost:3000 gets blocked when calling the API", "expected": ["https://fastapi.tiangolo.com/tutorial/cors/"]}
+{"id": "fa-08", "library": "fastapi", "question": "Step through my app with breakpoints in an IDE", "expected": ["https://fastapi.tiangolo.com/tutorial/debugging/"]}
+{"id": "fa-09", "library": "fastapi", "question": "Can a dependency be a class instead of a function?", "expected": ["https://fastapi.tiangolo.com/tutorial/dependencies/classes-as-dependencies/"]}
+{"id": "fa-10", "library": "fastapi", "question": "Open a database session for each request and always close it afterwards", "expected": ["https://fastapi.tiangolo.com/tutorial/dependencies/dependencies-with-yield/", "https://fastapi.tiangolo.com/tutorial/sql-databases/"]}
+{"id": "fa-11", "library": "fastapi", "question": "Run an API key check for every endpoint in the application", "expected": ["https://fastapi.tiangolo.com/tutorial/dependencies/global-dependencies/", "https://fastapi.tiangolo.com/tutorial/dependencies/dependencies-in-path-operation-decorators/"]}
+{"id": "fa-12", "library": "fastapi", "question": "Turn a model with datetime fields into something json.dumps accepts", "expected": ["https://fastapi.tiangolo.com/tutorial/encoder/"]}
+{"id": "fa-13", "library": "fastapi", "question": "Use one model for input with a password and another for output without it", "expected": ["https://fastapi.tiangolo.com/tutorial/extra-models/", "https://fastapi.tiangolo.com/tutorial/response-model/"]}
+{"id": "fa-14", "library": "fastapi", "question": "Return a 404 with a message when the item doesn't exist", "expected": ["https://fastapi.tiangolo.com/tutorial/handling-errors/"]}
+{"id": "fa-15", "library": "fastapi", "question": "How do I get the User-Agent the client sent?", "expected": ["https://fastapi.tiangolo.com/tutorial/header-params/", "https://fastapi.tiangolo.com/tutorial/header-param-models/"]}
+{"id": "fa-16", "library": "fastapi", "question": "Change the title, version and description shown on the docs page", "expected": ["https://fastapi.tiangolo.com/tutorial/metadata/"]}
+{"id": "fa-17", "library": "fastapi", "question": "Measure how long each request takes and put it in a response header", "expected": ["https://fastapi.tiangolo.com/tutorial/middleware/"]}
+{"id": "fa-18", "library": "fastapi", "question": "Group endpoints in the docs and give each a summary", "expected": ["https://fastapi.tiangolo.com/tutorial/path-operation-configuration/", "https://fastapi.tiangolo.com/tutorial/metadata/"]}
+{"id": "fa-19", "library": "fastapi", "question": "Make sure an integer id in the URL is greater than zero", "expected": ["https://fastapi.tiangolo.com/tutorial/path-params-numeric-validations/"]}
+{"id": "fa-20", "library": "fastapi", "question": "Limit a search string parameter to 50 characters and match a regex", "expected": ["https://fastapi.tiangolo.com/tutorial/query-params-str-validations/"]}
+{"id": "fa-21", "library": "fastapi", "question": "Let users upload an image to an endpoint", "expected": ["https://fastapi.tiangolo.com/tutorial/request-files/", "https://fastapi.tiangolo.com/tutorial/request-forms-and-files/"]}
+{"id": "fa-22", "library": "fastapi", "question": "Handle an HTML login form that posts username and password fields", "expected": ["https://fastapi.tiangolo.com/tutorial/request-forms/", "https://fastapi.tiangolo.com/tutorial/request-form-models/"]}
+{"id": "fa-23", "library": "fastapi", "question": "Stop internal fields from leaking into the JSON I return", "expected": ["https://fastapi.tiangolo.com/tutorial/response-model/"]}
+{"id": "fa-24", "library": "fastapi", "question": "Make a create endpoint answer with 201 instead of 200", "expected": ["https://fastapi.tiangolo.com/tutorial/response-status-code/", "https://fastapi.tiangolo.com/tutorial/path-operation-configuration/"]}
+{"id": "fa-25", "library": "fastapi", "question": "Hash passwords and issue signed access tokens on login", "expected": ["https://fastapi.tiangolo.com/tutorial/security/oauth2-jwt/"]}
+{"id": "fa-26", "library": "fastapi", "question": "Store data in a relational database with SQLModel", "expected": ["https://fastapi.tiangolo.com/tutorial/sql-databases/"]}
+{"id": "fa-27", "library": "fastapi", "question": "Serve a folder of CSS and images", "expected": ["https://fastapi.tiangolo.com/tutorial/static-files/"]}
+{"id": "fa-28", "library": "fastapi", "question": "Write tests that call my endpoints without starting a server", "expected": ["https://fastapi.tiangolo.com/tutorial/testing/", "https://fastapi.tiangolo.com/advanced/async-tests/"]}
+{"id": "fa-29", "library": "fastapi", "question": "Load a machine learning model once when the app starts and free it on shutdown", "expected": ["https://fastapi.tiangolo.com/advanced/events/"]}
+{"id": "fa-30", "library": "fastapi", "question": "Swap a real dependency for a fake one during tests", "expected": ["https://fastapi.tiangolo.com/advanced/testing-dependencies/"]}
+{"id": "fa-31", "library": "fastapi", "question": "Read configuration from environment variables with type checking", "expected": ["https://fastapi.tiangolo.com/advanced/settings/"]}
+{"id": "fa-32", "library": "fastapi", "question": "Run an existing Flask app inside my FastAPI app", "expected": ["https://fastapi.tiangolo.com/advanced/wsgi/"]}
+{"id": "fa-33", "library": "fastapi", "question": "Two-way real-time messages between the browser and server", "expected": ["https://fastapi.tiangolo.com/advanced/websockets/"]}
+{"id": "fa-34", "library": "fastapi", "question": "Give tokens fine-grained permissions like read:items", "expected": ["https://fastapi.tiangolo.com/advanced/security/oauth2-scopes/"]}
+{"id": "fa-35", "library": "fastapi", "question": "Return an HTML page instead of JSON", "expected": ["https://fastapi.tiangolo.com/advanced/custom-response/", "https://fastapi.tiangolo.com/advanced/templates/"]}
+{"id": "fa-36", "library": "fastapi", "question": "Set a cookie on the response I send back", "expected": ["https://fastapi.tiangolo.com/advanced/response-cookies/"]}
+{"id": "fa-37", "library": "fastapi", "question": "Docs page broken when the app runs behind nginx under a /api prefix", "expected": ["https://fastapi.tiangolo.com/advanced/behind-a-proxy/"]}
+{"id": "fa-38", "library": "fastapi", "question": "Send generated data to the client bit by bit instead of all at once", "expected": ["https://fastapi.tiangolo.com/advanced/stream-data/", "https://fastapi.tiangolo.com/advanced/custom-response/", "https://fastapi.tiangolo.com/tutorial/stream-json-lines/", "https://fastapi.tiangolo.com/tutorial/server-sent-events/"]}
+{"id": "fa-39", "library": "fastapi", "question": "Generate a TypeScript client for my API automatically", "expected": ["https://fastapi.tiangolo.com/advanced/generate-clients/"]}
+{"id": "fa-40", "library": "fastapi", "question": "Protect an endpoint with the browser's username and password popup", "expected": ["https://fastapi.tiangolo.com/advanced/security/http-basic-auth/"]}
+{"id": "hx-01", "library": "httpx", "question": "Use a shorter connect timeout but a longer read timeout", "expected": ["https://www.python-httpx.org/advanced/timeouts/"]}
+{"id": "hx-02", "library": "httpx", "question": "Send all requests through my company's proxy server", "expected": ["https://www.python-httpx.org/advanced/proxies/", "https://www.python-httpx.org/environment_variables/"]}
+{"id": "hx-03", "library": "httpx", "question": "Trust a custom certificate authority bundle for HTTPS", "expected": ["https://www.python-httpx.org/advanced/ssl/"]}
+{"id": "hx-04", "library": "httpx", "question": "Make many requests concurrently with asyncio", "expected": ["https://www.python-httpx.org/async/"]}
+{"id": "hx-05", "library": "httpx", "question": "Turn on HTTP/2", "expected": ["https://www.python-httpx.org/http2/"]}
+{"id": "hx-06", "library": "httpx", "question": "Reuse connections and share headers across many requests", "expected": ["https://www.python-httpx.org/advanced/clients/"]}
+{"id": "hx-07", "library": "httpx", "question": "Call a function every time a request is sent or a response arrives", "expected": ["https://www.python-httpx.org/advanced/event-hooks/"]}
+{"id": "hx-08", "library": "httpx", "question": "Cap how many connections the pool keeps open", "expected": ["https://www.python-httpx.org/advanced/resource-limits/"]}
+{"id": "hx-09", "library": "httpx", "question": "Send requests straight to my ASGI app in tests without a network", "expected": ["https://www.python-httpx.org/advanced/transports/"]}
+{"id": "hx-10", "library": "httpx", "question": "Why doesn't httpx follow redirects like requests does?", "expected": ["https://www.python-httpx.org/compatibility/", "https://www.python-httpx.org/quickstart/"]}
+{"id": "hx-11", "library": "httpx", "question": "Which exception do I catch when a request times out?", "expected": ["https://www.python-httpx.org/exceptions/", "https://www.python-httpx.org/advanced/timeouts/"]}
+{"id": "hx-12", "library": "httpx", "question": "Pass query string parameters and decode a JSON response", "expected": ["https://www.python-httpx.org/quickstart/"]}
+{"id": "hx-13", "library": "httpx", "question": "Implement a custom auth flow that refreshes a token", "expected": ["https://www.python-httpx.org/advanced/authentication/"]}
+{"id": "hx-14", "library": "httpx", "question": "Response text has garbled characters because the charset is wrong", "expected": ["https://www.python-httpx.org/advanced/text-encodings/"]}
+{"id": "hx-15", "library": "httpx", "question": "See debug output of what the client sends on the wire", "expected": ["https://www.python-httpx.org/logging/"]}
+{"id": "hx-16", "library": "httpx", "question": "Pick up proxy settings from HTTPS_PROXY", "expected": ["https://www.python-httpx.org/environment_variables/", "https://www.python-httpx.org/advanced/proxies/"]}
+{"id": "hx-17", "library": "httpx", "question": "Is there a plugin that adds HTTP caching?", "expected": ["https://www.python-httpx.org/third_party_packages/"]}
+{"id": "hx-18", "library": "httpx", "question": "Download a big file without loading it all into memory", "expected": ["https://www.python-httpx.org/quickstart/", "https://www.python-httpx.org/async/", "https://www.python-httpx.org/api/"]}
+{"id": "hx-19", "library": "httpx", "question": "HTTPS requests through a proxy fail with a handshake timeout", "expected": ["https://www.python-httpx.org/troubleshooting/"]}
+{"id": "hx-20", "library": "httpx", "question": "Override the SNI hostname for a single request", "expected": ["https://www.python-httpx.org/advanced/extensions/"]}
+{"id": "ty-01", "library": "typer", "question": "Give a positional argument a default so it can be left out", "expected": ["https://typer.tiangolo.com/tutorial/arguments/default/", "https://typer.tiangolo.com/tutorial/arguments/optional/"]}
+{"id": "ty-02", "library": "typer", "question": "Fall back to an environment variable when an argument isn't passed", "expected": ["https://typer.tiangolo.com/tutorial/arguments/envvar/"]}
+{"id": "ty-03", "library": "typer", "question": "Build a tool with several commands like create and delete", "expected": ["https://typer.tiangolo.com/tutorial/commands/"]}
+{"id": "ty-04", "library": "typer", "question": "Add a global --verbose flag that runs before any command", "expected": ["https://typer.tiangolo.com/tutorial/commands/callback/"]}
+{"id": "ty-05", "library": "typer", "question": "Add a --version flag that prints and exits before other parameters are checked", "expected": ["https://typer.tiangolo.com/tutorial/options/version/"]}
+{"id": "ty-06", "library": "typer", "question": "Ask for a password without showing what's typed, and confirm it", "expected": ["https://typer.tiangolo.com/tutorial/options/password/"]}
+{"id": "ty-07", "library": "typer", "question": "Interactively ask for an option's value when it's missing", "expected": ["https://typer.tiangolo.com/tutorial/options/prompt/"]}
+{"id": "ty-08", "library": "typer", "question": "Give an option a one-letter alias like -n", "expected": ["https://typer.tiangolo.com/tutorial/options/name/"]}
+{"id": "ty-09", "library": "typer", "question": "Only allow a parameter to be one of a few fixed values", "expected": ["https://typer.tiangolo.com/tutorial/parameter-types/enum/"]}
+{"id": "ty-10", "library": "typer", "question": "Accept a file path and make sure it exists", "expected": ["https://typer.tiangolo.com/tutorial/parameter-types/path/"]}
+{"id": "ty-11", "library": "typer", "question": "A flag pair like --force and --no-force", "expected": ["https://typer.tiangolo.com/tutorial/parameter-types/bool/"]}
+{"id": "ty-12", "library": "typer", "question": "Let users pass --user several times and get a list", "expected": ["https://typer.tiangolo.com/tutorial/multiple-values/multiple-options/"]}
+{"id": "ty-13", "library": "typer", "question": "Show a progress bar while processing items", "expected": ["https://typer.tiangolo.com/tutorial/progressbar/"]}
+{"id": "ty-14", "library": "typer", "question": "Print colored output and tables in the terminal", "expected": ["https://typer.tiangolo.com/tutorial/printing/"]}
+{"id": "ty-15", "library": "typer", "question": "Stop the program with a non-zero exit code", "expected": ["https://typer.tiangolo.com/tutorial/terminating/"]}
+{"id": "ty-16", "library": "typer", "question": "Test my CLI with pytest", "expected": ["https://typer.tiangolo.com/tutorial/testing/"]}
+{"id": "ty-17", "library": "typer", "question": "Nest commands so I can run app users create", "expected": ["https://typer.tiangolo.com/tutorial/subcommands/add-typer/", "https://typer.tiangolo.com/tutorial/subcommands/", "https://typer.tiangolo.com/tutorial/subcommands/single-file/", "https://typer.tiangolo.com/tutorial/subcommands/nested-subcommands/"]}
+{"id": "ty-18", "library": "typer", "question": "Tab-complete possible values for an option in the shell", "expected": ["https://typer.tiangolo.com/tutorial/options-autocompletion/"]}
+{"id": "ty-19", "library": "typer", "question": "Validate an option's value with my own function", "expected": ["https://typer.tiangolo.com/tutorial/options/callback-and-context/"]}
+{"id": "ty-20", "library": "typer", "question": "Where should my CLI keep its config file on the user's machine?", "expected": ["https://typer.tiangolo.com/tutorial/app-dir/"]}
+{"id": "ty-21", "library": "typer", "question": "Count how many times -v was given to set verbosity", "expected": ["https://typer.tiangolo.com/tutorial/parameter-types/number/"]}
+{"id": "ty-22", "library": "typer", "question": "Ask the user to confirm with yes or no before deleting", "expected": ["https://typer.tiangolo.com/tutorial/prompt/", "https://typer.tiangolo.com/tutorial/options/prompt/"]}
+{"id": "ty-23", "library": "typer", "question": "Parse a date argument in a custom format", "expected": ["https://typer.tiangolo.com/tutorial/parameter-types/datetime/"]}
+{"id": "ty-24", "library": "typer", "question": "Hide local variables from the error output when my CLI crashes", "expected": ["https://typer.tiangolo.com/tutorial/exceptions/"]}

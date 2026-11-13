@@ -1,0 +1,3456 @@
+{
+  "meta": {
+    "questions": 84,
+    "skipped": [],
+    "k": 10,
+    "embedder": {
+      "provider": "local",
+      "model": "BAAI/bge-small-en-v1.5",
+      "batch_size": 32,
+      "base_url": "https://api.openai.com/v1",
+      "api_key_env": "OPENAI_API_KEY",
+      "dim": null,
+      "query_prefix": null,
+      "cache_dir": null
+    },
+    "search": {
+      "mode": "hybrid",
+      "candidates": 50,
+      "rrf_k": 60,
+      "rerank": false,
+      "reranker_model": "Xenova/ms-marco-MiniLM-L-6-v2",
+      "rerank_candidates": 20
+    },
+    "chunking": {
+      "min_tokens": 300,
+      "max_tokens": 512,
+      "overlap": 0.12
+    }
+  },
+  "reports": [
+    {
+      "label": "vector",
+      "n": 84,
+      "k": 10,
+      "recall": {
+        "1": 0.7619047619047619,
+        "3": 0.8809523809523809,
+        "5": 0.9166666666666666,
+        "10": 0.9523809523809523
+      },
+      "mrr": 0.8320578231292517,
+      "p50_ms": 34.46615021675825,
+      "p95_ms": 113.66435498930514,
+      "results": [
+        {
+          "id": "fa-01",
+          "first_relevant_rank": 1,
+          "latency_ms": 19.701499491930008,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/tutorial/background-tasks/#background-tasks",
+            "https://fastapi.tiangolo.com/advanced/custom-response/#custom-response-html-stream-file-others",
+            "https://fastapi.tiangolo.com/tutorial/response-status-code/#response-status-code"
+          ]
+        },
+        {
+          "id": "fa-02",
+          "first_relevant_rank": 1,
+          "latency_ms": 25.088599883019924,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/tutorial/bigger-applications/#bigger-applications-multiple-files",
+            "https://fastapi.tiangolo.com/tutorial/bigger-applications/#another-module-with-apirouter",
+            "https://fastapi.tiangolo.com/tutorial/bigger-applications/#bigger-applications-multiple-files"
+          ]
+        },
+        {
+          "id": "fa-03",
+          "first_relevant_rank": 5,
+          "latency_ms": 18.67010071873665,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/tutorial/body-multiple-params/#embed-a-single-body-parameter",
+            "https://fastapi.tiangolo.com/tutorial/body-nested-models/#special-types-and-validation",
+            "https://fastapi.tiangolo.com/tutorial/schema-extra-example/#body-with-examples"
+          ]
+        },
+        {
+          "id": "fa-04",
+          "first_relevant_rank": 2,
+          "latency_ms": 26.340399868786335,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/tutorial/schema-extra-example/#examples-in-json-schema-openapi",
+            "https://fastapi.tiangolo.com/tutorial/body-multiple-params/#multiple-body-parameters",
+            "https://fastapi.tiangolo.com/tutorial/schema-extra-example/#body-with-examples"
+          ]
+        },
+        {
+          "id": "fa-05",
+          "first_relevant_rank": 1,
+          "latency_ms": 21.06770034879446,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/tutorial/body-updates/#using-pydantics-exclude-unset-parameter",
+            "https://fastapi.tiangolo.com/tutorial/body-updates/#partial-updates-recap",
+            "https://fastapi.tiangolo.com/tutorial/request-forms/#form-data"
+          ]
+        },
+        {
+          "id": "fa-06",
+          "first_relevant_rank": 1,
+          "latency_ms": 24.262200109660625,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/tutorial/cookie-params/#cookie-parameters",
+            "https://fastapi.tiangolo.com/tutorial/cookie-param-models/#check-the-docs",
+            "https://fastapi.tiangolo.com/tutorial/cookie-params/#cookie-parameters"
+          ]
+        },
+        {
+          "id": "fa-07",
+          "first_relevant_rank": 10,
+          "latency_ms": 26.859700679779053,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/advanced/websockets/#websockets",
+            "https://fastapi.tiangolo.com/advanced/behind-a-proxy/#check-the-docs-ui",
+            "https://fastapi.tiangolo.com/advanced/behind-a-proxy/#behind-a-proxy"
+          ]
+        },
+        {
+          "id": "fa-08",
+          "first_relevant_rank": 2,
+          "latency_ms": 23.452499881386757,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/tutorial/first-steps/#first-steps",
+            "https://fastapi.tiangolo.com/tutorial/debugging/#debugging",
+            "https://fastapi.tiangolo.com/tutorial/bigger-applications/#bigger-applications-multiple-files"
+          ]
+        },
+        {
+          "id": "fa-09",
+          "first_relevant_rank": 1,
+          "latency_ms": 18.452699296176434,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/tutorial/dependencies/classes-as-dependencies/#what-makes-a-dependency",
+            "https://fastapi.tiangolo.com/tutorial/dependencies/classes-as-dependencies/#classes-as-dependencies_1",
+            "https://fastapi.tiangolo.com/tutorial/dependencies/classes-as-dependencies/#classes-as-dependencies_1"
+          ]
+        },
+        {
+          "id": "fa-10",
+          "first_relevant_rank": 1,
+          "latency_ms": 18.99959985166788,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/tutorial/sql-databases/#create-a-session-dependency",
+            "https://fastapi.tiangolo.com/tutorial/sql-databases/#create-the-app-with-a-single-model",
+            "https://fastapi.tiangolo.com/advanced/advanced-dependencies/#use-cases-with-early-exit-code"
+          ]
+        },
+        {
+          "id": "fa-11",
+          "first_relevant_rank": null,
+          "latency_ms": 41.570100001990795,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/advanced/testing-events/#testing-events-lifespan-and-startup-shutdown",
+            "https://fastapi.tiangolo.com/advanced/wsgi/#check-it",
+            "https://fastapi.tiangolo.com/tutorial/security/first-steps/#fastapis-oauth2passwordbearer"
+          ]
+        },
+        {
+          "id": "fa-12",
+          "first_relevant_rank": 1,
+          "latency_ms": 18.595200031995773,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/tutorial/encoder/#json-compatible-encoder",
+            "https://fastapi.tiangolo.com/tutorial/body/#request-body",
+            "https://fastapi.tiangolo.com/tutorial/body/#request-body"
+          ]
+        },
+        {
+          "id": "fa-13",
+          "first_relevant_rank": 1,
+          "latency_ms": 18.273199908435345,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/tutorial/extra-models/#extra-models",
+            "https://fastapi.tiangolo.com/tutorial/extra-models/#about-user-in-model-dump",
+            "https://fastapi.tiangolo.com/tutorial/response-model/#add-an-output-model"
+          ]
+        },
+        {
+          "id": "fa-14",
+          "first_relevant_rank": 2,
+          "latency_ms": 17.725300043821335,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/tutorial/frontend/#frontend",
+            "https://fastapi.tiangolo.com/tutorial/handling-errors/#use-httpexception",
+            "https://fastapi.tiangolo.com/tutorial/handling-errors/#override-the-httpexception-error-handler"
+          ]
+        },
+        {
+          "id": "fa-15",
+          "first_relevant_rank": null,
+          "latency_ms": 16.75640046596527,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/tutorial/security/get-current-user/#get-the-user",
+            "https://fastapi.tiangolo.com/tutorial/security/get-current-user/#get-current-user",
+            "https://fastapi.tiangolo.com/tutorial/security/get-current-user/#inject-the-current-user"
+          ]
+        },
+        {
+          "id": "fa-16",
+          "first_relevant_rank": 1,
+          "latency_ms": 17.266600392758846,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/tutorial/metadata/#metadata-for-api",
+            "https://fastapi.tiangolo.com/tutorial/schema-extra-example/#examples-in-json-schema-openapi",
+            "https://fastapi.tiangolo.com/tutorial/schema-extra-example/#using-the-openapi-examples-parameter"
+          ]
+        },
+        {
+          "id": "fa-17",
+          "first_relevant_rank": 2,
+          "latency_ms": 18.55359971523285,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/advanced/response-headers/#response-headers",
+            "https://fastapi.tiangolo.com/tutorial/middleware/#middleware",
+            "https://fastapi.tiangolo.com/advanced/opentelemetry/#customize-telemetry"
+          ]
+        },
+        {
+          "id": "fa-18",
+          "first_relevant_rank": 1,
+          "latency_ms": 19.546800293028355,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/tutorial/metadata/#metadata-for-api",
+            "https://fastapi.tiangolo.com/tutorial/path-operation-configuration/#path-operation-configuration",
+            "https://fastapi.tiangolo.com/tutorial/metadata/#metadata-for-tags"
+          ]
+        },
+        {
+          "id": "fa-19",
+          "first_relevant_rank": 1,
+          "latency_ms": 20.75390052050352,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/tutorial/path-params-numeric-validations/#number-validations-greater-than-or-equal",
+            "https://fastapi.tiangolo.com/tutorial/path-params-numeric-validations/#number-validations-floats-greater-than-and-less-than",
+            "https://fastapi.tiangolo.com/tutorial/path-params/#path-parameters"
+          ]
+        },
+        {
+          "id": "fa-20",
+          "first_relevant_rank": 1,
+          "latency_ms": 22.401800379157066,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/tutorial/query-params-str-validations/#add-regular-expressions",
+            "https://fastapi.tiangolo.com/tutorial/query-params-str-validations/#add-query-to-annotated-in-the-q-parameter",
+            "https://fastapi.tiangolo.com/tutorial/query-params-str-validations/#recap"
+          ]
+        },
+        {
+          "id": "fa-21",
+          "first_relevant_rank": 2,
+          "latency_ms": 19.066800363361835,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/advanced/stream-data/#a-custom-pngstreamingresponse",
+            "https://fastapi.tiangolo.com/tutorial/request-files/#request-files",
+            "https://fastapi.tiangolo.com/tutorial/request-files/#uploadfile"
+          ]
+        },
+        {
+          "id": "fa-22",
+          "first_relevant_rank": 1,
+          "latency_ms": 20.632599480450153,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/tutorial/request-forms/#define-form-parameters",
+            "https://fastapi.tiangolo.com/tutorial/request-forms/#form-data",
+            "https://fastapi.tiangolo.com/tutorial/security/simple-oauth2/#code-to-get-the-username-and-password"
+          ]
+        },
+        {
+          "id": "fa-23",
+          "first_relevant_rank": null,
+          "latency_ms": 26.836100034415722,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/tutorial/stream-json-lines/#stream-json-lines",
+            "https://fastapi.tiangolo.com/tutorial/request-form-models/#form-models",
+            "https://fastapi.tiangolo.com/advanced/json-base64-bytes/#pydantic-bytes"
+          ]
+        },
+        {
+          "id": "fa-24",
+          "first_relevant_rank": 2,
+          "latency_ms": 21.46879956126213,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/advanced/response-change-status-code/#response-change-status-code",
+            "https://fastapi.tiangolo.com/tutorial/response-status-code/#response-status-code",
+            "https://fastapi.tiangolo.com/tutorial/response-status-code/#about-http-status-codes"
+          ]
+        },
+        {
+          "id": "fa-25",
+          "first_relevant_rank": 1,
+          "latency_ms": 32.08309970796108,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/tutorial/security/oauth2-jwt/#oauth2-with-password-and-hashing-bearer-with-jwt-tokens",
+            "https://fastapi.tiangolo.com/tutorial/security/oauth2-jwt/#oauth2-with-password-and-hashing-bearer-with-jwt-tokens",
+            "https://fastapi.tiangolo.com/tutorial/security/oauth2-jwt/#oauth2-with-password-and-hashing-bearer-with-jwt-tokens"
+          ]
+        },
+        {
+          "id": "fa-26",
+          "first_relevant_rank": 1,
+          "latency_ms": 26.25450026243925,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/tutorial/sql-databases/#sql-relational-databases",
+            "https://fastapi.tiangolo.com/tutorial/sql-databases/#sql-relational-databases",
+            "https://fastapi.tiangolo.com/tutorial/sql-databases/#create-multiple-models"
+          ]
+        },
+        {
+          "id": "fa-27",
+          "first_relevant_rank": 4,
+          "latency_ms": 23.622100241482258,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/advanced/templates/#templates",
+            "https://fastapi.tiangolo.com/tutorial/#run-the-code",
+            "https://fastapi.tiangolo.com/tutorial/first-steps/#first-steps"
+          ]
+        },
+        {
+          "id": "fa-28",
+          "first_relevant_rank": 3,
+          "latency_ms": 33.304800279438496,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/advanced/testing-events/#testing-events-lifespan-and-startup-shutdown",
+            "https://fastapi.tiangolo.com/advanced/behind-a-proxy/#testing-locally-with-traefik",
+            "https://fastapi.tiangolo.com/advanced/async-tests/#in-detail"
+          ]
+        },
+        {
+          "id": "fa-29",
+          "first_relevant_rank": 1,
+          "latency_ms": 114.83410000801086,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/advanced/events/#use-case",
+            "https://fastapi.tiangolo.com/advanced/events/#lifespan",
+            "https://fastapi.tiangolo.com/advanced/testing-events/#testing-events-lifespan-and-startup-shutdown"
+          ]
+        },
+        {
+          "id": "fa-30",
+          "first_relevant_rank": 1,
+          "latency_ms": 35.167899914085865,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/advanced/testing-dependencies/#testing-dependencies-with-overrides",
+            "https://fastapi.tiangolo.com/advanced/testing-dependencies/#use-the-app-dependency-overrides-attribute",
+            "https://fastapi.tiangolo.com/advanced/testing-dependencies/#use-the-app-dependency-overrides-attribute"
+          ]
+        },
+        {
+          "id": "fa-31",
+          "first_relevant_rank": 1,
+          "latency_ms": 106.24559968709946,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/advanced/settings/#settings-and-environment-variables",
+            "https://fastapi.tiangolo.com/advanced/settings/#reading-a-env-file",
+            "https://fastapi.tiangolo.com/advanced/settings/#pydantic-settings"
+          ]
+        },
+        {
+          "id": "fa-32",
+          "first_relevant_rank": 7,
+          "latency_ms": 72.79390003532171,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/tutorial/bigger-applications/#bigger-applications-multiple-files",
+            "https://fastapi.tiangolo.com/tutorial/bigger-applications/#the-main-fastapi",
+            "https://fastapi.tiangolo.com/tutorial/first-steps/#first-steps"
+          ]
+        },
+        {
+          "id": "fa-33",
+          "first_relevant_rank": 1,
+          "latency_ms": 47.51240089535713,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/advanced/websockets/#await-for-messages-and-send-messages",
+            "https://fastapi.tiangolo.com/advanced/websockets/#in-production",
+            "https://fastapi.tiangolo.com/advanced/websockets/#handling-disconnections-and-multiple-clients"
+          ]
+        },
+        {
+          "id": "fa-34",
+          "first_relevant_rank": 1,
+          "latency_ms": 19.45989951491356,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/advanced/security/oauth2-scopes/#oauth2-scopes",
+            "https://fastapi.tiangolo.com/tutorial/bigger-applications/#add-some-custom-tags-responses-and-dependencies",
+            "https://fastapi.tiangolo.com/tutorial/dependencies/classes-as-dependencies/#shortcut"
+          ]
+        },
+        {
+          "id": "fa-35",
+          "first_relevant_rank": 1,
+          "latency_ms": 14.514199458062649,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/advanced/custom-response/#custom-response-html-stream-file-others",
+            "https://fastapi.tiangolo.com/advanced/custom-response/#custom-response-html-stream-file-others",
+            "https://fastapi.tiangolo.com/tutorial/frontend/#frontend"
+          ]
+        },
+        {
+          "id": "fa-36",
+          "first_relevant_rank": 1,
+          "latency_ms": 16.299599781632423,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/advanced/response-cookies/#return-a-response-directly",
+            "https://fastapi.tiangolo.com/advanced/response-cookies/#response-cookies",
+            "https://fastapi.tiangolo.com/tutorial/cookie-params/#cookie-parameters"
+          ]
+        },
+        {
+          "id": "fa-37",
+          "first_relevant_rank": 1,
+          "latency_ms": 30.6037999689579,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/advanced/behind-a-proxy/#check-the-docs-ui",
+            "https://fastapi.tiangolo.com/advanced/behind-a-proxy/#behind-a-proxy",
+            "https://fastapi.tiangolo.com/advanced/behind-a-proxy/#proxy-with-a-stripped-path-prefix"
+          ]
+        },
+        {
+          "id": "fa-38",
+          "first_relevant_rank": 1,
+          "latency_ms": 41.90380033105612,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/tutorial/server-sent-events/#server-sent-events-sse",
+            "https://fastapi.tiangolo.com/advanced/stream-data/#a-streamingresponse-with-yield",
+            "https://fastapi.tiangolo.com/advanced/stream-data/#yield-from"
+          ]
+        },
+        {
+          "id": "fa-39",
+          "first_relevant_rank": 1,
+          "latency_ms": 46.93409986793995,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/advanced/generate-clients/#create-a-typescript-sdk",
+            "https://fastapi.tiangolo.com/advanced/generate-clients/#generating-sdks",
+            "https://fastapi.tiangolo.com/advanced/generate-clients/#generating-sdks"
+          ]
+        },
+        {
+          "id": "fa-40",
+          "first_relevant_rank": 1,
+          "latency_ms": 46.29140067845583,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/advanced/security/http-basic-auth/#timing-attacks",
+            "https://fastapi.tiangolo.com/tutorial/security/simple-oauth2/#simple-oauth2-with-password-and-bearer",
+            "https://fastapi.tiangolo.com/tutorial/security/simple-oauth2/#code-to-get-the-username-and-password"
+          ]
+        },
+        {
+          "id": "hx-01",
+          "first_relevant_rank": 1,
+          "latency_ms": 49.933199770748615,
+          "top_urls": [
+            "https://www.python-httpx.org/advanced/timeouts/#fine-tuning-the-configuration",
+            "https://www.python-httpx.org/compatibility/#requests-compatibility-guide",
+            "https://www.python-httpx.org/advanced/extensions/#request-extensions"
+          ]
+        },
+        {
+          "id": "hx-02",
+          "first_relevant_rank": 1,
+          "latency_ms": 20.665200427174568,
+          "top_urls": [
+            "https://www.python-httpx.org/advanced/proxies/",
+            "https://www.python-httpx.org/advanced/transports/#mounting-transports",
+            "https://www.python-httpx.org/api/#helper-functions"
+          ]
+        },
+        {
+          "id": "hx-03",
+          "first_relevant_rank": 1,
+          "latency_ms": 21.137500181794167,
+          "top_urls": [
+            "https://www.python-httpx.org/advanced/ssl/",
+            "https://www.python-httpx.org/advanced/ssl/",
+            "https://www.python-httpx.org/contributing/#development-proxy-setup"
+          ]
+        },
+        {
+          "id": "hx-04",
+          "first_relevant_rank": 1,
+          "latency_ms": 53.498400375247,
+          "top_urls": [
+            "https://www.python-httpx.org/async/#async-support",
+            "https://www.python-httpx.org/async/#async-support",
+            "https://www.python-httpx.org/async/#async-support"
+          ]
+        },
+        {
+          "id": "hx-05",
+          "first_relevant_rank": 1,
+          "latency_ms": 66.79220031946898,
+          "top_urls": [
+            "https://www.python-httpx.org/http2/#http2",
+            "https://www.python-httpx.org/http2/#inspecting-the-http-version",
+            "https://www.python-httpx.org/"
+          ]
+        },
+        {
+          "id": "hx-06",
+          "first_relevant_rank": 1,
+          "latency_ms": 45.64979951828718,
+          "top_urls": [
+            "https://www.python-httpx.org/advanced/clients/#sharing-configuration-across-requests",
+            "https://www.python-httpx.org/api/#developer-interface",
+            "https://www.python-httpx.org/compatibility/#requests-compatibility-guide"
+          ]
+        },
+        {
+          "id": "hx-07",
+          "first_relevant_rank": 1,
+          "latency_ms": 51.4038996770978,
+          "top_urls": [
+            "https://www.python-httpx.org/advanced/event-hooks/",
+            "https://www.python-httpx.org/api/#response",
+            "https://www.python-httpx.org/api/#helper-functions"
+          ]
+        },
+        {
+          "id": "hx-08",
+          "first_relevant_rank": 1,
+          "latency_ms": 23.838399909436703,
+          "top_urls": [
+            "https://www.python-httpx.org/advanced/resource-limits/",
+            "https://www.python-httpx.org/advanced/timeouts/#fine-tuning-the-configuration",
+            "https://www.python-httpx.org/async/#opening-and-closing-clients"
+          ]
+        },
+        {
+          "id": "hx-09",
+          "first_relevant_rank": 1,
+          "latency_ms": 63.090299256145954,
+          "top_urls": [
+            "https://www.python-httpx.org/advanced/transports/#asgi-transport",
+            "https://www.python-httpx.org/api/#asyncclient",
+            "https://www.python-httpx.org/api/#asyncclient"
+          ]
+        },
+        {
+          "id": "hx-10",
+          "first_relevant_rank": 1,
+          "latency_ms": 37.47490048408508,
+          "top_urls": [
+            "https://www.python-httpx.org/compatibility/#requests-compatibility-guide",
+            "https://www.python-httpx.org/quickstart/#quickstart",
+            "https://www.python-httpx.org/api/#helper-functions"
+          ]
+        },
+        {
+          "id": "hx-11",
+          "first_relevant_rank": 1,
+          "latency_ms": 52.51829978078604,
+          "top_urls": [
+            "https://www.python-httpx.org/exceptions/#exception-classes",
+            "https://www.python-httpx.org/advanced/timeouts/",
+            "https://www.python-httpx.org/exceptions/#the-exception-hierarchy"
+          ]
+        },
+        {
+          "id": "hx-12",
+          "first_relevant_rank": 1,
+          "latency_ms": 17.583400011062622,
+          "top_urls": [
+            "https://www.python-httpx.org/quickstart/#quickstart",
+            "https://www.python-httpx.org/quickstart/#quickstart",
+            "https://www.python-httpx.org/quickstart/#quickstart"
+          ]
+        },
+        {
+          "id": "hx-13",
+          "first_relevant_rank": 1,
+          "latency_ms": 40.29390029609203,
+          "top_urls": [
+            "https://www.python-httpx.org/advanced/authentication/#custom-authentication-schemes",
+            "https://www.python-httpx.org/advanced/authentication/#custom-authentication-schemes",
+            "https://www.python-httpx.org/advanced/authentication/#custom-authentication-schemes"
+          ]
+        },
+        {
+          "id": "hx-14",
+          "first_relevant_rank": 1,
+          "latency_ms": 82.87919964641333,
+          "top_urls": [
+            "https://www.python-httpx.org/advanced/text-encodings/",
+            "https://www.python-httpx.org/quickstart/#quickstart",
+            "https://www.python-httpx.org/advanced/text-encodings/#using-auto-detection"
+          ]
+        },
+        {
+          "id": "hx-15",
+          "first_relevant_rank": 1,
+          "latency_ms": 65.99679961800575,
+          "top_urls": [
+            "https://www.python-httpx.org/logging/#logging",
+            "https://www.python-httpx.org/logging/#logging",
+            "https://www.python-httpx.org/logging/#logging"
+          ]
+        },
+        {
+          "id": "hx-16",
+          "first_relevant_rank": 1,
+          "latency_ms": 107.03579988330603,
+          "top_urls": [
+            "https://www.python-httpx.org/advanced/proxies/",
+            "https://www.python-httpx.org/environment_variables/#environment-variables",
+            "https://www.python-httpx.org/advanced/proxies/"
+          ]
+        },
+        {
+          "id": "hx-17",
+          "first_relevant_rank": 1,
+          "latency_ms": 35.400799475610256,
+          "top_urls": [
+            "https://www.python-httpx.org/third_party_packages/#plugins",
+            "https://www.python-httpx.org/api/#helper-functions",
+            "https://www.python-httpx.org/api/#asyncclient"
+          ]
+        },
+        {
+          "id": "hx-18",
+          "first_relevant_rank": 2,
+          "latency_ms": 66.42859987914562,
+          "top_urls": [
+            "https://www.python-httpx.org/advanced/clients/#monitoring-download-progress",
+            "https://www.python-httpx.org/quickstart/#streaming-responses",
+            "https://www.python-httpx.org/advanced/clients/#multipart-file-encoding"
+          ]
+        },
+        {
+          "id": "hx-19",
+          "first_relevant_rank": 1,
+          "latency_ms": 74.17379971593618,
+          "top_urls": [
+            "https://www.python-httpx.org/troubleshooting/#proxies",
+            "https://www.python-httpx.org/compatibility/#requests-compatibility-guide",
+            "https://www.python-httpx.org/troubleshooting/#error-when-making-requests-to-an-https-proxy"
+          ]
+        },
+        {
+          "id": "hx-20",
+          "first_relevant_rank": 1,
+          "latency_ms": 43.434799648821354,
+          "top_urls": [
+            "https://www.python-httpx.org/advanced/extensions/#request-extensions",
+            "https://www.python-httpx.org/contributing/#development-proxy-setup",
+            "https://www.python-httpx.org/compatibility/#requests-compatibility-guide"
+          ]
+        },
+        {
+          "id": "ty-01",
+          "first_relevant_rank": 1,
+          "latency_ms": 71.26650027930737,
+          "top_urls": [
+            "https://typer.tiangolo.com/tutorial/arguments/optional/#alternative-old-typerargument-as-the-default-value",
+            "https://typer.tiangolo.com/tutorial/arguments/optional/#alternative-old-typerargument-as-the-default-value",
+            "https://typer.tiangolo.com/tutorial/arguments/default/#cli-arguments-with-default"
+          ]
+        },
+        {
+          "id": "ty-02",
+          "first_relevant_rank": 1,
+          "latency_ms": 94.67520006000996,
+          "top_urls": [
+            "https://typer.tiangolo.com/tutorial/arguments/envvar/#hide-an-env-var-from-the-help-text",
+            "https://typer.tiangolo.com/tutorial/arguments/envvar/#multiple-environment-variables",
+            "https://typer.tiangolo.com/tutorial/arguments/envvar/#cli-arguments-with-environment-variables"
+          ]
+        },
+        {
+          "id": "ty-03",
+          "first_relevant_rank": 1,
+          "latency_ms": 104.25970051437616,
+          "top_urls": [
+            "https://typer.tiangolo.com/tutorial/commands/#a-cli-application-with-multiple-commands",
+            "https://typer.tiangolo.com/tutorial/commands/one-or-multiple/#one-or-multiple-commands",
+            "https://typer.tiangolo.com/tutorial/commands/one-or-multiple/#one-or-multiple-commands"
+          ]
+        },
+        {
+          "id": "ty-04",
+          "first_relevant_rank": null,
+          "latency_ms": 131.2915002927184,
+          "top_urls": [
+            "https://typer.tiangolo.com/tutorial/subcommands/nested-subcommands/#deeply-nested-subcommands",
+            "https://typer.tiangolo.com/tutorial/subcommands/name-and-help/#recap",
+            "https://typer.tiangolo.com/tutorial/first-steps/#add-one-cli-option"
+          ]
+        },
+        {
+          "id": "ty-05",
+          "first_relevant_rank": 1,
+          "latency_ms": 124.93409961462021,
+          "top_urls": [
+            "https://typer.tiangolo.com/tutorial/options/version/#previous-parameters-and-is_eager",
+            "https://typer.tiangolo.com/tutorial/options/version/#first-version-of-version",
+            "https://typer.tiangolo.com/tutorial/exceptions/#disable-pretty-exceptions"
+          ]
+        },
+        {
+          "id": "ty-06",
+          "first_relevant_rank": 1,
+          "latency_ms": 69.58109978586435,
+          "top_urls": [
+            "https://typer.tiangolo.com/tutorial/options/password/#a-password-prompt",
+            "https://typer.tiangolo.com/tutorial/options/password/#password-cli-option-and-confirmation-prompt",
+            "https://typer.tiangolo.com/tutorial/prompt/#ask-with-prompt"
+          ]
+        },
+        {
+          "id": "ty-07",
+          "first_relevant_rank": 2,
+          "latency_ms": 53.216999396681786,
+          "top_urls": [
+            "https://typer.tiangolo.com/tutorial/options-autocompletion/#check-the-incomplete-value",
+            "https://typer.tiangolo.com/tutorial/options/prompt/#cli-option-prompt",
+            "https://typer.tiangolo.com/tutorial/options-autocompletion/#check-the-incomplete-value"
+          ]
+        },
+        {
+          "id": "ty-08",
+          "first_relevant_rank": 5,
+          "latency_ms": 40.01890029758215,
+          "top_urls": [
+            "https://typer.tiangolo.com/tutorial/parameter-types/bool/#alternative-names",
+            "https://typer.tiangolo.com/tutorial/options/help/#cli-options-help-panels",
+            "https://typer.tiangolo.com/tutorial/options/help/#cli-options-with-help"
+          ]
+        },
+        {
+          "id": "ty-09",
+          "first_relevant_rank": 6,
+          "latency_ms": 105.76359927654266,
+          "top_urls": [
+            "https://typer.tiangolo.com/tutorial/multiple-values/#multiple-values",
+            "https://typer.tiangolo.com/tutorial/options/callback-and-context/#validate-cli-parameters",
+            "https://typer.tiangolo.com/tutorial/multiple-values/options-with-multiple-values/#cli-options-with-multiple-values"
+          ]
+        },
+        {
+          "id": "ty-10",
+          "first_relevant_rank": 1,
+          "latency_ms": 73.22109956294298,
+          "top_urls": [
+            "https://typer.tiangolo.com/tutorial/parameter-types/path/#path-validations",
+            "https://typer.tiangolo.com/tutorial/parameter-types/path/#path-validations",
+            "https://typer.tiangolo.com/tutorial/parameter-types/path/#path"
+          ]
+        },
+        {
+          "id": "ty-11",
+          "first_relevant_rank": 1,
+          "latency_ms": 33.76440051943064,
+          "top_urls": [
+            "https://typer.tiangolo.com/tutorial/parameter-types/bool/#short-names",
+            "https://typer.tiangolo.com/tutorial/parameter-types/bool/#boolean-cli-options",
+            "https://typer.tiangolo.com/tutorial/subcommands/nested-subcommands/#nested-subcommands"
+          ]
+        },
+        {
+          "id": "ty-12",
+          "first_relevant_rank": 1,
+          "latency_ms": 45.63959967344999,
+          "top_urls": [
+            "https://typer.tiangolo.com/tutorial/multiple-values/multiple-options/#multiple-cli-options",
+            "https://typer.tiangolo.com/tutorial/multiple-values/options-with-multiple-values/#cli-options-with-multiple-values",
+            "https://typer.tiangolo.com/tutorial/subcommands/name-and-help/#name-and-help-in-appadd_typer"
+          ]
+        },
+        {
+          "id": "ty-13",
+          "first_relevant_rank": 1,
+          "latency_ms": 23.48729968070984,
+          "top_urls": [
+            "https://typer.tiangolo.com/tutorial/progressbar/#progress-bar",
+            "https://typer.tiangolo.com/tutorial/progressbar/#progress-bar",
+            "https://typer.tiangolo.com/tutorial/progressbar/#progress-bar"
+          ]
+        },
+        {
+          "id": "ty-14",
+          "first_relevant_rank": 1,
+          "latency_ms": 22.279799915850163,
+          "top_urls": [
+            "https://typer.tiangolo.com/tutorial/printing/#color",
+            "https://typer.tiangolo.com/tutorial/printing/#printing-and-colors",
+            "https://typer.tiangolo.com/tutorial/printing/#use-rich-print"
+          ]
+        },
+        {
+          "id": "ty-15",
+          "first_relevant_rank": 1,
+          "latency_ms": 19.355900585651398,
+          "top_urls": [
+            "https://typer.tiangolo.com/tutorial/terminating/#terminating",
+            "https://typer.tiangolo.com/tutorial/terminating/#terminating",
+            "https://typer.tiangolo.com/tutorial/terminating/#exit-a-cli-program"
+          ]
+        },
+        {
+          "id": "ty-16",
+          "first_relevant_rank": 1,
+          "latency_ms": 20.95900010317564,
+          "top_urls": [
+            "https://typer.tiangolo.com/tutorial/testing/#test-the-app",
+            "https://typer.tiangolo.com/tutorial/testing/#call-pytest",
+            "https://typer.tiangolo.com/tutorial/testing/#testing"
+          ]
+        },
+        {
+          "id": "ty-17",
+          "first_relevant_rank": 1,
+          "latency_ms": 22.417999804019928,
+          "top_urls": [
+            "https://typer.tiangolo.com/tutorial/subcommands/nested-subcommands/#deeply-nested-subcommands",
+            "https://typer.tiangolo.com/tutorial/subcommands/nested-subcommands/#nested-subcommands",
+            "https://typer.tiangolo.com/tutorial/subcommands/nested-subcommands/#review-the-files"
+          ]
+        },
+        {
+          "id": "ty-18",
+          "first_relevant_rank": 1,
+          "latency_ms": 30.73050081729889,
+          "top_urls": [
+            "https://typer.tiangolo.com/tutorial/options-autocompletion/#check-the-incomplete-value",
+            "https://typer.tiangolo.com/tutorial/options-autocompletion/#custom-completion-for-values",
+            "https://typer.tiangolo.com/tutorial/options-autocompletion/#getting-completion-for-multiple-values"
+          ]
+        },
+        {
+          "id": "ty-19",
+          "first_relevant_rank": 1,
+          "latency_ms": 55.812600068748,
+          "top_urls": [
+            "https://typer.tiangolo.com/tutorial/options/callback-and-context/#validate-cli-parameters",
+            "https://typer.tiangolo.com/tutorial/options-autocompletion/#check-the-incomplete-value",
+            "https://typer.tiangolo.com/tutorial/first-steps/#add-one-cli-option"
+          ]
+        },
+        {
+          "id": "ty-20",
+          "first_relevant_rank": 1,
+          "latency_ms": 91.36010054498911,
+          "top_urls": [
+            "https://typer.tiangolo.com/tutorial/app-dir/#cli-application-directory",
+            "https://typer.tiangolo.com/tutorial/parameter-types/path/#path",
+            "https://typer.tiangolo.com/tutorial/subcommands/nested-subcommands/#nested-subcommands"
+          ]
+        },
+        {
+          "id": "ty-21",
+          "first_relevant_rank": 1,
+          "latency_ms": 58.31069964915514,
+          "top_urls": [
+            "https://typer.tiangolo.com/tutorial/parameter-types/number/#counter-cli-options",
+            "https://typer.tiangolo.com/tutorial/testing/#testing",
+            "https://typer.tiangolo.com/tutorial/multiple-values/options-with-multiple-values/#cli-options-with-multiple-values"
+          ]
+        },
+        {
+          "id": "ty-22",
+          "first_relevant_rank": 1,
+          "latency_ms": 60.6370996683836,
+          "top_urls": [
+            "https://typer.tiangolo.com/tutorial/prompt/#ask-with-prompt",
+            "https://typer.tiangolo.com/tutorial/options/prompt/#confirmation-prompt",
+            "https://typer.tiangolo.com/tutorial/prompt/#ask-with-prompt"
+          ]
+        },
+        {
+          "id": "ty-23",
+          "first_relevant_rank": 1,
+          "latency_ms": 132.4276002123952,
+          "top_urls": [
+            "https://typer.tiangolo.com/tutorial/parameter-types/datetime/#custom-date-format",
+            "https://typer.tiangolo.com/tutorial/parameter-types/datetime/#custom-date-format",
+            "https://typer.tiangolo.com/tutorial/parameter-types/datetime/#datetime"
+          ]
+        },
+        {
+          "id": "ty-24",
+          "first_relevant_rank": 2,
+          "latency_ms": 155.74210043996572,
+          "top_urls": [
+            "https://typer.tiangolo.com/tutorial/arguments/envvar/#hide-an-env-var-from-the-help-text",
+            "https://typer.tiangolo.com/tutorial/exceptions/#exceptions-and-errors",
+            "https://typer.tiangolo.com/tutorial/exceptions/#exceptions-and-errors"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "bm25",
+      "n": 84,
+      "k": 10,
+      "recall": {
+        "1": 0.6428571428571429,
+        "3": 0.7857142857142857,
+        "5": 0.8809523809523809,
+        "10": 0.9404761904761905
+      },
+      "mrr": 0.7360544217687075,
+      "p50_ms": 6.982350256294012,
+      "p95_ms": 15.288224956020713,
+      "results": [
+        {
+          "id": "fa-01",
+          "first_relevant_rank": 1,
+          "latency_ms": 33.574000000953674,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/tutorial/background-tasks/#background-tasks",
+            "https://fastapi.tiangolo.com/advanced/advanced-dependencies/#dependencies-with-yield-httpexception-except-and-background-tasks",
+            "https://fastapi.tiangolo.com/tutorial/dependencies/dependencies-with-yield/#early-exit-and-scope"
+          ]
+        },
+        {
+          "id": "fa-02",
+          "first_relevant_rank": 1,
+          "latency_ms": 11.954499408602715,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/tutorial/bigger-applications/#another-module-with-apirouter",
+            "https://fastapi.tiangolo.com/tutorial/security/#fastapi-utilities",
+            "https://fastapi.tiangolo.com/advanced/websockets/#websockets"
+          ]
+        },
+        {
+          "id": "fa-03",
+          "first_relevant_rank": 4,
+          "latency_ms": 12.106399983167648,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/tutorial/body/#request-body",
+            "https://fastapi.tiangolo.com/tutorial/body-nested-models/#attributes-with-lists-of-submodels",
+            "https://fastapi.tiangolo.com/tutorial/body/#request-body"
+          ]
+        },
+        {
+          "id": "fa-04",
+          "first_relevant_rank": 4,
+          "latency_ms": 16.500400379300117,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/tutorial/stream-json-lines/#stream-json-lines",
+            "https://fastapi.tiangolo.com/tutorial/testing/#separating-tests",
+            "https://fastapi.tiangolo.com/advanced/generate-clients/#fastapi-app-with-tags"
+          ]
+        },
+        {
+          "id": "fa-05",
+          "first_relevant_rank": null,
+          "latency_ms": 6.806200370192528,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/tutorial/dependencies/dependencies-with-yield/#execution-of-dependencies-with-yield",
+            "https://fastapi.tiangolo.com/tutorial/sql-databases/#heroupdate-the-data-model-to-update-a-hero",
+            "https://fastapi.tiangolo.com/tutorial/sql-databases/#update-a-hero-with-heroupdate"
+          ]
+        },
+        {
+          "id": "fa-06",
+          "first_relevant_rank": 2,
+          "latency_ms": 4.105299711227417,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/advanced/websockets/#websockets",
+            "https://fastapi.tiangolo.com/tutorial/cookie-params/#cookie-parameters",
+            "https://fastapi.tiangolo.com/tutorial/cookie-param-models/#check-the-docs"
+          ]
+        },
+        {
+          "id": "fa-07",
+          "first_relevant_rank": 4,
+          "latency_ms": 7.146700285375118,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/advanced/strict-content-type/#example-attack",
+            "https://fastapi.tiangolo.com/advanced/websockets/#in-production",
+            "https://fastapi.tiangolo.com/tutorial/frontend/#frontend"
+          ]
+        },
+        {
+          "id": "fa-08",
+          "first_relevant_rank": 1,
+          "latency_ms": 11.384500190615654,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/tutorial/debugging/#run-your-code-with-your-debugger",
+            "https://fastapi.tiangolo.com/advanced/behind-a-proxy/#check-the-docs-ui",
+            "https://fastapi.tiangolo.com/tutorial/first-steps/#step-3-create-a-path-operation"
+          ]
+        },
+        {
+          "id": "fa-09",
+          "first_relevant_rank": 5,
+          "latency_ms": 6.9297002628445625,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/advanced/security/oauth2-scopes/#oauth2-scopes",
+            "https://fastapi.tiangolo.com/advanced/advanced-dependencies/#use-the-instance-as-a-dependency",
+            "https://fastapi.tiangolo.com/tutorial/security/simple-oauth2/#code-to-get-the-username-and-password"
+          ]
+        },
+        {
+          "id": "fa-10",
+          "first_relevant_rank": 3,
+          "latency_ms": 4.149800166487694,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/advanced/advanced-dependencies/#use-cases-with-early-exit-code",
+            "https://fastapi.tiangolo.com/advanced/advanced-dependencies/#use-cases-with-early-exit-code",
+            "https://fastapi.tiangolo.com/tutorial/sql-databases/#create-a-session-dependency"
+          ]
+        },
+        {
+          "id": "fa-11",
+          "first_relevant_rank": null,
+          "latency_ms": 6.988100707530975,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/advanced/opentelemetry/#opentelemetry",
+            "https://fastapi.tiangolo.com/tutorial/security/first-steps/#the-password-flow",
+            "https://fastapi.tiangolo.com/tutorial/bigger-applications/#bigger-applications-multiple-files"
+          ]
+        },
+        {
+          "id": "fa-12",
+          "first_relevant_rank": 1,
+          "latency_ms": 5.773600190877914,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/tutorial/encoder/#json-compatible-encoder",
+            "https://fastapi.tiangolo.com/tutorial/body-updates/#partial-updates-recap",
+            "https://fastapi.tiangolo.com/tutorial/extra-models/#about-user-in-model-dump"
+          ]
+        },
+        {
+          "id": "fa-13",
+          "first_relevant_rank": 1,
+          "latency_ms": 8.299499750137329,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/tutorial/response-model/#add-an-output-model",
+            "https://fastapi.tiangolo.com/tutorial/response-model/#return-the-same-input-data",
+            "https://fastapi.tiangolo.com/tutorial/extra-models/#extra-models"
+          ]
+        },
+        {
+          "id": "fa-14",
+          "first_relevant_rank": 1,
+          "latency_ms": 10.729099623858929,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/tutorial/handling-errors/#handling-errors",
+            "https://fastapi.tiangolo.com/tutorial/handling-errors/#use-httpexception",
+            "https://fastapi.tiangolo.com/tutorial/testing/#extended-testing-file"
+          ]
+        },
+        {
+          "id": "fa-15",
+          "first_relevant_rank": 7,
+          "latency_ms": 12.628000229597092,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/tutorial/server-sent-events/#server-sent-events-sse",
+            "https://fastapi.tiangolo.com/tutorial/dependencies/dependencies-with-yield/#early-exit-and-scope",
+            "https://fastapi.tiangolo.com/tutorial/dependencies/dependencies-with-yield/#execution-of-dependencies-with-yield"
+          ]
+        },
+        {
+          "id": "fa-16",
+          "first_relevant_rank": 1,
+          "latency_ms": 9.62579995393753,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/tutorial/metadata/#metadata-and-docs-urls",
+            "https://fastapi.tiangolo.com/tutorial/metadata/#create-metadata-for-tags",
+            "https://fastapi.tiangolo.com/tutorial/metadata/#metadata-for-api"
+          ]
+        },
+        {
+          "id": "fa-17",
+          "first_relevant_rank": 7,
+          "latency_ms": 7.748899981379509,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/advanced/opentelemetry/#customize-telemetry",
+            "https://fastapi.tiangolo.com/tutorial/schema-extra-example/#using-the-openapi-examples-parameter",
+            "https://fastapi.tiangolo.com/advanced/opentelemetry/#opentelemetry"
+          ]
+        },
+        {
+          "id": "fa-18",
+          "first_relevant_rank": 1,
+          "latency_ms": 4.56130038946867,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/tutorial/metadata/#metadata-and-docs-urls",
+            "https://fastapi.tiangolo.com/tutorial/schema-extra-example/#technical-details",
+            "https://fastapi.tiangolo.com/tutorial/path-operation-configuration/#path-operation-configuration"
+          ]
+        },
+        {
+          "id": "fa-19",
+          "first_relevant_rank": 3,
+          "latency_ms": 5.764300003647804,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/tutorial/body-fields/#body-fields",
+            "https://fastapi.tiangolo.com/tutorial/body-fields/#declare-model-attributes",
+            "https://fastapi.tiangolo.com/tutorial/path-params-numeric-validations/#number-validations-greater-than-or-equal"
+          ]
+        },
+        {
+          "id": "fa-20",
+          "first_relevant_rank": 1,
+          "latency_ms": 9.226400405168533,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/tutorial/query-params-str-validations/#deprecating-parameters",
+            "https://fastapi.tiangolo.com/tutorial/query-params-str-validations/#add-regular-expressions",
+            "https://fastapi.tiangolo.com/tutorial/query-param-models/#combine-parameter-models"
+          ]
+        },
+        {
+          "id": "fa-21",
+          "first_relevant_rank": 2,
+          "latency_ms": 7.488899864256382,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/advanced/stream-data/#simulate-a-file",
+            "https://fastapi.tiangolo.com/tutorial/request-files/#file-parameters-with-uploadfile",
+            "https://fastapi.tiangolo.com/tutorial/security/simple-oauth2/#simple-oauth2-with-password-and-bearer"
+          ]
+        },
+        {
+          "id": "fa-22",
+          "first_relevant_rank": 1,
+          "latency_ms": 7.7010998502373695,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/tutorial/request-form-models/#form-models",
+            "https://fastapi.tiangolo.com/tutorial/request-forms/#define-form-parameters",
+            "https://fastapi.tiangolo.com/tutorial/request-forms/#form-data"
+          ]
+        },
+        {
+          "id": "fa-23",
+          "first_relevant_rank": 1,
+          "latency_ms": 6.649800576269627,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/tutorial/response-model/#response-model-return-type",
+            "https://fastapi.tiangolo.com/tutorial/body-nested-models/#body-nested-models",
+            "https://fastapi.tiangolo.com/tutorial/debugging/#run-your-code-with-your-debugger"
+          ]
+        },
+        {
+          "id": "fa-24",
+          "first_relevant_rank": 5,
+          "latency_ms": 7.067999802529812,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/advanced/response-change-status-code/#response-change-status-code",
+            "https://fastapi.tiangolo.com/advanced/additional-status-codes/#additional-status-codes",
+            "https://fastapi.tiangolo.com/advanced/events/#async-context-manager"
+          ]
+        },
+        {
+          "id": "fa-25",
+          "first_relevant_rank": 1,
+          "latency_ms": 7.74069968611002,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/tutorial/security/oauth2-jwt/#oauth2-with-password-and-hashing-bearer-with-jwt-tokens",
+            "https://fastapi.tiangolo.com/tutorial/security/oauth2-jwt/#oauth2-with-password-and-hashing-bearer-with-jwt-tokens",
+            "https://fastapi.tiangolo.com/tutorial/security/oauth2-jwt/#hash-and-verify-the-passwords"
+          ]
+        },
+        {
+          "id": "fa-26",
+          "first_relevant_rank": 1,
+          "latency_ms": 6.602699868381023,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/tutorial/sql-databases/#herocreate-the-data-model-to-create-a-hero",
+            "https://fastapi.tiangolo.com/tutorial/sql-databases/#create-models",
+            "https://fastapi.tiangolo.com/tutorial/sql-databases/#sql-relational-databases"
+          ]
+        },
+        {
+          "id": "fa-27",
+          "first_relevant_rank": null,
+          "latency_ms": 2.5474000722169876,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/advanced/templates/#templates",
+            "https://fastapi.tiangolo.com/tutorial/frontend/#client-side-routing",
+            "https://fastapi.tiangolo.com/advanced/templates/#writing-templates"
+          ]
+        },
+        {
+          "id": "fa-28",
+          "first_relevant_rank": 1,
+          "latency_ms": 7.78569933027029,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/tutorial/testing/#using-testclient",
+            "https://fastapi.tiangolo.com/advanced/async-tests/#async-tests",
+            "https://fastapi.tiangolo.com/tutorial/security/oauth2-jwt/#oauth2-with-password-and-hashing-bearer-with-jwt-tokens"
+          ]
+        },
+        {
+          "id": "fa-29",
+          "first_relevant_rank": 1,
+          "latency_ms": 13.039999641478062,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/advanced/events/#lifespan",
+            "https://fastapi.tiangolo.com/advanced/events/#lifespan-events",
+            "https://fastapi.tiangolo.com/advanced/events/#use-case"
+          ]
+        },
+        {
+          "id": "fa-30",
+          "first_relevant_rank": 1,
+          "latency_ms": 6.923499517142773,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/advanced/testing-dependencies/#use-the-app-dependency-overrides-attribute",
+            "https://fastapi.tiangolo.com/advanced/testing-dependencies/#testing-dependencies-with-overrides",
+            "https://fastapi.tiangolo.com/advanced/testing-dependencies/#use-the-app-dependency-overrides-attribute"
+          ]
+        },
+        {
+          "id": "fa-31",
+          "first_relevant_rank": 1,
+          "latency_ms": 8.331400342285633,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/advanced/settings/#settings-and-environment-variables",
+            "https://fastapi.tiangolo.com/advanced/opentelemetry/#choose-what-to-record",
+            "https://fastapi.tiangolo.com/advanced/settings/#reading-a-env-file"
+          ]
+        },
+        {
+          "id": "fa-32",
+          "first_relevant_rank": 1,
+          "latency_ms": 11.881699785590172,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/advanced/wsgi/#check-it",
+            "https://fastapi.tiangolo.com/advanced/wsgi/#including-wsgi-flask-django-others",
+            "https://fastapi.tiangolo.com/tutorial/handling-errors/#use-httpexception"
+          ]
+        },
+        {
+          "id": "fa-33",
+          "first_relevant_rank": null,
+          "latency_ms": 6.82000070810318,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/tutorial/response-model/#other-return-type-annotations",
+            "https://fastapi.tiangolo.com/advanced/behind-a-proxy/#behind-a-proxy",
+            "https://fastapi.tiangolo.com/tutorial/security/oauth2-jwt/#update-the-token-path-operation"
+          ]
+        },
+        {
+          "id": "fa-34",
+          "first_relevant_rank": 2,
+          "latency_ms": 9.866200387477875,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/tutorial/security/oauth2-jwt/#recap",
+            "https://fastapi.tiangolo.com/advanced/security/oauth2-scopes/#oauth2-scopes",
+            "https://fastapi.tiangolo.com/advanced/security/oauth2-scopes/#oauth2-scopes"
+          ]
+        },
+        {
+          "id": "fa-35",
+          "first_relevant_rank": 3,
+          "latency_ms": 5.808600224554539,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/tutorial/frontend/#frontend",
+            "https://fastapi.tiangolo.com/tutorial/frontend/#client-side-routing",
+            "https://fastapi.tiangolo.com/advanced/custom-response/#custom-response-html-stream-file-others"
+          ]
+        },
+        {
+          "id": "fa-36",
+          "first_relevant_rank": 1,
+          "latency_ms": 6.519900634884834,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/advanced/response-cookies/#return-a-response-directly",
+            "https://fastapi.tiangolo.com/advanced/websockets/#websockets",
+            "https://fastapi.tiangolo.com/advanced/response-cookies/#response-cookies"
+          ]
+        },
+        {
+          "id": "fa-37",
+          "first_relevant_rank": 1,
+          "latency_ms": 10.978500358760357,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/advanced/behind-a-proxy/#proxy-with-a-stripped-path-prefix",
+            "https://fastapi.tiangolo.com/advanced/sub-applications/#mounting-a-fastapi-application",
+            "https://fastapi.tiangolo.com/advanced/behind-a-proxy/#proxy-with-a-stripped-path-prefix"
+          ]
+        },
+        {
+          "id": "fa-38",
+          "first_relevant_rank": 2,
+          "latency_ms": 12.225599959492683,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/advanced/generate-clients/#create-a-typescript-sdk",
+            "https://fastapi.tiangolo.com/advanced/stream-data/#stream-data",
+            "https://fastapi.tiangolo.com/advanced/generate-clients/#generating-sdks"
+          ]
+        },
+        {
+          "id": "fa-39",
+          "first_relevant_rank": 1,
+          "latency_ms": 3.557099960744381,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/advanced/generate-clients/#generating-sdks",
+            "https://fastapi.tiangolo.com/advanced/generate-clients/#create-a-typescript-sdk",
+            "https://fastapi.tiangolo.com/advanced/generate-clients/#generating-sdks"
+          ]
+        },
+        {
+          "id": "fa-40",
+          "first_relevant_rank": 3,
+          "latency_ms": 6.573700346052647,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/tutorial/security/first-steps/#the-password-flow",
+            "https://fastapi.tiangolo.com/advanced/strict-content-type/#strict-content-type-checking",
+            "https://fastapi.tiangolo.com/advanced/security/http-basic-auth/#http-basic-auth"
+          ]
+        },
+        {
+          "id": "hx-01",
+          "first_relevant_rank": 1,
+          "latency_ms": 8.48810002207756,
+          "top_urls": [
+            "https://www.python-httpx.org/advanced/timeouts/#fine-tuning-the-configuration",
+            "https://www.python-httpx.org/advanced/extensions/#request-extensions",
+            "https://www.python-httpx.org/api/#asyncclient"
+          ]
+        },
+        {
+          "id": "hx-02",
+          "first_relevant_rank": 1,
+          "latency_ms": 9.29429940879345,
+          "top_urls": [
+            "https://www.python-httpx.org/advanced/proxies/",
+            "https://www.python-httpx.org/advanced/proxies/",
+            "https://www.python-httpx.org/advanced/transports/#mounting-transports"
+          ]
+        },
+        {
+          "id": "hx-03",
+          "first_relevant_rank": 1,
+          "latency_ms": 5.244799889624119,
+          "top_urls": [
+            "https://www.python-httpx.org/advanced/ssl/",
+            "https://www.python-httpx.org/environment_variables/#environment-variables",
+            "https://www.python-httpx.org/api/#helper-functions"
+          ]
+        },
+        {
+          "id": "hx-04",
+          "first_relevant_rank": 1,
+          "latency_ms": 3.160400316119194,
+          "top_urls": [
+            "https://www.python-httpx.org/async/#async-support",
+            "https://www.python-httpx.org/async/#async-support",
+            "https://www.python-httpx.org/async/#async-support"
+          ]
+        },
+        {
+          "id": "hx-05",
+          "first_relevant_rank": 1,
+          "latency_ms": 2.734200097620487,
+          "top_urls": [
+            "https://www.python-httpx.org/http2/#http2",
+            "https://www.python-httpx.org/http2/#inspecting-the-http-version",
+            "https://www.python-httpx.org/advanced/extensions/#response-extensions"
+          ]
+        },
+        {
+          "id": "hx-06",
+          "first_relevant_rank": 1,
+          "latency_ms": 4.162799566984177,
+          "top_urls": [
+            "https://www.python-httpx.org/advanced/clients/#sharing-configuration-across-requests",
+            "https://www.python-httpx.org/advanced/clients/#why-use-a-client",
+            "https://www.python-httpx.org/advanced/extensions/#trace"
+          ]
+        },
+        {
+          "id": "hx-07",
+          "first_relevant_rank": 1,
+          "latency_ms": 6.112799979746342,
+          "top_urls": [
+            "https://www.python-httpx.org/advanced/event-hooks/",
+            "https://www.python-httpx.org/exceptions/#exception-classes",
+            "https://www.python-httpx.org/advanced/timeouts/#fine-tuning-the-configuration"
+          ]
+        },
+        {
+          "id": "hx-08",
+          "first_relevant_rank": 1,
+          "latency_ms": 2.9030004516243935,
+          "top_urls": [
+            "https://www.python-httpx.org/advanced/resource-limits/",
+            "https://www.python-httpx.org/async/#opening-and-closing-clients",
+            "https://www.python-httpx.org/advanced/timeouts/#fine-tuning-the-configuration"
+          ]
+        },
+        {
+          "id": "hx-09",
+          "first_relevant_rank": 1,
+          "latency_ms": 7.530299946665764,
+          "top_urls": [
+            "https://www.python-httpx.org/advanced/transports/#asgi-transport",
+            "https://www.python-httpx.org/compatibility/#requests-compatibility-guide",
+            "https://www.python-httpx.org/advanced/extensions/#target"
+          ]
+        },
+        {
+          "id": "hx-10",
+          "first_relevant_rank": 1,
+          "latency_ms": 6.949000060558319,
+          "top_urls": [
+            "https://www.python-httpx.org/compatibility/#requests-compatibility-guide",
+            "https://www.python-httpx.org/api/#client",
+            "https://www.python-httpx.org/api/#asyncclient"
+          ]
+        },
+        {
+          "id": "hx-11",
+          "first_relevant_rank": 1,
+          "latency_ms": 3.3553000539541245,
+          "top_urls": [
+            "https://www.python-httpx.org/exceptions/#exception-classes",
+            "https://www.python-httpx.org/quickstart/#exceptions",
+            "https://www.python-httpx.org/troubleshooting/#proxies"
+          ]
+        },
+        {
+          "id": "hx-12",
+          "first_relevant_rank": 4,
+          "latency_ms": 7.197299972176552,
+          "top_urls": [
+            "https://www.python-httpx.org/api/#client",
+            "https://www.python-httpx.org/api/#asyncclient",
+            "https://www.python-httpx.org/api/#helper-functions"
+          ]
+        },
+        {
+          "id": "hx-13",
+          "first_relevant_rank": 1,
+          "latency_ms": 4.252700135111809,
+          "top_urls": [
+            "https://www.python-httpx.org/advanced/authentication/#custom-authentication-schemes",
+            "https://www.python-httpx.org/advanced/authentication/#custom-authentication-schemes",
+            "https://www.python-httpx.org/advanced/authentication/#custom-authentication-schemes"
+          ]
+        },
+        {
+          "id": "hx-14",
+          "first_relevant_rank": 1,
+          "latency_ms": 6.395299918949604,
+          "top_urls": [
+            "https://www.python-httpx.org/advanced/text-encodings/#using-auto-detection",
+            "https://www.python-httpx.org/advanced/text-encodings/",
+            "https://www.python-httpx.org/compatibility/#requests-compatibility-guide"
+          ]
+        },
+        {
+          "id": "hx-15",
+          "first_relevant_rank": 1,
+          "latency_ms": 4.140300676226616,
+          "top_urls": [
+            "https://www.python-httpx.org/logging/#logging",
+            "https://www.python-httpx.org/advanced/clients/",
+            "https://www.python-httpx.org/logging/#logging"
+          ]
+        },
+        {
+          "id": "hx-16",
+          "first_relevant_rank": 1,
+          "latency_ms": 3.55369970202446,
+          "top_urls": [
+            "https://www.python-httpx.org/advanced/proxies/",
+            "https://www.python-httpx.org/environment_variables/#environment-variables",
+            "https://www.python-httpx.org/troubleshooting/#proxies"
+          ]
+        },
+        {
+          "id": "hx-17",
+          "first_relevant_rank": 1,
+          "latency_ms": 6.253300234675407,
+          "top_urls": [
+            "https://www.python-httpx.org/third_party_packages/#plugins",
+            "https://www.python-httpx.org/compatibility/#requests-compatibility-guide",
+            "https://www.python-httpx.org/advanced/extensions/#trace"
+          ]
+        },
+        {
+          "id": "hx-18",
+          "first_relevant_rank": 1,
+          "latency_ms": 5.190799944102764,
+          "top_urls": [
+            "https://www.python-httpx.org/quickstart/#streaming-responses",
+            "https://www.python-httpx.org/advanced/clients/#monitoring-download-progress",
+            "https://www.python-httpx.org/advanced/clients/#multipart-file-encoding"
+          ]
+        },
+        {
+          "id": "hx-19",
+          "first_relevant_rank": 4,
+          "latency_ms": 5.12589979916811,
+          "top_urls": [
+            "https://www.python-httpx.org/exceptions/#exception-classes",
+            "https://www.python-httpx.org/advanced/proxies/",
+            "https://www.python-httpx.org/exceptions/#exception-classes"
+          ]
+        },
+        {
+          "id": "hx-20",
+          "first_relevant_rank": 1,
+          "latency_ms": 3.520100377500057,
+          "top_urls": [
+            "https://www.python-httpx.org/advanced/extensions/#request-extensions",
+            "https://www.python-httpx.org/contributing/#development-proxy-setup",
+            "https://www.python-httpx.org/advanced/extensions/#target"
+          ]
+        },
+        {
+          "id": "ty-01",
+          "first_relevant_rank": 7,
+          "latency_ms": 5.6940000504255295,
+          "top_urls": [
+            "https://typer.tiangolo.com/tutorial/options/name/#cli-option-name",
+            "https://typer.tiangolo.com/tutorial/options/name/#defining-cli-option-short-names",
+            "https://typer.tiangolo.com/tutorial/commands/#decorator-technical-details"
+          ]
+        },
+        {
+          "id": "ty-02",
+          "first_relevant_rank": 1,
+          "latency_ms": 6.292599253356457,
+          "top_urls": [
+            "https://typer.tiangolo.com/tutorial/arguments/envvar/#cli-arguments-with-environment-variables",
+            "https://typer.tiangolo.com/tutorial/arguments/envvar/#multiple-environment-variables",
+            "https://typer.tiangolo.com/tutorial/arguments/envvar/#cli-arguments-with-environment-variables"
+          ]
+        },
+        {
+          "id": "ty-03",
+          "first_relevant_rank": 2,
+          "latency_ms": 7.983599789440632,
+          "top_urls": [
+            "https://typer.tiangolo.com/tutorial/package/#building-a-package",
+            "https://typer.tiangolo.com/tutorial/commands/#commands",
+            "https://typer.tiangolo.com/tutorial/package/#building-a-package"
+          ]
+        },
+        {
+          "id": "ty-04",
+          "first_relevant_rank": 1,
+          "latency_ms": 8.52769985795021,
+          "top_urls": [
+            "https://typer.tiangolo.com/tutorial/commands/callback/#typer-callback",
+            "https://typer.tiangolo.com/tutorial/parameter-types/number/#counter-cli-options",
+            "https://typer.tiangolo.com/tutorial/commands/callback/#typer-callback"
+          ]
+        },
+        {
+          "id": "ty-05",
+          "first_relevant_rank": 2,
+          "latency_ms": 14.913800172507763,
+          "top_urls": [
+            "https://typer.tiangolo.com/tutorial/commands/callback/#typer-callback",
+            "https://typer.tiangolo.com/tutorial/options/version/#fix-with-is_eager",
+            "https://typer.tiangolo.com/tutorial/options/version/#previous-parameters-and-is_eager"
+          ]
+        },
+        {
+          "id": "ty-06",
+          "first_relevant_rank": 6,
+          "latency_ms": 29.4295996427536,
+          "top_urls": [
+            "https://typer.tiangolo.com/tutorial/typer-command/#typer-command",
+            "https://typer.tiangolo.com/tutorial/commands/help/#command-help",
+            "https://typer.tiangolo.com/tutorial/prompt/#ask-with-prompt"
+          ]
+        },
+        {
+          "id": "ty-07",
+          "first_relevant_rank": 1,
+          "latency_ms": 7.666300050914288,
+          "top_urls": [
+            "https://typer.tiangolo.com/tutorial/options/prompt/#cli-option-prompt",
+            "https://typer.tiangolo.com/tutorial/prompt/#ask-with-prompt",
+            "https://typer.tiangolo.com/tutorial/typer-app/#typer-app"
+          ]
+        },
+        {
+          "id": "ty-08",
+          "first_relevant_rank": 1,
+          "latency_ms": 6.425300613045692,
+          "top_urls": [
+            "https://typer.tiangolo.com/tutorial/options/name/#cli-option-name",
+            "https://typer.tiangolo.com/tutorial/options/name/#cli-option-only-short-name",
+            "https://typer.tiangolo.com/tutorial/options/name/#defining-cli-option-short-names"
+          ]
+        },
+        {
+          "id": "ty-09",
+          "first_relevant_rank": null,
+          "latency_ms": 11.763299815356731,
+          "top_urls": [
+            "https://typer.tiangolo.com/tutorial/options/version/#fix-with-is_eager",
+            "https://typer.tiangolo.com/tutorial/options/callback-and-context/#fix-completion-using-the-context",
+            "https://typer.tiangolo.com/tutorial/exceptions/#exceptions-and-errors"
+          ]
+        },
+        {
+          "id": "ty-10",
+          "first_relevant_rank": 2,
+          "latency_ms": 22.34330028295517,
+          "top_urls": [
+            "https://typer.tiangolo.com/tutorial/launch/#launching-applications",
+            "https://typer.tiangolo.com/tutorial/parameter-types/path/#path-validations",
+            "https://typer.tiangolo.com/tutorial/parameter-types/path/#path"
+          ]
+        },
+        {
+          "id": "ty-11",
+          "first_relevant_rank": 1,
+          "latency_ms": 4.954800009727478,
+          "top_urls": [
+            "https://typer.tiangolo.com/tutorial/parameter-types/bool/#boolean-cli-options",
+            "https://typer.tiangolo.com/tutorial/parameter-types/bool/#short-names",
+            "https://typer.tiangolo.com/tutorial/typer-command/#typer-command"
+          ]
+        },
+        {
+          "id": "ty-12",
+          "first_relevant_rank": 1,
+          "latency_ms": 8.340500295162201,
+          "top_urls": [
+            "https://typer.tiangolo.com/tutorial/multiple-values/multiple-options/#multiple-cli-options",
+            "https://typer.tiangolo.com/tutorial/progressbar/#setting-a-progress-bar-length",
+            "https://typer.tiangolo.com/tutorial/progressbar/#use-typerprogressbar"
+          ]
+        },
+        {
+          "id": "ty-13",
+          "first_relevant_rank": 1,
+          "latency_ms": 6.594100035727024,
+          "top_urls": [
+            "https://typer.tiangolo.com/tutorial/progressbar/#progress-bar",
+            "https://typer.tiangolo.com/tutorial/progressbar/#progress-bar",
+            "https://typer.tiangolo.com/tutorial/progressbar/#progress-bar"
+          ]
+        },
+        {
+          "id": "ty-14",
+          "first_relevant_rank": 1,
+          "latency_ms": 5.62559999525547,
+          "top_urls": [
+            "https://typer.tiangolo.com/tutorial/printing/#printing-and-colors",
+            "https://typer.tiangolo.com/tutorial/testing/#testing-input",
+            "https://typer.tiangolo.com/tutorial/printing/#color"
+          ]
+        },
+        {
+          "id": "ty-15",
+          "first_relevant_rank": 1,
+          "latency_ms": 13.858000747859478,
+          "top_urls": [
+            "https://typer.tiangolo.com/tutorial/terminating/#exit-a-cli-program",
+            "https://typer.tiangolo.com/tutorial/terminating/#terminating",
+            "https://typer.tiangolo.com/tutorial/terminating/#terminating"
+          ]
+        },
+        {
+          "id": "ty-16",
+          "first_relevant_rank": 1,
+          "latency_ms": 2.9156003147363663,
+          "top_urls": [
+            "https://typer.tiangolo.com/tutorial/testing/#call-pytest",
+            "https://typer.tiangolo.com/tutorial/testing/#testing",
+            "https://typer.tiangolo.com/tutorial/testing/#test-the-app"
+          ]
+        },
+        {
+          "id": "ty-17",
+          "first_relevant_rank": 1,
+          "latency_ms": 13.22339940816164,
+          "top_urls": [
+            "https://typer.tiangolo.com/tutorial/subcommands/nested-subcommands/#deeply-nested-subcommands",
+            "https://typer.tiangolo.com/tutorial/subcommands/nested-subcommands/#nested-subcommands",
+            "https://typer.tiangolo.com/tutorial/subcommands/nested-subcommands/#review-the-files"
+          ]
+        },
+        {
+          "id": "ty-18",
+          "first_relevant_rank": 3,
+          "latency_ms": 7.698300294578075,
+          "top_urls": [
+            "https://typer.tiangolo.com/tutorial/options/callback-and-context/#handling-completion",
+            "https://typer.tiangolo.com/tutorial/options/callback-and-context/#handling-completion",
+            "https://typer.tiangolo.com/tutorial/options-autocompletion/#review-completion"
+          ]
+        },
+        {
+          "id": "ty-19",
+          "first_relevant_rank": 4,
+          "latency_ms": 10.164100676774979,
+          "top_urls": [
+            "https://typer.tiangolo.com/tutorial/parameter-types/custom-types/#custom-types",
+            "https://typer.tiangolo.com/tutorial/options-autocompletion/#check-the-incomplete-value",
+            "https://typer.tiangolo.com/tutorial/options-autocompletion/#check-the-incomplete-value"
+          ]
+        },
+        {
+          "id": "ty-20",
+          "first_relevant_rank": 1,
+          "latency_ms": 15.354299917817116,
+          "top_urls": [
+            "https://typer.tiangolo.com/tutorial/app-dir/#cli-application-directory",
+            "https://typer.tiangolo.com/tutorial/parameter-types/file/#advanced-mode",
+            "https://typer.tiangolo.com/tutorial/launch/#launching-applications"
+          ]
+        },
+        {
+          "id": "ty-21",
+          "first_relevant_rank": 1,
+          "latency_ms": 5.393199622631073,
+          "top_urls": [
+            "https://typer.tiangolo.com/tutorial/parameter-types/number/#counter-cli-options",
+            "https://typer.tiangolo.com/tutorial/subcommands/#subcommands-command-groups",
+            "https://typer.tiangolo.com/tutorial/commands/callback/#typer-callback"
+          ]
+        },
+        {
+          "id": "ty-22",
+          "first_relevant_rank": 6,
+          "latency_ms": 6.976599805057049,
+          "top_urls": [
+            "https://typer.tiangolo.com/tutorial/typer-command/#typer-command",
+            "https://typer.tiangolo.com/tutorial/commands/help/#command-help",
+            "https://typer.tiangolo.com/tutorial/commands/help/#command-help"
+          ]
+        },
+        {
+          "id": "ty-23",
+          "first_relevant_rank": 1,
+          "latency_ms": 7.640000432729721,
+          "top_urls": [
+            "https://typer.tiangolo.com/tutorial/parameter-types/datetime/#custom-date-format",
+            "https://typer.tiangolo.com/tutorial/parameter-types/datetime/#custom-date-format",
+            "https://typer.tiangolo.com/tutorial/parameter-types/custom-types/#custom-types"
+          ]
+        },
+        {
+          "id": "ty-24",
+          "first_relevant_rank": 1,
+          "latency_ms": 4.635999910533428,
+          "top_urls": [
+            "https://typer.tiangolo.com/tutorial/exceptions/#exceptions-and-errors",
+            "https://typer.tiangolo.com/tutorial/exceptions/#exceptions-and-errors",
+            "https://typer.tiangolo.com/tutorial/arguments/help/#help-text-for-cli-arguments"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "hybrid",
+      "n": 84,
+      "k": 10,
+      "recall": {
+        "1": 0.7738095238095238,
+        "3": 0.9166666666666666,
+        "5": 0.9404761904761905,
+        "10": 0.9761904761904762
+      },
+      "mrr": 0.8471230158730159,
+      "p50_ms": 49.16369961574674,
+      "p95_ms": 104.70329001545906,
+      "results": [
+        {
+          "id": "fa-01",
+          "first_relevant_rank": 1,
+          "latency_ms": 46.430899761617184,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/tutorial/background-tasks/#background-tasks",
+            "https://fastapi.tiangolo.com/tutorial/dependencies/dependencies-with-yield/#early-exit-and-scope",
+            "https://fastapi.tiangolo.com/tutorial/background-tasks/#background-tasks"
+          ]
+        },
+        {
+          "id": "fa-02",
+          "first_relevant_rank": 1,
+          "latency_ms": 50.87109934538603,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/tutorial/bigger-applications/#another-module-with-apirouter",
+            "https://fastapi.tiangolo.com/tutorial/bigger-applications/#an-example-file-structure",
+            "https://fastapi.tiangolo.com/tutorial/bigger-applications/#bigger-applications-multiple-files"
+          ]
+        },
+        {
+          "id": "fa-03",
+          "first_relevant_rank": 1,
+          "latency_ms": 61.170900240540504,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/tutorial/body-fields/#declare-model-attributes",
+            "https://fastapi.tiangolo.com/tutorial/body-fields/#body-fields",
+            "https://fastapi.tiangolo.com/tutorial/body/#request-body"
+          ]
+        },
+        {
+          "id": "fa-04",
+          "first_relevant_rank": 1,
+          "latency_ms": 43.26449986547232,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/tutorial/body-multiple-params/#multiple-body-parameters",
+            "https://fastapi.tiangolo.com/tutorial/stream-json-lines/#stream-json-lines",
+            "https://fastapi.tiangolo.com/tutorial/schema-extra-example/#body-with-examples"
+          ]
+        },
+        {
+          "id": "fa-05",
+          "first_relevant_rank": 5,
+          "latency_ms": 40.76060000807047,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/tutorial/sql-databases/#update-a-hero-with-heroupdate",
+            "https://fastapi.tiangolo.com/tutorial/sql-databases/#heroupdate-the-data-model-to-update-a-hero",
+            "https://fastapi.tiangolo.com/tutorial/server-sent-events/#server-sent-events-sse"
+          ]
+        },
+        {
+          "id": "fa-06",
+          "first_relevant_rank": 1,
+          "latency_ms": 42.192600667476654,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/tutorial/cookie-params/#cookie-parameters",
+            "https://fastapi.tiangolo.com/tutorial/cookie-param-models/#check-the-docs",
+            "https://fastapi.tiangolo.com/tutorial/cookie-param-models/#forbid-extra-cookies"
+          ]
+        },
+        {
+          "id": "fa-07",
+          "first_relevant_rank": 3,
+          "latency_ms": 67.25810002535582,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/advanced/strict-content-type/#example-attack",
+            "https://fastapi.tiangolo.com/tutorial/frontend/#frontend",
+            "https://fastapi.tiangolo.com/tutorial/cors/#cors-cross-origin-resource-sharing"
+          ]
+        },
+        {
+          "id": "fa-08",
+          "first_relevant_rank": 1,
+          "latency_ms": 49.96049962937832,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/tutorial/debugging/#run-your-code-with-your-debugger",
+            "https://fastapi.tiangolo.com/tutorial/first-steps/#step-3-create-a-path-operation",
+            "https://fastapi.tiangolo.com/tutorial/first-steps/#first-steps"
+          ]
+        },
+        {
+          "id": "fa-09",
+          "first_relevant_rank": 1,
+          "latency_ms": 51.45249981433153,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/tutorial/dependencies/classes-as-dependencies/#what-makes-a-dependency",
+            "https://fastapi.tiangolo.com/tutorial/dependencies/classes-as-dependencies/#classes-as-dependencies_1",
+            "https://fastapi.tiangolo.com/tutorial/dependencies/classes-as-dependencies/#shortcut"
+          ]
+        },
+        {
+          "id": "fa-10",
+          "first_relevant_rank": 1,
+          "latency_ms": 46.66829947382212,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/tutorial/sql-databases/#create-a-session-dependency",
+            "https://fastapi.tiangolo.com/advanced/advanced-dependencies/#use-cases-with-early-exit-code",
+            "https://fastapi.tiangolo.com/advanced/advanced-dependencies/#use-cases-with-early-exit-code"
+          ]
+        },
+        {
+          "id": "fa-11",
+          "first_relevant_rank": null,
+          "latency_ms": 51.2533001601696,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/advanced/wsgi/#check-it",
+            "https://fastapi.tiangolo.com/tutorial/security/first-steps/#fastapis-oauth2passwordbearer",
+            "https://fastapi.tiangolo.com/advanced/opentelemetry/#opentelemetry"
+          ]
+        },
+        {
+          "id": "fa-12",
+          "first_relevant_rank": 1,
+          "latency_ms": 45.17860058695078,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/tutorial/encoder/#json-compatible-encoder",
+            "https://fastapi.tiangolo.com/tutorial/body-nested-models/#body-nested-models",
+            "https://fastapi.tiangolo.com/advanced/json-base64-bytes/#pydantic-bytes"
+          ]
+        },
+        {
+          "id": "fa-13",
+          "first_relevant_rank": 1,
+          "latency_ms": 42.4276003614068,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/tutorial/response-model/#add-an-output-model",
+            "https://fastapi.tiangolo.com/tutorial/extra-models/#extra-models",
+            "https://fastapi.tiangolo.com/tutorial/response-model/#return-the-same-input-data"
+          ]
+        },
+        {
+          "id": "fa-14",
+          "first_relevant_rank": 1,
+          "latency_ms": 42.421700432896614,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/tutorial/handling-errors/#use-httpexception",
+            "https://fastapi.tiangolo.com/tutorial/handling-errors/#handling-errors",
+            "https://fastapi.tiangolo.com/tutorial/frontend/#frontend"
+          ]
+        },
+        {
+          "id": "fa-15",
+          "first_relevant_rank": 8,
+          "latency_ms": 44.574699364602566,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/tutorial/body/#request-body",
+            "https://fastapi.tiangolo.com/tutorial/server-sent-events/#server-sent-events-sse",
+            "https://fastapi.tiangolo.com/advanced/security/http-basic-auth/#http-basic-auth"
+          ]
+        },
+        {
+          "id": "fa-16",
+          "first_relevant_rank": 1,
+          "latency_ms": 66.94860011339188,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/tutorial/metadata/#metadata-for-api",
+            "https://fastapi.tiangolo.com/tutorial/metadata/#metadata-and-docs-urls",
+            "https://fastapi.tiangolo.com/tutorial/metadata/#metadata-for-api"
+          ]
+        },
+        {
+          "id": "fa-17",
+          "first_relevant_rank": 3,
+          "latency_ms": 50.39669945836067,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/advanced/opentelemetry/#customize-telemetry",
+            "https://fastapi.tiangolo.com/advanced/opentelemetry/#opentelemetry",
+            "https://fastapi.tiangolo.com/tutorial/middleware/#middleware"
+          ]
+        },
+        {
+          "id": "fa-18",
+          "first_relevant_rank": 1,
+          "latency_ms": 48.27080015093088,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/tutorial/metadata/#metadata-and-docs-urls",
+            "https://fastapi.tiangolo.com/tutorial/path-operation-configuration/#path-operation-configuration",
+            "https://fastapi.tiangolo.com/tutorial/metadata/#metadata-for-api"
+          ]
+        },
+        {
+          "id": "fa-19",
+          "first_relevant_rank": 1,
+          "latency_ms": 53.851899690926075,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/tutorial/path-params-numeric-validations/#number-validations-greater-than-or-equal",
+            "https://fastapi.tiangolo.com/tutorial/path-params-numeric-validations/#number-validations-floats-greater-than-and-less-than",
+            "https://fastapi.tiangolo.com/tutorial/path-params-numeric-validations/#number-validations-greater-than-and-less-than-or-equal"
+          ]
+        },
+        {
+          "id": "fa-20",
+          "first_relevant_rank": 1,
+          "latency_ms": 56.98290001600981,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/tutorial/query-params-str-validations/#add-regular-expressions",
+            "https://fastapi.tiangolo.com/tutorial/query-params-str-validations/#add-query-to-annotated-in-the-q-parameter",
+            "https://fastapi.tiangolo.com/tutorial/query-params-str-validations/#deprecating-parameters"
+          ]
+        },
+        {
+          "id": "fa-21",
+          "first_relevant_rank": 3,
+          "latency_ms": 45.63140030950308,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/advanced/stream-data/#a-custom-pngstreamingresponse",
+            "https://fastapi.tiangolo.com/advanced/stream-data/#a-custom-pngstreamingresponse",
+            "https://fastapi.tiangolo.com/tutorial/request-files/#optional-file-upload"
+          ]
+        },
+        {
+          "id": "fa-22",
+          "first_relevant_rank": 1,
+          "latency_ms": 73.0907004326582,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/tutorial/request-forms/#define-form-parameters",
+            "https://fastapi.tiangolo.com/tutorial/request-forms/#form-data",
+            "https://fastapi.tiangolo.com/tutorial/request-form-models/#form-models"
+          ]
+        },
+        {
+          "id": "fa-23",
+          "first_relevant_rank": null,
+          "latency_ms": 48.85519947856665,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/tutorial/body-fields/#body-fields",
+            "https://fastapi.tiangolo.com/advanced/json-base64-bytes/#pydantic-bytes",
+            "https://fastapi.tiangolo.com/advanced/json-base64-bytes/#pydantic-bytes-for-output-data"
+          ]
+        },
+        {
+          "id": "fa-24",
+          "first_relevant_rank": 2,
+          "latency_ms": 42.07029938697815,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/advanced/response-change-status-code/#response-change-status-code",
+            "https://fastapi.tiangolo.com/tutorial/response-status-code/#about-http-status-codes",
+            "https://fastapi.tiangolo.com/tutorial/response-status-code/#response-status-code"
+          ]
+        },
+        {
+          "id": "fa-25",
+          "first_relevant_rank": 1,
+          "latency_ms": 68.3173006400466,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/tutorial/security/oauth2-jwt/#oauth2-with-password-and-hashing-bearer-with-jwt-tokens",
+            "https://fastapi.tiangolo.com/tutorial/security/oauth2-jwt/#oauth2-with-password-and-hashing-bearer-with-jwt-tokens",
+            "https://fastapi.tiangolo.com/tutorial/security/oauth2-jwt/#hash-and-verify-the-passwords"
+          ]
+        },
+        {
+          "id": "fa-26",
+          "first_relevant_rank": 1,
+          "latency_ms": 114.40850049257278,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/tutorial/sql-databases/#sql-relational-databases",
+            "https://fastapi.tiangolo.com/tutorial/sql-databases/#create-models",
+            "https://fastapi.tiangolo.com/tutorial/sql-databases/#sql-relational-databases"
+          ]
+        },
+        {
+          "id": "fa-27",
+          "first_relevant_rank": 8,
+          "latency_ms": 43.04409958422184,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/advanced/templates/#templates",
+            "https://fastapi.tiangolo.com/tutorial/frontend/#client-side-routing",
+            "https://fastapi.tiangolo.com/tutorial/frontend/#frontend"
+          ]
+        },
+        {
+          "id": "fa-28",
+          "first_relevant_rank": 2,
+          "latency_ms": 39.50779978185892,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/advanced/behind-a-proxy/#testing-locally-with-traefik",
+            "https://fastapi.tiangolo.com/advanced/async-tests/#async-tests",
+            "https://fastapi.tiangolo.com/tutorial/testing/#using-testclient"
+          ]
+        },
+        {
+          "id": "fa-29",
+          "first_relevant_rank": 1,
+          "latency_ms": 58.86160023510456,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/advanced/events/#lifespan",
+            "https://fastapi.tiangolo.com/advanced/events/#use-case",
+            "https://fastapi.tiangolo.com/advanced/events/#lifespan-events"
+          ]
+        },
+        {
+          "id": "fa-30",
+          "first_relevant_rank": 1,
+          "latency_ms": 57.597399689257145,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/advanced/testing-dependencies/#testing-dependencies-with-overrides",
+            "https://fastapi.tiangolo.com/advanced/testing-dependencies/#use-the-app-dependency-overrides-attribute",
+            "https://fastapi.tiangolo.com/advanced/testing-dependencies/#use-the-app-dependency-overrides-attribute"
+          ]
+        },
+        {
+          "id": "fa-31",
+          "first_relevant_rank": 1,
+          "latency_ms": 49.47219975292683,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/advanced/settings/#settings-and-environment-variables",
+            "https://fastapi.tiangolo.com/advanced/settings/#reading-a-env-file",
+            "https://fastapi.tiangolo.com/advanced/settings/#settings-and-environment-variables"
+          ]
+        },
+        {
+          "id": "fa-32",
+          "first_relevant_rank": 1,
+          "latency_ms": 66.8673999607563,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/advanced/wsgi/#including-wsgi-flask-django-others",
+            "https://fastapi.tiangolo.com/advanced/wsgi/#check-it",
+            "https://fastapi.tiangolo.com/tutorial/debugging/#debugging"
+          ]
+        },
+        {
+          "id": "fa-33",
+          "first_relevant_rank": 2,
+          "latency_ms": 50.84559973329306,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/tutorial/server-sent-events/#server-sent-events-sse",
+            "https://fastapi.tiangolo.com/advanced/websockets/#in-production",
+            "https://fastapi.tiangolo.com/advanced/websockets/#websockets"
+          ]
+        },
+        {
+          "id": "fa-34",
+          "first_relevant_rank": 1,
+          "latency_ms": 56.10800068825483,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/advanced/security/oauth2-scopes/#oauth2-scopes",
+            "https://fastapi.tiangolo.com/advanced/security/oauth2-scopes/#oauth2-scopes",
+            "https://fastapi.tiangolo.com/advanced/security/oauth2-scopes/#oauth2-scopes"
+          ]
+        },
+        {
+          "id": "fa-35",
+          "first_relevant_rank": 2,
+          "latency_ms": 44.0012002363801,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/tutorial/frontend/#frontend",
+            "https://fastapi.tiangolo.com/advanced/custom-response/#custom-response-html-stream-file-others",
+            "https://fastapi.tiangolo.com/advanced/custom-response/#custom-response-html-stream-file-others"
+          ]
+        },
+        {
+          "id": "fa-36",
+          "first_relevant_rank": 1,
+          "latency_ms": 43.06179936975241,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/advanced/response-cookies/#return-a-response-directly",
+            "https://fastapi.tiangolo.com/advanced/response-cookies/#response-cookies",
+            "https://fastapi.tiangolo.com/tutorial/cookie-param-models/#forbid-extra-cookies"
+          ]
+        },
+        {
+          "id": "fa-37",
+          "first_relevant_rank": 1,
+          "latency_ms": 47.743200324475765,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/advanced/behind-a-proxy/#proxy-with-a-stripped-path-prefix",
+            "https://fastapi.tiangolo.com/advanced/behind-a-proxy/#check-the-docs-ui",
+            "https://fastapi.tiangolo.com/advanced/behind-a-proxy/#proxy-with-a-stripped-path-prefix"
+          ]
+        },
+        {
+          "id": "fa-38",
+          "first_relevant_rank": 4,
+          "latency_ms": 52.38380003720522,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/advanced/generate-clients/#generating-sdks",
+            "https://fastapi.tiangolo.com/advanced/generate-clients/#generating-sdks",
+            "https://fastapi.tiangolo.com/advanced/generate-clients/#create-a-typescript-sdk"
+          ]
+        },
+        {
+          "id": "fa-39",
+          "first_relevant_rank": 1,
+          "latency_ms": 50.73640029877424,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/advanced/generate-clients/#create-a-typescript-sdk",
+            "https://fastapi.tiangolo.com/advanced/generate-clients/#generating-sdks",
+            "https://fastapi.tiangolo.com/advanced/generate-clients/#generating-sdks"
+          ]
+        },
+        {
+          "id": "fa-40",
+          "first_relevant_rank": 3,
+          "latency_ms": 132.3000993579626,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/tutorial/security/first-steps/#the-password-flow",
+            "https://fastapi.tiangolo.com/tutorial/security/oauth2-jwt/#oauth2-with-password-and-hashing-bearer-with-jwt-tokens",
+            "https://fastapi.tiangolo.com/advanced/security/http-basic-auth/#check-the-username"
+          ]
+        },
+        {
+          "id": "hx-01",
+          "first_relevant_rank": 1,
+          "latency_ms": 69.54769976437092,
+          "top_urls": [
+            "https://www.python-httpx.org/advanced/timeouts/#fine-tuning-the-configuration",
+            "https://www.python-httpx.org/advanced/extensions/#request-extensions",
+            "https://www.python-httpx.org/api/#asyncclient"
+          ]
+        },
+        {
+          "id": "hx-02",
+          "first_relevant_rank": 1,
+          "latency_ms": 87.5067999586463,
+          "top_urls": [
+            "https://www.python-httpx.org/advanced/proxies/",
+            "https://www.python-httpx.org/advanced/proxies/",
+            "https://www.python-httpx.org/advanced/transports/#mounting-transports"
+          ]
+        },
+        {
+          "id": "hx-03",
+          "first_relevant_rank": 1,
+          "latency_ms": 60.11249963194132,
+          "top_urls": [
+            "https://www.python-httpx.org/advanced/ssl/",
+            "https://www.python-httpx.org/contributing/#development-proxy-setup",
+            "https://www.python-httpx.org/advanced/ssl/"
+          ]
+        },
+        {
+          "id": "hx-04",
+          "first_relevant_rank": 1,
+          "latency_ms": 58.12760069966316,
+          "top_urls": [
+            "https://www.python-httpx.org/async/#async-support",
+            "https://www.python-httpx.org/async/#async-support",
+            "https://www.python-httpx.org/async/#async-support"
+          ]
+        },
+        {
+          "id": "hx-05",
+          "first_relevant_rank": 1,
+          "latency_ms": 43.03670022636652,
+          "top_urls": [
+            "https://www.python-httpx.org/http2/#http2",
+            "https://www.python-httpx.org/http2/#inspecting-the-http-version",
+            "https://www.python-httpx.org/advanced/extensions/#response-extensions"
+          ]
+        },
+        {
+          "id": "hx-06",
+          "first_relevant_rank": 1,
+          "latency_ms": 32.73550048470497,
+          "top_urls": [
+            "https://www.python-httpx.org/advanced/clients/#sharing-configuration-across-requests",
+            "https://www.python-httpx.org/advanced/clients/#why-use-a-client",
+            "https://www.python-httpx.org/api/#developer-interface"
+          ]
+        },
+        {
+          "id": "hx-07",
+          "first_relevant_rank": 1,
+          "latency_ms": 38.90009969472885,
+          "top_urls": [
+            "https://www.python-httpx.org/advanced/event-hooks/",
+            "https://www.python-httpx.org/api/#response",
+            "https://www.python-httpx.org/api/#asyncclient"
+          ]
+        },
+        {
+          "id": "hx-08",
+          "first_relevant_rank": 1,
+          "latency_ms": 34.4396997243166,
+          "top_urls": [
+            "https://www.python-httpx.org/advanced/resource-limits/",
+            "https://www.python-httpx.org/async/#opening-and-closing-clients",
+            "https://www.python-httpx.org/advanced/timeouts/#fine-tuning-the-configuration"
+          ]
+        },
+        {
+          "id": "hx-09",
+          "first_relevant_rank": 1,
+          "latency_ms": 49.750800244510174,
+          "top_urls": [
+            "https://www.python-httpx.org/advanced/transports/#asgi-transport",
+            "https://www.python-httpx.org/api/#asyncclient",
+            "https://www.python-httpx.org/compatibility/#requests-compatibility-guide"
+          ]
+        },
+        {
+          "id": "hx-10",
+          "first_relevant_rank": 1,
+          "latency_ms": 53.73590067028999,
+          "top_urls": [
+            "https://www.python-httpx.org/compatibility/#requests-compatibility-guide",
+            "https://www.python-httpx.org/quickstart/#quickstart",
+            "https://www.python-httpx.org/api/#helper-functions"
+          ]
+        },
+        {
+          "id": "hx-11",
+          "first_relevant_rank": 1,
+          "latency_ms": 52.46280040591955,
+          "top_urls": [
+            "https://www.python-httpx.org/exceptions/#exception-classes",
+            "https://www.python-httpx.org/quickstart/#exceptions",
+            "https://www.python-httpx.org/advanced/timeouts/#fine-tuning-the-configuration"
+          ]
+        },
+        {
+          "id": "hx-12",
+          "first_relevant_rank": 1,
+          "latency_ms": 60.16079988330603,
+          "top_urls": [
+            "https://www.python-httpx.org/quickstart/#quickstart",
+            "https://www.python-httpx.org/api/#helper-functions",
+            "https://www.python-httpx.org/api/#asyncclient"
+          ]
+        },
+        {
+          "id": "hx-13",
+          "first_relevant_rank": 1,
+          "latency_ms": 42.14229993522167,
+          "top_urls": [
+            "https://www.python-httpx.org/advanced/authentication/#custom-authentication-schemes",
+            "https://www.python-httpx.org/advanced/authentication/#custom-authentication-schemes",
+            "https://www.python-httpx.org/advanced/authentication/#custom-authentication-schemes"
+          ]
+        },
+        {
+          "id": "hx-14",
+          "first_relevant_rank": 1,
+          "latency_ms": 67.38639995455742,
+          "top_urls": [
+            "https://www.python-httpx.org/advanced/text-encodings/",
+            "https://www.python-httpx.org/advanced/text-encodings/#using-auto-detection",
+            "https://www.python-httpx.org/compatibility/#requests-compatibility-guide"
+          ]
+        },
+        {
+          "id": "hx-15",
+          "first_relevant_rank": 1,
+          "latency_ms": 45.81919964402914,
+          "top_urls": [
+            "https://www.python-httpx.org/logging/#logging",
+            "https://www.python-httpx.org/logging/#logging",
+            "https://www.python-httpx.org/logging/#logging"
+          ]
+        },
+        {
+          "id": "hx-16",
+          "first_relevant_rank": 1,
+          "latency_ms": 58.81599988788366,
+          "top_urls": [
+            "https://www.python-httpx.org/advanced/proxies/",
+            "https://www.python-httpx.org/advanced/proxies/",
+            "https://www.python-httpx.org/environment_variables/#environment-variables"
+          ]
+        },
+        {
+          "id": "hx-17",
+          "first_relevant_rank": 1,
+          "latency_ms": 98.75210002064705,
+          "top_urls": [
+            "https://www.python-httpx.org/third_party_packages/#plugins",
+            "https://www.python-httpx.org/compatibility/#requests-compatibility-guide",
+            "https://www.python-httpx.org/advanced/extensions/#trace"
+          ]
+        },
+        {
+          "id": "hx-18",
+          "first_relevant_rank": 1,
+          "latency_ms": 68.4082992374897,
+          "top_urls": [
+            "https://www.python-httpx.org/quickstart/#streaming-responses",
+            "https://www.python-httpx.org/advanced/clients/#monitoring-download-progress",
+            "https://www.python-httpx.org/advanced/clients/#multipart-file-encoding"
+          ]
+        },
+        {
+          "id": "hx-19",
+          "first_relevant_rank": 1,
+          "latency_ms": 109.68019999563694,
+          "top_urls": [
+            "https://www.python-httpx.org/troubleshooting/#proxies",
+            "https://www.python-httpx.org/compatibility/#requests-compatibility-guide",
+            "https://www.python-httpx.org/advanced/proxies/"
+          ]
+        },
+        {
+          "id": "hx-20",
+          "first_relevant_rank": 1,
+          "latency_ms": 66.53540022671223,
+          "top_urls": [
+            "https://www.python-httpx.org/advanced/extensions/#request-extensions",
+            "https://www.python-httpx.org/contributing/#development-proxy-setup",
+            "https://www.python-httpx.org/advanced/extensions/#target"
+          ]
+        },
+        {
+          "id": "ty-01",
+          "first_relevant_rank": 1,
+          "latency_ms": 43.127099983394146,
+          "top_urls": [
+            "https://typer.tiangolo.com/tutorial/arguments/optional/#alternative-old-typerargument-as-the-default-value",
+            "https://typer.tiangolo.com/tutorial/arguments/optional/#alternative-old-typerargument-as-the-default-value",
+            "https://typer.tiangolo.com/tutorial/options/name/#defining-cli-option-short-names"
+          ]
+        },
+        {
+          "id": "ty-02",
+          "first_relevant_rank": 1,
+          "latency_ms": 105.75350001454353,
+          "top_urls": [
+            "https://typer.tiangolo.com/tutorial/arguments/envvar/#multiple-environment-variables",
+            "https://typer.tiangolo.com/tutorial/arguments/envvar/#cli-arguments-with-environment-variables",
+            "https://typer.tiangolo.com/tutorial/arguments/envvar/#hide-an-env-var-from-the-help-text"
+          ]
+        },
+        {
+          "id": "ty-03",
+          "first_relevant_rank": 2,
+          "latency_ms": 44.37999986112118,
+          "top_urls": [
+            "https://typer.tiangolo.com/tutorial/one-file-per-command/#implementation",
+            "https://typer.tiangolo.com/tutorial/commands/#commands",
+            "https://typer.tiangolo.com/tutorial/commands/#a-cli-application-with-multiple-commands"
+          ]
+        },
+        {
+          "id": "ty-04",
+          "first_relevant_rank": 2,
+          "latency_ms": 69.27039939910173,
+          "top_urls": [
+            "https://typer.tiangolo.com/tutorial/parameter-types/number/#counter-cli-options",
+            "https://typer.tiangolo.com/tutorial/commands/callback/#typer-callback",
+            "https://typer.tiangolo.com/tutorial/subcommands/nested-subcommands/#deeply-nested-subcommands"
+          ]
+        },
+        {
+          "id": "ty-05",
+          "first_relevant_rank": 1,
+          "latency_ms": 44.59280055016279,
+          "top_urls": [
+            "https://typer.tiangolo.com/tutorial/options/version/#previous-parameters-and-is_eager",
+            "https://typer.tiangolo.com/tutorial/options/version/#first-version-of-version",
+            "https://typer.tiangolo.com/tutorial/options/version/#fix-with-is_eager"
+          ]
+        },
+        {
+          "id": "ty-06",
+          "first_relevant_rank": 2,
+          "latency_ms": 201.09190046787262,
+          "top_urls": [
+            "https://typer.tiangolo.com/tutorial/prompt/#ask-with-prompt",
+            "https://typer.tiangolo.com/tutorial/options/password/#password-cli-option-and-confirmation-prompt",
+            "https://typer.tiangolo.com/tutorial/options/password/#a-password-prompt"
+          ]
+        },
+        {
+          "id": "ty-07",
+          "first_relevant_rank": 1,
+          "latency_ms": 72.12410029023886,
+          "top_urls": [
+            "https://typer.tiangolo.com/tutorial/options/prompt/#cli-option-prompt",
+            "https://typer.tiangolo.com/tutorial/prompt/#ask-with-prompt",
+            "https://typer.tiangolo.com/tutorial/prompt/#ask-with-prompt"
+          ]
+        },
+        {
+          "id": "ty-08",
+          "first_relevant_rank": 1,
+          "latency_ms": 78.52569967508316,
+          "top_urls": [
+            "https://typer.tiangolo.com/tutorial/options/name/#cli-option-only-short-name",
+            "https://typer.tiangolo.com/tutorial/options/name/#defining-cli-option-short-names",
+            "https://typer.tiangolo.com/tutorial/options/name/#cli-option-name"
+          ]
+        },
+        {
+          "id": "ty-09",
+          "first_relevant_rank": 8,
+          "latency_ms": 53.57650015503168,
+          "top_urls": [
+            "https://typer.tiangolo.com/tutorial/options/callback-and-context/#validate-cli-parameters",
+            "https://typer.tiangolo.com/tutorial/options/version/#fix-with-is_eager",
+            "https://typer.tiangolo.com/tutorial/multiple-values/options-with-multiple-values/#cli-options-with-multiple-values"
+          ]
+        },
+        {
+          "id": "ty-10",
+          "first_relevant_rank": 1,
+          "latency_ms": 34.79799907654524,
+          "top_urls": [
+            "https://typer.tiangolo.com/tutorial/parameter-types/path/#path-validations",
+            "https://typer.tiangolo.com/tutorial/parameter-types/path/#path",
+            "https://typer.tiangolo.com/tutorial/parameter-types/path/#path-validations"
+          ]
+        },
+        {
+          "id": "ty-11",
+          "first_relevant_rank": 1,
+          "latency_ms": 40.53490050137043,
+          "top_urls": [
+            "https://typer.tiangolo.com/tutorial/parameter-types/bool/#boolean-cli-options",
+            "https://typer.tiangolo.com/tutorial/parameter-types/bool/#short-names",
+            "https://typer.tiangolo.com/tutorial/first-steps/#arguments-options-parameters-optional-required"
+          ]
+        },
+        {
+          "id": "ty-12",
+          "first_relevant_rank": 1,
+          "latency_ms": 37.91620023548603,
+          "top_urls": [
+            "https://typer.tiangolo.com/tutorial/multiple-values/multiple-options/#multiple-cli-options",
+            "https://typer.tiangolo.com/tutorial/progressbar/#use-typerprogressbar",
+            "https://typer.tiangolo.com/tutorial/progressbar/#setting-a-progress-bar-length"
+          ]
+        },
+        {
+          "id": "ty-13",
+          "first_relevant_rank": 1,
+          "latency_ms": 29.214399866759777,
+          "top_urls": [
+            "https://typer.tiangolo.com/tutorial/progressbar/#progress-bar",
+            "https://typer.tiangolo.com/tutorial/progressbar/#progress-bar",
+            "https://typer.tiangolo.com/tutorial/progressbar/#progress-bar"
+          ]
+        },
+        {
+          "id": "ty-14",
+          "first_relevant_rank": 1,
+          "latency_ms": 33.99929963052273,
+          "top_urls": [
+            "https://typer.tiangolo.com/tutorial/printing/#printing-and-colors",
+            "https://typer.tiangolo.com/tutorial/printing/#color",
+            "https://typer.tiangolo.com/tutorial/printing/#printing-and-colors"
+          ]
+        },
+        {
+          "id": "ty-15",
+          "first_relevant_rank": 1,
+          "latency_ms": 28.283899649977684,
+          "top_urls": [
+            "https://typer.tiangolo.com/tutorial/terminating/#exit-a-cli-program",
+            "https://typer.tiangolo.com/tutorial/terminating/#terminating",
+            "https://typer.tiangolo.com/tutorial/terminating/#terminating"
+          ]
+        },
+        {
+          "id": "ty-16",
+          "first_relevant_rank": 1,
+          "latency_ms": 29.08569946885109,
+          "top_urls": [
+            "https://typer.tiangolo.com/tutorial/testing/#call-pytest",
+            "https://typer.tiangolo.com/tutorial/testing/#test-the-app",
+            "https://typer.tiangolo.com/tutorial/testing/#testing"
+          ]
+        },
+        {
+          "id": "ty-17",
+          "first_relevant_rank": 1,
+          "latency_ms": 29.35480047017336,
+          "top_urls": [
+            "https://typer.tiangolo.com/tutorial/subcommands/nested-subcommands/#deeply-nested-subcommands",
+            "https://typer.tiangolo.com/tutorial/subcommands/nested-subcommands/#nested-subcommands",
+            "https://typer.tiangolo.com/tutorial/subcommands/nested-subcommands/#review-the-files"
+          ]
+        },
+        {
+          "id": "ty-18",
+          "first_relevant_rank": 2,
+          "latency_ms": 37.615000270307064,
+          "top_urls": [
+            "https://typer.tiangolo.com/tutorial/options/callback-and-context/#handling-completion",
+            "https://typer.tiangolo.com/tutorial/options-autocompletion/#check-the-incomplete-value",
+            "https://typer.tiangolo.com/tutorial/options-autocompletion/#custom-completion-for-values"
+          ]
+        },
+        {
+          "id": "ty-19",
+          "first_relevant_rank": 1,
+          "latency_ms": 47.348299995064735,
+          "top_urls": [
+            "https://typer.tiangolo.com/tutorial/options/callback-and-context/#validate-cli-parameters",
+            "https://typer.tiangolo.com/tutorial/options-autocompletion/#check-the-incomplete-value",
+            "https://typer.tiangolo.com/tutorial/options-autocompletion/#check-the-incomplete-value"
+          ]
+        },
+        {
+          "id": "ty-20",
+          "first_relevant_rank": 1,
+          "latency_ms": 35.79770028591156,
+          "top_urls": [
+            "https://typer.tiangolo.com/tutorial/app-dir/#cli-application-directory",
+            "https://typer.tiangolo.com/tutorial/parameter-types/path/#path",
+            "https://typer.tiangolo.com/tutorial/parameter-types/path/#path"
+          ]
+        },
+        {
+          "id": "ty-21",
+          "first_relevant_rank": 1,
+          "latency_ms": 27.396900579333305,
+          "top_urls": [
+            "https://typer.tiangolo.com/tutorial/parameter-types/number/#counter-cli-options",
+            "https://typer.tiangolo.com/tutorial/commands/callback/#typer-callback",
+            "https://typer.tiangolo.com/tutorial/commands/callback/#typer-callback"
+          ]
+        },
+        {
+          "id": "ty-22",
+          "first_relevant_rank": 1,
+          "latency_ms": 32.67450071871281,
+          "top_urls": [
+            "https://typer.tiangolo.com/tutorial/prompt/#ask-with-prompt",
+            "https://typer.tiangolo.com/tutorial/commands/help/#command-help",
+            "https://typer.tiangolo.com/tutorial/prompt/#ask-with-prompt"
+          ]
+        },
+        {
+          "id": "ty-23",
+          "first_relevant_rank": 1,
+          "latency_ms": 31.59959986805916,
+          "top_urls": [
+            "https://typer.tiangolo.com/tutorial/parameter-types/datetime/#custom-date-format",
+            "https://typer.tiangolo.com/tutorial/parameter-types/datetime/#custom-date-format",
+            "https://typer.tiangolo.com/tutorial/parameter-types/datetime/#datetime"
+          ]
+        },
+        {
+          "id": "ty-24",
+          "first_relevant_rank": 1,
+          "latency_ms": 32.10490010678768,
+          "top_urls": [
+            "https://typer.tiangolo.com/tutorial/exceptions/#exceptions-and-errors",
+            "https://typer.tiangolo.com/tutorial/exceptions/#exceptions-and-errors",
+            "https://typer.tiangolo.com/tutorial/arguments/envvar/#hide-an-env-var-from-the-help-text"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "hybrid+rerank",
+      "n": 84,
+      "k": 10,
+      "recall": {
+        "1": 0.7976190476190477,
+        "3": 0.9047619047619048,
+        "5": 0.9523809523809523,
+        "10": 0.9761904761904762
+      },
+      "mrr": 0.8546296296296296,
+      "p50_ms": 3241.286550182849,
+      "p95_ms": 4818.729875050485,
+      "results": [
+        {
+          "id": "fa-01",
+          "first_relevant_rank": 1,
+          "latency_ms": 4360.604799352586,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/tutorial/background-tasks/#background-tasks",
+            "https://fastapi.tiangolo.com/tutorial/dependencies/dependencies-with-yield/#early-exit-and-scope",
+            "https://fastapi.tiangolo.com/tutorial/middleware/#middleware"
+          ]
+        },
+        {
+          "id": "fa-02",
+          "first_relevant_rank": 1,
+          "latency_ms": 3614.6662002429366,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/tutorial/bigger-applications/#another-module-with-apirouter",
+            "https://fastapi.tiangolo.com/tutorial/bigger-applications/#the-main-fastapi",
+            "https://fastapi.tiangolo.com/tutorial/testing/#separating-tests"
+          ]
+        },
+        {
+          "id": "fa-03",
+          "first_relevant_rank": 3,
+          "latency_ms": 3175.6196999922395,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/tutorial/body-multiple-params/#multiple-body-parameters",
+            "https://fastapi.tiangolo.com/tutorial/body/#request-body",
+            "https://fastapi.tiangolo.com/tutorial/body-fields/#body-fields"
+          ]
+        },
+        {
+          "id": "fa-04",
+          "first_relevant_rank": 1,
+          "latency_ms": 3201.098299585283,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/tutorial/body-multiple-params/#multiple-body-parameters",
+            "https://fastapi.tiangolo.com/tutorial/stream-json-lines/#stream-json-lines",
+            "https://fastapi.tiangolo.com/tutorial/schema-extra-example/#body-with-examples"
+          ]
+        },
+        {
+          "id": "fa-05",
+          "first_relevant_rank": null,
+          "latency_ms": 3150.8460994809866,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/tutorial/sql-databases/#heroupdate-the-data-model-to-update-a-hero",
+            "https://fastapi.tiangolo.com/tutorial/request-form-models/#form-models",
+            "https://fastapi.tiangolo.com/tutorial/query-param-models/#query-parameter-models"
+          ]
+        },
+        {
+          "id": "fa-06",
+          "first_relevant_rank": 1,
+          "latency_ms": 2976.1361991986632,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/tutorial/cookie-params/#cookie-parameters",
+            "https://fastapi.tiangolo.com/tutorial/cookie-param-models/#check-the-docs",
+            "https://fastapi.tiangolo.com/tutorial/cookie-param-models/#forbid-extra-cookies"
+          ]
+        },
+        {
+          "id": "fa-07",
+          "first_relevant_rank": 5,
+          "latency_ms": 3107.9274993389845,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/advanced/strict-content-type/#example-attack",
+            "https://fastapi.tiangolo.com/advanced/behind-a-proxy/#check-the-responses",
+            "https://fastapi.tiangolo.com/tutorial/first-steps/#first-steps"
+          ]
+        },
+        {
+          "id": "fa-08",
+          "first_relevant_rank": 2,
+          "latency_ms": 3304.002800025046,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/tutorial/first-steps/#first-steps",
+            "https://fastapi.tiangolo.com/tutorial/debugging/#run-your-code-with-your-debugger",
+            "https://fastapi.tiangolo.com/tutorial/security/first-steps/#security-first-steps"
+          ]
+        },
+        {
+          "id": "fa-09",
+          "first_relevant_rank": 1,
+          "latency_ms": 2953.504399396479,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/tutorial/dependencies/classes-as-dependencies/#what-makes-a-dependency",
+            "https://fastapi.tiangolo.com/advanced/advanced-dependencies/#use-the-instance-as-a-dependency",
+            "https://fastapi.tiangolo.com/advanced/advanced-dependencies/#advanced-dependencies"
+          ]
+        },
+        {
+          "id": "fa-10",
+          "first_relevant_rank": 1,
+          "latency_ms": 3048.894500359893,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/tutorial/sql-databases/#create-a-session-dependency",
+            "https://fastapi.tiangolo.com/advanced/advanced-dependencies/#use-cases-with-early-exit-code",
+            "https://fastapi.tiangolo.com/advanced/advanced-dependencies/#use-cases-with-early-exit-code"
+          ]
+        },
+        {
+          "id": "fa-11",
+          "first_relevant_rank": null,
+          "latency_ms": 3054.4938994571567,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/advanced/opentelemetry/#opentelemetry",
+            "https://fastapi.tiangolo.com/tutorial/security/first-steps/#the-password-flow",
+            "https://fastapi.tiangolo.com/tutorial/bigger-applications/#bigger-applications-multiple-files"
+          ]
+        },
+        {
+          "id": "fa-12",
+          "first_relevant_rank": 1,
+          "latency_ms": 3086.711399257183,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/tutorial/encoder/#json-compatible-encoder",
+            "https://fastapi.tiangolo.com/advanced/response-directly/#return-a-response-directly",
+            "https://fastapi.tiangolo.com/advanced/json-base64-bytes/#pydantic-bytes"
+          ]
+        },
+        {
+          "id": "fa-13",
+          "first_relevant_rank": 1,
+          "latency_ms": 3296.5026004239917,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/tutorial/response-model/#add-an-output-model",
+            "https://fastapi.tiangolo.com/tutorial/extra-models/#extra-models",
+            "https://fastapi.tiangolo.com/tutorial/response-model/#return-the-same-input-data"
+          ]
+        },
+        {
+          "id": "fa-14",
+          "first_relevant_rank": 1,
+          "latency_ms": 3350.796800106764,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/tutorial/handling-errors/#use-httpexception",
+            "https://fastapi.tiangolo.com/tutorial/handling-errors/#handling-errors",
+            "https://fastapi.tiangolo.com/tutorial/frontend/#frontend"
+          ]
+        },
+        {
+          "id": "fa-15",
+          "first_relevant_rank": 9,
+          "latency_ms": 3223.35649933666,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/tutorial/security/get-current-user/#recap",
+            "https://fastapi.tiangolo.com/tutorial/dependencies/dependencies-with-yield/#early-exit-and-scope",
+            "https://fastapi.tiangolo.com/tutorial/security/simple-oauth2/#simple-oauth2-with-password-and-bearer"
+          ]
+        },
+        {
+          "id": "fa-16",
+          "first_relevant_rank": 1,
+          "latency_ms": 3023.901400156319,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/tutorial/metadata/#metadata-and-docs-urls",
+            "https://fastapi.tiangolo.com/tutorial/metadata/#metadata-for-api",
+            "https://fastapi.tiangolo.com/tutorial/query-params-str-validations/#deprecating-parameters"
+          ]
+        },
+        {
+          "id": "fa-17",
+          "first_relevant_rank": 1,
+          "latency_ms": 3138.2812997326255,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/tutorial/middleware/#middleware",
+            "https://fastapi.tiangolo.com/advanced/opentelemetry/#customize-telemetry",
+            "https://fastapi.tiangolo.com/advanced/response-headers/#response-headers"
+          ]
+        },
+        {
+          "id": "fa-18",
+          "first_relevant_rank": 1,
+          "latency_ms": 3177.7119003236294,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/tutorial/path-operation-configuration/#path-operation-configuration",
+            "https://fastapi.tiangolo.com/tutorial/metadata/#metadata-and-docs-urls",
+            "https://fastapi.tiangolo.com/advanced/opentelemetry/#configure-providers-and-exporters"
+          ]
+        },
+        {
+          "id": "fa-19",
+          "first_relevant_rank": 1,
+          "latency_ms": 2978.401499800384,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/tutorial/path-params-numeric-validations/#number-validations-greater-than-or-equal",
+            "https://fastapi.tiangolo.com/tutorial/path-params-numeric-validations/#number-validations-floats-greater-than-and-less-than",
+            "https://fastapi.tiangolo.com/tutorial/path-params-numeric-validations/#number-validations-greater-than-and-less-than-or-equal"
+          ]
+        },
+        {
+          "id": "fa-20",
+          "first_relevant_rank": 1,
+          "latency_ms": 3150.185400620103,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/tutorial/query-params-str-validations/#add-regular-expressions",
+            "https://fastapi.tiangolo.com/tutorial/query-params-str-validations/#add-query-to-annotated-in-the-q-parameter",
+            "https://fastapi.tiangolo.com/tutorial/query-params-str-validations/#deprecating-parameters"
+          ]
+        },
+        {
+          "id": "fa-21",
+          "first_relevant_rank": 1,
+          "latency_ms": 3039.0272000804543,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/tutorial/request-files/#uploadfile",
+            "https://fastapi.tiangolo.com/tutorial/request-files/#file-parameters-with-uploadfile",
+            "https://fastapi.tiangolo.com/tutorial/first-steps/#step-3-create-a-path-operation"
+          ]
+        },
+        {
+          "id": "fa-22",
+          "first_relevant_rank": 1,
+          "latency_ms": 3021.53529971838,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/tutorial/request-forms/#define-form-parameters",
+            "https://fastapi.tiangolo.com/tutorial/security/simple-oauth2/#simple-oauth2-with-password-and-bearer",
+            "https://fastapi.tiangolo.com/tutorial/request-form-models/#form-models"
+          ]
+        },
+        {
+          "id": "fa-23",
+          "first_relevant_rank": 3,
+          "latency_ms": 3342.3043992370367,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/tutorial/handling-errors/#override-the-default-exception-handlers",
+            "https://fastapi.tiangolo.com/tutorial/body-fields/#body-fields",
+            "https://fastapi.tiangolo.com/tutorial/response-model/#response-model-return-type"
+          ]
+        },
+        {
+          "id": "fa-24",
+          "first_relevant_rank": 2,
+          "latency_ms": 3603.2397001981735,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/advanced/response-change-status-code/#response-change-status-code",
+            "https://fastapi.tiangolo.com/tutorial/response-status-code/#about-http-status-codes",
+            "https://fastapi.tiangolo.com/tutorial/response-status-code/#response-status-code"
+          ]
+        },
+        {
+          "id": "fa-25",
+          "first_relevant_rank": 1,
+          "latency_ms": 3228.0322005972266,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/tutorial/security/oauth2-jwt/#oauth2-with-password-and-hashing-bearer-with-jwt-tokens",
+            "https://fastapi.tiangolo.com/tutorial/security/oauth2-jwt/#oauth2-with-password-and-hashing-bearer-with-jwt-tokens",
+            "https://fastapi.tiangolo.com/tutorial/security/oauth2-jwt/#hash-and-verify-the-passwords"
+          ]
+        },
+        {
+          "id": "fa-26",
+          "first_relevant_rank": 1,
+          "latency_ms": 3410.1259000599384,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/tutorial/sql-databases/#create-a-session-dependency",
+            "https://fastapi.tiangolo.com/tutorial/sql-databases/#create-multiple-models",
+            "https://fastapi.tiangolo.com/tutorial/sql-databases/#create-models"
+          ]
+        },
+        {
+          "id": "fa-27",
+          "first_relevant_rank": 5,
+          "latency_ms": 3138.2934004068375,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/advanced/templates/#templates",
+            "https://fastapi.tiangolo.com/advanced/templates/#writing-templates",
+            "https://fastapi.tiangolo.com/tutorial/frontend/#client-side-routing"
+          ]
+        },
+        {
+          "id": "fa-28",
+          "first_relevant_rank": 1,
+          "latency_ms": 3319.4613996893167,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/tutorial/testing/#using-testclient",
+            "https://fastapi.tiangolo.com/advanced/async-tests/#async-tests",
+            "https://fastapi.tiangolo.com/advanced/behind-a-proxy/#testing-locally-with-traefik"
+          ]
+        },
+        {
+          "id": "fa-29",
+          "first_relevant_rank": 1,
+          "latency_ms": 3300.48740003258,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/advanced/events/#lifespan",
+            "https://fastapi.tiangolo.com/advanced/events/#lifespan-events",
+            "https://fastapi.tiangolo.com/advanced/events/#use-case"
+          ]
+        },
+        {
+          "id": "fa-30",
+          "first_relevant_rank": 1,
+          "latency_ms": 3187.7838000655174,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/advanced/testing-dependencies/#testing-dependencies-with-overrides",
+            "https://fastapi.tiangolo.com/advanced/testing-dependencies/#use-the-app-dependency-overrides-attribute",
+            "https://fastapi.tiangolo.com/advanced/testing-dependencies/#use-the-app-dependency-overrides-attribute"
+          ]
+        },
+        {
+          "id": "fa-31",
+          "first_relevant_rank": 1,
+          "latency_ms": 3243.5130001977086,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/advanced/settings/#reading-a-env-file",
+            "https://fastapi.tiangolo.com/advanced/settings/#settings-and-environment-variables",
+            "https://fastapi.tiangolo.com/advanced/settings/#creating-the-settings-only-once-with-lru-cache"
+          ]
+        },
+        {
+          "id": "fa-32",
+          "first_relevant_rank": 1,
+          "latency_ms": 3272.9591000825167,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/advanced/wsgi/#including-wsgi-flask-django-others",
+            "https://fastapi.tiangolo.com/advanced/wsgi/#check-it",
+            "https://fastapi.tiangolo.com/advanced/templates/#templates"
+          ]
+        },
+        {
+          "id": "fa-33",
+          "first_relevant_rank": 3,
+          "latency_ms": 3113.932699896395,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/advanced/behind-a-proxy/#behind-a-proxy",
+            "https://fastapi.tiangolo.com/tutorial/server-sent-events/#server-sent-events-sse",
+            "https://fastapi.tiangolo.com/advanced/websockets/#in-production"
+          ]
+        },
+        {
+          "id": "fa-34",
+          "first_relevant_rank": 1,
+          "latency_ms": 3313.9296993613243,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/advanced/security/oauth2-scopes/#oauth2-scopes",
+            "https://fastapi.tiangolo.com/tutorial/security/oauth2-jwt/#recap",
+            "https://fastapi.tiangolo.com/advanced/security/oauth2-scopes/#oauth2-scopes"
+          ]
+        },
+        {
+          "id": "fa-35",
+          "first_relevant_rank": 1,
+          "latency_ms": 3241.269700229168,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/advanced/custom-response/#custom-response-html-stream-file-others",
+            "https://fastapi.tiangolo.com/advanced/custom-response/#available-responses",
+            "https://fastapi.tiangolo.com/advanced/custom-response/#custom-response-class"
+          ]
+        },
+        {
+          "id": "fa-36",
+          "first_relevant_rank": 1,
+          "latency_ms": 3138.313699513674,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/advanced/response-cookies/#return-a-response-directly",
+            "https://fastapi.tiangolo.com/advanced/response-cookies/#response-cookies",
+            "https://fastapi.tiangolo.com/advanced/response-headers/#response-headers"
+          ]
+        },
+        {
+          "id": "fa-37",
+          "first_relevant_rank": 1,
+          "latency_ms": 3006.9452999159694,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/advanced/behind-a-proxy/#proxy-with-a-stripped-path-prefix",
+            "https://fastapi.tiangolo.com/advanced/behind-a-proxy/#proxy-with-a-stripped-path-prefix",
+            "https://fastapi.tiangolo.com/advanced/behind-a-proxy/#check-the-docs-ui"
+          ]
+        },
+        {
+          "id": "fa-38",
+          "first_relevant_rank": 4,
+          "latency_ms": 3212.5701000913978,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/advanced/generate-clients/#create-a-typescript-sdk",
+            "https://fastapi.tiangolo.com/advanced/generate-clients/#generating-sdks",
+            "https://fastapi.tiangolo.com/tutorial/body/#request-body"
+          ]
+        },
+        {
+          "id": "fa-39",
+          "first_relevant_rank": 1,
+          "latency_ms": 6009.283799678087,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/advanced/generate-clients/#generating-sdks",
+            "https://fastapi.tiangolo.com/advanced/generate-clients/#create-a-typescript-sdk",
+            "https://fastapi.tiangolo.com/advanced/generate-clients/#generate-a-typescript-client-with-custom-operation-ids"
+          ]
+        },
+        {
+          "id": "fa-40",
+          "first_relevant_rank": 4,
+          "latency_ms": 5196.77220005542,
+          "top_urls": [
+            "https://fastapi.tiangolo.com/tutorial/security/first-steps/#the-password-flow",
+            "https://fastapi.tiangolo.com/tutorial/security/oauth2-jwt/#oauth2-with-password-and-hashing-bearer-with-jwt-tokens",
+            "https://fastapi.tiangolo.com/tutorial/security/oauth2-jwt/#oauth2-with-password-and-hashing-bearer-with-jwt-tokens"
+          ]
+        },
+        {
+          "id": "hx-01",
+          "first_relevant_rank": 1,
+          "latency_ms": 7067.692200653255,
+          "top_urls": [
+            "https://www.python-httpx.org/advanced/timeouts/#fine-tuning-the-configuration",
+            "https://www.python-httpx.org/advanced/extensions/#request-extensions",
+            "https://www.python-httpx.org/advanced/extensions/#network_stream"
+          ]
+        },
+        {
+          "id": "hx-02",
+          "first_relevant_rank": 3,
+          "latency_ms": 6317.334599792957,
+          "top_urls": [
+            "https://www.python-httpx.org/advanced/transports/#mounting-transports",
+            "https://www.python-httpx.org/advanced/extensions/#target",
+            "https://www.python-httpx.org/advanced/proxies/"
+          ]
+        },
+        {
+          "id": "hx-03",
+          "first_relevant_rank": 1,
+          "latency_ms": 4836.691400036216,
+          "top_urls": [
+            "https://www.python-httpx.org/advanced/ssl/",
+            "https://www.python-httpx.org/advanced/ssl/",
+            "https://www.python-httpx.org/contributing/#development-proxy-setup"
+          ]
+        },
+        {
+          "id": "hx-04",
+          "first_relevant_rank": 1,
+          "latency_ms": 4716.947900131345,
+          "top_urls": [
+            "https://www.python-httpx.org/async/#async-support",
+            "https://www.python-httpx.org/async/#async-support",
+            "https://www.python-httpx.org/http2/#http2"
+          ]
+        },
+        {
+          "id": "hx-05",
+          "first_relevant_rank": 1,
+          "latency_ms": 4009.1059003025293,
+          "top_urls": [
+            "https://www.python-httpx.org/http2/#http2",
+            "https://www.python-httpx.org/http2/#inspecting-the-http-version",
+            "https://www.python-httpx.org/advanced/extensions/#response-extensions"
+          ]
+        },
+        {
+          "id": "hx-06",
+          "first_relevant_rank": 1,
+          "latency_ms": 3921.727200038731,
+          "top_urls": [
+            "https://www.python-httpx.org/advanced/clients/#sharing-configuration-across-requests",
+            "https://www.python-httpx.org/advanced/clients/",
+            "https://www.python-httpx.org/advanced/clients/#why-use-a-client"
+          ]
+        },
+        {
+          "id": "hx-07",
+          "first_relevant_rank": 1,
+          "latency_ms": 3750.4077004268765,
+          "top_urls": [
+            "https://www.python-httpx.org/advanced/event-hooks/",
+            "https://www.python-httpx.org/api/#helper-functions",
+            "https://www.python-httpx.org/api/#helper-functions"
+          ]
+        },
+        {
+          "id": "hx-08",
+          "first_relevant_rank": 1,
+          "latency_ms": 3557.748499326408,
+          "top_urls": [
+            "https://www.python-httpx.org/advanced/resource-limits/",
+            "https://www.python-httpx.org/advanced/clients/",
+            "https://www.python-httpx.org/advanced/timeouts/#fine-tuning-the-configuration"
+          ]
+        },
+        {
+          "id": "hx-09",
+          "first_relevant_rank": 1,
+          "latency_ms": 3504.5542996376753,
+          "top_urls": [
+            "https://www.python-httpx.org/advanced/transports/#asgi-transport",
+            "https://www.python-httpx.org/async/#async-support",
+            "https://www.python-httpx.org/compatibility/#requests-compatibility-guide"
+          ]
+        },
+        {
+          "id": "hx-10",
+          "first_relevant_rank": 1,
+          "latency_ms": 3695.148700848222,
+          "top_urls": [
+            "https://www.python-httpx.org/compatibility/#requests-compatibility-guide",
+            "https://www.python-httpx.org/quickstart/#quickstart",
+            "https://www.python-httpx.org/api/#helper-functions"
+          ]
+        },
+        {
+          "id": "hx-11",
+          "first_relevant_rank": 1,
+          "latency_ms": 3357.6512997969985,
+          "top_urls": [
+            "https://www.python-httpx.org/exceptions/#exception-classes",
+            "https://www.python-httpx.org/quickstart/#exceptions",
+            "https://www.python-httpx.org/exceptions/#the-exception-hierarchy"
+          ]
+        },
+        {
+          "id": "hx-12",
+          "first_relevant_rank": 3,
+          "latency_ms": 3119.097899645567,
+          "top_urls": [
+            "https://www.python-httpx.org/api/#asyncclient",
+            "https://www.python-httpx.org/api/#client",
+            "https://www.python-httpx.org/quickstart/#quickstart"
+          ]
+        },
+        {
+          "id": "hx-13",
+          "first_relevant_rank": 1,
+          "latency_ms": 3685.352699831128,
+          "top_urls": [
+            "https://www.python-httpx.org/advanced/authentication/#custom-authentication-schemes",
+            "https://www.python-httpx.org/advanced/authentication/#custom-authentication-schemes",
+            "https://www.python-httpx.org/advanced/authentication/#custom-authentication-schemes"
+          ]
+        },
+        {
+          "id": "hx-14",
+          "first_relevant_rank": 1,
+          "latency_ms": 3360.5704000219703,
+          "top_urls": [
+            "https://www.python-httpx.org/advanced/text-encodings/",
+            "https://www.python-httpx.org/advanced/text-encodings/#using-auto-detection",
+            "https://www.python-httpx.org/compatibility/#requests-compatibility-guide"
+          ]
+        },
+        {
+          "id": "hx-15",
+          "first_relevant_rank": 1,
+          "latency_ms": 3051.0975997895002,
+          "top_urls": [
+            "https://www.python-httpx.org/logging/#logging",
+            "https://www.python-httpx.org/advanced/clients/",
+            "https://www.python-httpx.org/logging/#logging"
+          ]
+        },
+        {
+          "id": "hx-16",
+          "first_relevant_rank": 1,
+          "latency_ms": 3349.055400118232,
+          "top_urls": [
+            "https://www.python-httpx.org/advanced/proxies/",
+            "https://www.python-httpx.org/troubleshooting/#error-when-making-requests-to-an-https-proxy",
+            "https://www.python-httpx.org/advanced/proxies/"
+          ]
+        },
+        {
+          "id": "hx-17",
+          "first_relevant_rank": 1,
+          "latency_ms": 3485.6587005779147,
+          "top_urls": [
+            "https://www.python-httpx.org/third_party_packages/#plugins",
+            "https://www.python-httpx.org/compatibility/#requests-compatibility-guide",
+            "https://www.python-httpx.org/advanced/extensions/#extensions"
+          ]
+        },
+        {
+          "id": "hx-18",
+          "first_relevant_rank": 1,
+          "latency_ms": 3368.536099791527,
+          "top_urls": [
+            "https://www.python-httpx.org/quickstart/#streaming-responses",
+            "https://www.python-httpx.org/advanced/clients/#multipart-file-encoding",
+            "https://www.python-httpx.org/api/#asyncclient"
+          ]
+        },
+        {
+          "id": "hx-19",
+          "first_relevant_rank": 1,
+          "latency_ms": 3358.894499950111,
+          "top_urls": [
+            "https://www.python-httpx.org/troubleshooting/#proxies",
+            "https://www.python-httpx.org/contributing/#development-proxy-setup",
+            "https://www.python-httpx.org/compatibility/#requests-compatibility-guide"
+          ]
+        },
+        {
+          "id": "hx-20",
+          "first_relevant_rank": 1,
+          "latency_ms": 3272.9254998266697,
+          "top_urls": [
+            "https://www.python-httpx.org/advanced/extensions/#request-extensions",
+            "https://www.python-httpx.org/contributing/#development-proxy-setup",
+            "https://www.python-httpx.org/advanced/transports/#custom-transports"
+          ]
+        },
+        {
+          "id": "ty-01",
+          "first_relevant_rank": 1,
+          "latency_ms": 3133.3163995295763,
+          "top_urls": [
+            "https://typer.tiangolo.com/tutorial/arguments/optional/#alternative-old-typerargument-as-the-default-value",
+            "https://typer.tiangolo.com/tutorial/options/name/#defining-cli-option-short-names",
+            "https://typer.tiangolo.com/tutorial/arguments/default/#dynamic-default-value"
+          ]
+        },
+        {
+          "id": "ty-02",
+          "first_relevant_rank": 1,
+          "latency_ms": 3257.4837002903223,
+          "top_urls": [
+            "https://typer.tiangolo.com/tutorial/arguments/envvar/#multiple-environment-variables",
+            "https://typer.tiangolo.com/tutorial/arguments/envvar/#cli-arguments-with-environment-variables",
+            "https://typer.tiangolo.com/tutorial/arguments/envvar/#cli-arguments-with-environment-variables"
+          ]
+        },
+        {
+          "id": "ty-03",
+          "first_relevant_rank": 1,
+          "latency_ms": 3352.721900679171,
+          "top_urls": [
+            "https://typer.tiangolo.com/tutorial/commands/#a-cli-application-with-multiple-commands",
+            "https://typer.tiangolo.com/tutorial/commands/one-or-multiple/#one-or-multiple-commands",
+            "https://typer.tiangolo.com/tutorial/commands/one-or-multiple/#one-or-multiple-commands"
+          ]
+        },
+        {
+          "id": "ty-04",
+          "first_relevant_rank": 1,
+          "latency_ms": 3128.43170017004,
+          "top_urls": [
+            "https://typer.tiangolo.com/tutorial/commands/callback/#typer-callback",
+            "https://typer.tiangolo.com/tutorial/parameter-types/number/#counter-cli-options",
+            "https://typer.tiangolo.com/tutorial/commands/callback/#typer-callback"
+          ]
+        },
+        {
+          "id": "ty-05",
+          "first_relevant_rank": 1,
+          "latency_ms": 3148.1442004442215,
+          "top_urls": [
+            "https://typer.tiangolo.com/tutorial/options/version/#previous-parameters-and-is_eager",
+            "https://typer.tiangolo.com/tutorial/terminating/#terminating",
+            "https://typer.tiangolo.com/tutorial/options/version/#fix-with-is_eager"
+          ]
+        },
+        {
+          "id": "ty-06",
+          "first_relevant_rank": 1,
+          "latency_ms": 3386.1462995409966,
+          "top_urls": [
+            "https://typer.tiangolo.com/tutorial/options/password/#a-password-prompt",
+            "https://typer.tiangolo.com/tutorial/options/prompt/#confirmation-prompt",
+            "https://typer.tiangolo.com/tutorial/options/password/#password-cli-option-and-confirmation-prompt"
+          ]
+        },
+        {
+          "id": "ty-07",
+          "first_relevant_rank": 1,
+          "latency_ms": 3252.753200009465,
+          "top_urls": [
+            "https://typer.tiangolo.com/tutorial/options/prompt/#cli-option-prompt",
+            "https://typer.tiangolo.com/tutorial/prompt/#ask-with-prompt",
+            "https://typer.tiangolo.com/tutorial/options-autocompletion/#check-the-incomplete-value"
+          ]
+        },
+        {
+          "id": "ty-08",
+          "first_relevant_rank": 1,
+          "latency_ms": 3048.4298998489976,
+          "top_urls": [
+            "https://typer.tiangolo.com/tutorial/options/name/#cli-option-only-short-name",
+            "https://typer.tiangolo.com/tutorial/options/name/#cli-option-name",
+            "https://typer.tiangolo.com/tutorial/options/name/#defining-cli-option-short-names"
+          ]
+        },
+        {
+          "id": "ty-09",
+          "first_relevant_rank": 9,
+          "latency_ms": 3408.087399788201,
+          "top_urls": [
+            "https://typer.tiangolo.com/tutorial/multiple-values/options-with-multiple-values/#cli-options-with-multiple-values",
+            "https://typer.tiangolo.com/tutorial/options/callback-and-context/#fix-completion-using-the-context",
+            "https://typer.tiangolo.com/tutorial/options/callback-and-context/#using-the-callbackparam-object"
+          ]
+        },
+        {
+          "id": "ty-10",
+          "first_relevant_rank": 1,
+          "latency_ms": 3211.410900577903,
+          "top_urls": [
+            "https://typer.tiangolo.com/tutorial/parameter-types/path/#path-validations",
+            "https://typer.tiangolo.com/tutorial/launch/#launching-applications",
+            "https://typer.tiangolo.com/tutorial/parameter-types/path/#path"
+          ]
+        },
+        {
+          "id": "ty-11",
+          "first_relevant_rank": 1,
+          "latency_ms": 3229.6037999913096,
+          "top_urls": [
+            "https://typer.tiangolo.com/tutorial/parameter-types/bool/#short-names",
+            "https://typer.tiangolo.com/tutorial/parameter-types/bool/#boolean-cli-options",
+            "https://typer.tiangolo.com/tutorial/typer-command/#typer-command"
+          ]
+        },
+        {
+          "id": "ty-12",
+          "first_relevant_rank": 1,
+          "latency_ms": 3474.825200624764,
+          "top_urls": [
+            "https://typer.tiangolo.com/tutorial/multiple-values/multiple-options/#multiple-cli-options",
+            "https://typer.tiangolo.com/tutorial/progressbar/#setting-a-progress-bar-length",
+            "https://typer.tiangolo.com/tutorial/progressbar/#use-typerprogressbar"
+          ]
+        },
+        {
+          "id": "ty-13",
+          "first_relevant_rank": 1,
+          "latency_ms": 3225.464600138366,
+          "top_urls": [
+            "https://typer.tiangolo.com/tutorial/progressbar/#progress-bar",
+            "https://typer.tiangolo.com/tutorial/progressbar/#progress-bar",
+            "https://typer.tiangolo.com/tutorial/progressbar/#progress-bar"
+          ]
+        },
+        {
+          "id": "ty-14",
+          "first_relevant_rank": 1,
+          "latency_ms": 3239.898799918592,
+          "top_urls": [
+            "https://typer.tiangolo.com/tutorial/printing/#color",
+            "https://typer.tiangolo.com/tutorial/printing/#printing-and-colors",
+            "https://typer.tiangolo.com/tutorial/printing/#printing-and-colors"
+          ]
+        },
+        {
+          "id": "ty-15",
+          "first_relevant_rank": 1,
+          "latency_ms": 3438.028300181031,
+          "top_urls": [
+            "https://typer.tiangolo.com/tutorial/terminating/#exit-a-cli-program",
+            "https://typer.tiangolo.com/tutorial/terminating/#terminating",
+            "https://typer.tiangolo.com/tutorial/terminating/#terminating"
+          ]
+        },
+        {
+          "id": "ty-16",
+          "first_relevant_rank": 1,
+          "latency_ms": 3241.3034001365304,
+          "top_urls": [
+            "https://typer.tiangolo.com/tutorial/testing/#call-pytest",
+            "https://typer.tiangolo.com/tutorial/testing/#testing",
+            "https://typer.tiangolo.com/tutorial/commands/options/#command-cli-options"
+          ]
+        },
+        {
+          "id": "ty-17",
+          "first_relevant_rank": 1,
+          "latency_ms": 3129.2570997029543,
+          "top_urls": [
+            "https://typer.tiangolo.com/tutorial/subcommands/nested-subcommands/#deeply-nested-subcommands",
+            "https://typer.tiangolo.com/tutorial/subcommands/nested-subcommands/#nested-subcommands",
+            "https://typer.tiangolo.com/tutorial/subcommands/nested-subcommands/#review-the-files"
+          ]
+        },
+        {
+          "id": "ty-18",
+          "first_relevant_rank": 1,
+          "latency_ms": 3230.493599548936,
+          "top_urls": [
+            "https://typer.tiangolo.com/tutorial/options-autocompletion/#check-the-incomplete-value",
+            "https://typer.tiangolo.com/tutorial/options-autocompletion/#custom-completion-for-values",
+            "https://typer.tiangolo.com/tutorial/options/callback-and-context/#handling-completion"
+          ]
+        },
+        {
+          "id": "ty-19",
+          "first_relevant_rank": 2,
+          "latency_ms": 3199.5222996920347,
+          "top_urls": [
+            "https://typer.tiangolo.com/tutorial/options-autocompletion/#check-the-incomplete-value",
+            "https://typer.tiangolo.com/tutorial/options/callback-and-context/#validate-cli-parameters",
+            "https://typer.tiangolo.com/tutorial/options/callback-and-context/#using-the-callbackparam-object"
+          ]
+        },
+        {
+          "id": "ty-20",
+          "first_relevant_rank": 1,
+          "latency_ms": 3169.151400215924,
+          "top_urls": [
+            "https://typer.tiangolo.com/tutorial/app-dir/#cli-application-directory",
+            "https://typer.tiangolo.com/tutorial/commands/context/#configuring-the-context",
+            "https://typer.tiangolo.com/tutorial/launch/#launching-applications"
+          ]
+        },
+        {
+          "id": "ty-21",
+          "first_relevant_rank": 1,
+          "latency_ms": 3569.2020002752542,
+          "top_urls": [
+            "https://typer.tiangolo.com/tutorial/parameter-types/number/#counter-cli-options",
+            "https://typer.tiangolo.com/tutorial/progressbar/#setting-a-progress-bar-length",
+            "https://typer.tiangolo.com/tutorial/multiple-values/multiple-options/#multiple-cli-options"
+          ]
+        },
+        {
+          "id": "ty-22",
+          "first_relevant_rank": 1,
+          "latency_ms": 3116.746099665761,
+          "top_urls": [
+            "https://typer.tiangolo.com/tutorial/prompt/#ask-with-prompt",
+            "https://typer.tiangolo.com/tutorial/options/prompt/#confirmation-prompt",
+            "https://typer.tiangolo.com/tutorial/prompt/#ask-with-prompt"
+          ]
+        },
+        {
+          "id": "ty-23",
+          "first_relevant_rank": 1,
+          "latency_ms": 3174.053500406444,
+          "top_urls": [
+            "https://typer.tiangolo.com/tutorial/parameter-types/datetime/#custom-date-format",
+            "https://typer.tiangolo.com/tutorial/parameter-types/custom-types/#custom-types",
+            "https://typer.tiangolo.com/tutorial/parameter-types/datetime/#custom-date-format"
+          ]
+        },
+        {
+          "id": "ty-24",
+          "first_relevant_rank": 2,
+          "latency_ms": 3219.8753003031015,
+          "top_urls": [
+            "https://typer.tiangolo.com/tutorial/arguments/envvar/#hide-an-env-var-from-the-help-text",
+            "https://typer.tiangolo.com/tutorial/exceptions/#exceptions-and-errors",
+            "https://typer.tiangolo.com/tutorial/exceptions/#exceptions-and-errors"
+          ]
+        }
+      ]
+    }
+  ]
+}

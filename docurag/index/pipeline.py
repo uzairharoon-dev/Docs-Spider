@@ -10,7 +10,7 @@ from dataclasses import dataclass
 
 from docurag.config import ChunkConfig
 from docurag.db import Database
-from docurag.index.chunker import chunk_markdown
+from docurag.index.chunker import chunk_markdown, context_line
 from docurag.index.embedder import Embedder
 from docurag.index.store import VectorItem, VectorStore
 
@@ -21,15 +21,6 @@ class IndexStats:
     pages_skipped: int = 0
     chunks_written: int = 0
     chunks_deleted: int = 0
-
-
-def context_line(title: str | None, heading_path: list[str]) -> str:
-    """'Page title > Section > Subsection', without repeating the title."""
-    parts = [title] if title else []
-    for h in heading_path:
-        if not parts or parts[-1] != h:
-            parts.append(h)
-    return " > ".join(parts)
 
 
 def embedding_text(title: str | None, heading_path: list[str], text: str) -> str:
@@ -91,7 +82,11 @@ class Indexer:
         old_ids = self.db.chunk_ids_for_page(page["id"])
         self.store.delete(old_ids)
         with self.db.transaction():
-            new_ids = self.db.replace_chunks(page, [c.as_dict() for c in chunks])
+            new_ids = self.db.replace_chunks(
+                page,
+                [{**c.as_dict(), "context": context_line(page["title"], c.heading_path)}
+                 for c in chunks],
+            )
         self.store.upsert(
             [
                 VectorItem(cid, page["library_id"], page["version"], vec)

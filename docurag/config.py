@@ -86,6 +86,19 @@ class ChunkConfig(BaseModel):
     overlap: float = Field(default=0.12, ge=0, le=0.5)
 
 
+class SearchConfig(BaseModel):
+    """Retrieval defaults (F14, F15). CLI flags override them per query."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    mode: Literal["vector", "bm25", "hybrid"] = "hybrid"
+    candidates: int = Field(default=50, ge=1, le=1000)  # per retriever, before fusion
+    rrf_k: int = Field(default=60, ge=1)  # reciprocal rank fusion constant
+    rerank: bool = False
+    reranker_model: str = "Xenova/ms-marco-MiniLM-L-6-v2"
+    rerank_candidates: int = Field(default=20, ge=1, le=200)
+
+
 class Settings(BaseModel):
     """Top-level settings. Unknown sections are kept for later milestones."""
 
@@ -101,6 +114,7 @@ class Settings(BaseModel):
     embedder: EmbedderConfig = Field(default_factory=EmbedderConfig)
     store: StoreConfig = Field(default_factory=StoreConfig)
     chunking: ChunkConfig = Field(default_factory=ChunkConfig)
+    search: SearchConfig = Field(default_factory=SearchConfig)
 
     @field_validator("data_dir", mode="before")
     @classmethod

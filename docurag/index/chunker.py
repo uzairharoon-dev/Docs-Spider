@@ -31,6 +31,15 @@ def count_tokens(text: str) -> int:
     return len(_TOKEN.findall(text))
 
 
+def context_line(title: str | None, heading_path: list[str]) -> str:
+    """'Page title > Section > Subsection', without repeating the title."""
+    parts = [title] if title else []
+    for h in heading_path:
+        if not parts or parts[-1] != h:
+            parts.append(h)
+    return " > ".join(parts)
+
+
 def normalize_heading(text: str) -> str:
     text = _MD_LINK.sub(r"\1", text)
     return _NON_WORD.sub(" ", text).strip().lower()

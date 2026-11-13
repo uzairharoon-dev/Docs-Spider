@@ -76,6 +76,7 @@ CREATE TABLE IF NOT EXISTS chunks (
     position      INTEGER NOT NULL,
     heading_path  TEXT NOT NULL,      -- JSON list, e.g. ["Guide", "Auth", "OAuth2"]
     anchor        TEXT,               -- HTML id of the section heading, if known
+    context       TEXT NOT NULL DEFAULT '',  -- "Title > Section", searched by BM25
     text          TEXT NOT NULL,
     token_count   INTEGER NOT NULL
 );
@@ -92,6 +93,24 @@ CREATE TABLE IF NOT EXISTS chunk_vectors (
     vector     BLOB NOT NULL
 );
 CREATE INDEX IF NOT EXISTS chunk_vectors_lib ON chunk_vectors(model, library_id, version);
+
+-- BM25 keyword index over chunks (F14). External content: text lives once, in `chunks`;
+-- the triggers keep the index in sync, including FK cascade deletes.
+CREATE VIRTUAL TABLE IF NOT EXISTS chunks_fts USING fts5(
+    text, context, content='chunks', content_rowid='id', tokenize='porter unicode61'
+);
+CREATE TRIGGER IF NOT EXISTS chunks_fts_ai AFTER INSERT ON chunks BEGIN
+    INSERT INTO chunks_fts(rowid, text, context) VALUES (new.id, new.text, new.context);
+END;
+CREATE TRIGGER IF NOT EXISTS chunks_fts_ad AFTER DELETE ON chunks BEGIN
+    INSERT INTO chunks_fts(chunks_fts, rowid, text, context)
+    VALUES ('delete', old.id, old.text, old.context);
+END;
+CREATE TRIGGER IF NOT EXISTS chunks_fts_au AFTER UPDATE ON chunks BEGIN
+    INSERT INTO chunks_fts(chunks_fts, rowid, text, context)
+    VALUES ('delete', old.id, old.text, old.context);
+    INSERT INTO chunks_fts(rowid, text, context) VALUES (new.id, new.text, new.context);
+END;
 """
 
 # Columns added after M1; created on open for databases made by older versions.
@@ -100,6 +119,9 @@ MIGRATIONS = {
         "anchors_json": "TEXT NOT NULL DEFAULT '[]'",
         "indexed_hash": "TEXT",
         "indexed_model": "TEXT",
+    },
+    "chunks": {
+        "context": "TEXT NOT NULL DEFAULT ''",
     },
 }
 
@@ -128,7 +150,32 @@ class Database:
         self.conn.execute("PRAGMA synchronous=NORMAL")
         self.conn.execute("PRAGMA foreign_keys=ON")
         self._migrate_columns()
+        upgrading = self._table_exists("chunks") and not self._table_exists("chunks_fts")
+        if upgrading:
+            # Before SCHEMA creates the FTS triggers: an UPDATE trigger firing against
+            # an empty external-content index would corrupt it.
+            self._backfill_context()
         self.conn.executescript(SCHEMA)
+        if upgrading:
+            self.conn.execute("INSERT INTO chunks_fts(chunks_fts) VALUES ('rebuild')")
+
+    def _table_exists(self, name: str) -> bool:
+        sql = "SELECT 1 FROM sqlite_master WHERE name=?"
+        return self.conn.execute(sql, (name,)).fetchone() is not None
+
+    def _backfill_context(self) -> None:
+        """Chunks indexed before M3 have no "Title > Section" context for BM25."""
+        from docurag.index.chunker import context_line
+
+        rows = self.conn.execute(
+            """SELECT c.id, c.heading_path, p.title FROM chunks c
+               JOIN pages p ON p.id = c.page_id WHERE c.context = ''"""
+        ).fetchall()
+        with self.transaction() as conn:
+            conn.executemany(
+                "UPDATE chunks SET context=? WHERE id=?",
+                [(context_line(r[2], json.loads(r[1])), r[0]) for r in rows],
+            )
 
     def _migrate_columns(self) -> None:
         for table, columns in MIGRATIONS.items():
@@ -357,11 +404,12 @@ class Database:
         for pos, ch in enumerate(chunks):
             cur = self.conn.execute(
                 """INSERT INTO chunks (page_id, library_id, version, position, heading_path,
-                                       anchor, text, token_count)
-                   VALUES (?, ?, ?, ?, ?, ?, ?, ?)""",
+                                       anchor, context, text, token_count)
+                   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)""",
                 (
                     page["id"], page["library_id"], page["version"], pos,
-                    json.dumps(ch["heading_path"]), ch["anchor"], ch["text"], ch["token_count"],
+                    json.dumps(ch["heading_path"]), ch["anchor"], ch.get("context", ""),
+                    ch["text"], ch["token_count"],
                 ),
             )
             ids.append(cur.lastrowid)
@@ -379,7 +427,8 @@ class Database:
             part = chunk_ids[start : start + 500]
             marks = ",".join("?" * len(part))
             for r in self.conn.execute(
-                f"""SELECT c.id, c.heading_path, c.anchor, c.text, c.token_count, c.version,
+                f"""SELECT c.id, c.heading_path, c.anchor, c.context, c.text, c.token_count,
+                           c.version,
                            p.url, p.title, l.name AS library
                     FROM chunks c JOIN pages p ON p.id = c.page_id
                     JOIN libraries l ON l.id = c.library_id

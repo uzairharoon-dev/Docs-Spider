@@ -2,7 +2,7 @@
 
 [![CI](https://github.com/uzairharoon-dev/Docs-Spider/actions/workflows/ci.yml/badge.svg)](https://github.com/uzairharoon-dev/Docs-Spider/actions/workflows/ci.yml)
 ![Python 3.12+](https://img.shields.io/badge/python-3.12%2B-blue)
-![Status: M2](https://img.shields.io/badge/status-M2%20search-orange)
+![Status: M3](https://img.shields.io/badge/status-M3%20hybrid%20search-orange)
 
 **Up-to-date, versioned library docs for AI coding assistants. Self-hosted, and it works on private docs too.**
 
@@ -34,25 +34,25 @@ Assistant:  (calls search_docs("cookie parameters", library="fastapi"))
 | --- | --- | --- |
 | Hosting | Hosted service | **Self-hosted**: runs on your laptop or your servers |
 | Private / internal docs | No | **Yes**: point it at any URL your machine can reach |
-| Retrieval quality | Not published | **Measured**: Recall@k and MRR on a public eval set (M3) |
+| Retrieval quality | Not published | **Measured**: Recall@5 = 0.94 on a public 84-question eval set ([details](#evaluation)) |
 
 ---
 
 ## Status
 
-The project is built in milestones. **M1 (crawler) and M2 (chunking, embeddings, search) are done.**
+The project is built in milestones. **M1–M3 are done:** crawler, chunking and embeddings, hybrid search with a measured eval.
 
 | # | Deliverable | Status |
 | --- | --- | --- |
 | M1 | Async crawler, robots.txt, resumable frontier, HTML to Markdown | ✅ Done |
 | M2 | Heading-aware chunker, embedder, vector index, `docurag search` | ✅ Done |
-| M3 | Hybrid search (vector + BM25), reranker, eval harness | ⏳ Next |
-| M4 | MCP server, REST API, Docker Compose | Planned |
+| M3 | Hybrid search (vector + BM25), reranker, eval harness | ✅ Done |
+| M4 | MCP server, REST API, Docker Compose | ⏳ Next |
 | M5 | Full incremental re-crawl, version detection, Playwright for JS sites | Planned |
 | M6 | Demo GIF, benchmarks, docs site | Planned |
 
 Today you can crawl a docs site, keep it fresh, and search it from the CLI with
-cited results. Hybrid search and the eval harness come in M3; MCP serving in M4.
+hybrid retrieval and cited results. MCP serving for coding assistants comes in M4.
 
 ---
 
@@ -123,15 +123,23 @@ into `~/.docurag/models`. Everything runs locally on CPU: no API key, no server.
 - **Code stays whole.** A fenced code block is never split, even when it exceeds the limit.
 - **No orphan fragments.** Small neighbouring sections merge under their common parent heading.
 
-### Embedding and search
+### Embedding and indexing
 - **Pluggable embedders.** `local` (fastembed, ONNX on CPU), `openai` (any OpenAI-compatible
   `/embeddings` API) or `hash` (offline, for tests).
 - **Pluggable vector stores.** `sqlite` (default: vectors stored next to the metadata,
   searched with numpy, no server) or `qdrant` (server or embedded).
 - **Incremental indexing.** Only pages whose content or embedding model changed are re-chunked
   and re-embedded.
-- **Cited results.** Every hit carries its library, version, section path and
-  `url#anchor` citation. `--json` gives machine-readable output.
+
+### Search
+- **Hybrid by default.** Dense vectors and BM25 (SQLite FTS5, Porter stemming) each return
+  their top 50, merged with reciprocal rank fusion. Exact API names like `jsonable_encoder`
+  are found by keywords; paraphrased questions are found by meaning.
+- **Optional reranker.** `--rerank` re-orders the top 20 with a cross-encoder
+  (`ms-marco-MiniLM-L-6-v2`, 80 MB, local).
+- **Three modes.** `--mode vector | bm25 | hybrid`. BM25 needs no model at all.
+- **Cited results.** Every hit carries its library, version, section path,
+  `url#anchor` citation and each retriever's score. `--json` gives machine-readable output.
 
 ---
 
@@ -142,7 +150,8 @@ into `~/.docurag/models`. Everything runs locally on CPU: no API key, no server.
 | `docurag add URL --name NAME` | Add a library, crawl it and index it. Re-running resumes an unfinished crawl. |
 | `docurag update NAME` | Re-crawl and re-index a library incrementally. |
 | `docurag index [NAME] [--force]` | Chunk and embed new or changed pages (all libraries by default). |
-| `docurag search QUERY --lib NAME` | Search. Options: `--version`, `-k`, `--json`, `--full`. |
+| `docurag search QUERY --lib NAME` | Search. Options: `--mode`, `--rerank`, `--version`, `-k`, `--json`, `--full`. |
+| `docurag eval` | Run the retrieval eval: Recall@k, MRR and latency per search mode. |
 | `docurag libraries` | List libraries with page, indexed-page and chunk counts. |
 | `docurag jobs [NAME]` | Show recent crawl jobs and their stats. |
 | `docurag page URL [--raw]` | Print the stored Markdown for a page. |
@@ -203,6 +212,14 @@ store:
   # url: http://localhost:6333   # omit to run Qdrant embedded under data_dir
 
 chunking: {min_tokens: 300, max_tokens: 512, overlap: 0.12}
+
+search:
+  mode: hybrid                # vector | bm25 | hybrid
+  candidates: 50              # per retriever, before fusion
+  rrf_k: 60
+  rerank: false
+  reranker_model: Xenova/ms-marco-MiniLM-L-6-v2
+  rerank_candidates: 20
 ```
 
 Changing the embedder re-indexes pages on the next `index` / `update`; vectors from
@@ -226,9 +243,12 @@ flowchart LR
     P --> C[Chunker<br/>heading-aware]
     C --> E[Embedder<br/>fastembed · OpenAI]
     E --> V[(Vectors<br/>SQLite · Qdrant)]
-    V --> CLI[docurag search]
-    V -.M3.-> H[Hybrid: + BM25, RRF, reranker]
-    H -.M4.-> M[MCP server] & A[REST API]
+    C --> B[(BM25<br/>SQLite FTS5)]
+    V --> H[Hybrid<br/>RRF fusion]
+    B --> H
+    H --> RR[Reranker<br/>optional]
+    RR --> CLI[docurag search]
+    RR -.M4.-> M[MCP server] & A[REST API]
 ```
 
 Solid lines exist today. Dotted lines are planned.
@@ -242,7 +262,8 @@ Solid lines exist today. Dotted lines are planned.
 | `crawl_jobs` | `library_id`, `status` (running / completed / interrupted / failed), `pages_done`, `stats_json` |
 | `crawl_errors` | `job_id`, `url`, `error` |
 | `frontier` | `job_id`, `url`, `depth`, `status`, `attempts` |
-| `chunks` | `page_id`, `library_id`, `version`, `position`, `heading_path`, `anchor`, `text`, `token_count` |
+| `chunks` | `page_id`, `library_id`, `version`, `position`, `heading_path`, `anchor`, `context`, `text`, `token_count` |
+| `chunks_fts` | FTS5 index over `chunks.text` and `chunks.context`, kept in sync by triggers |
 | `chunk_vectors` | `chunk_id`, `model`, `library_id`, `version`, `vector` (sqlite store only) |
 
 ---
@@ -270,23 +291,63 @@ docurag/
     embedder.py       local / OpenAI-compatible / hash embedders
     store.py          sqlite (numpy) and Qdrant vector stores
     pipeline.py       incremental pages -> chunks -> vectors
-    search.py         query embedding, filtering, cited hits
+    hybrid.py         BM25 over SQLite FTS5, reciprocal rank fusion
+    rerank.py         optional cross-encoder reranker
+    search.py         vector / bm25 / hybrid search, cited hits
+  eval/
+    run_eval.py       Recall@k, MRR and latency per configuration
+    dataset/          questions.jsonl: the bundled eval set
+    corpus.yaml       the docs the eval set is answered from
   serve/cli.py        Typer CLI
-  eval/               M3
 tests/                pytest suite, using an in-memory fake docs site
 ```
 
 ---
 
-## Evaluation plan (M3)
+## Evaluation
 
-Retrieval quality will be measured, not assumed:
+Retrieval quality is measured, not assumed. The bundled eval set has **84 questions** over
+three docs sites: FastAPI (40), httpx (20) and Typer (24). The questions are phrased the way a
+developer asks an assistant ("My React app on localhost:3000 gets blocked when calling the
+API"), not copied from page headings, so keyword matching gets no free ride. Each question lists
+every page that answers it.
 
-- An eval set of 50–100 question / source-section pairs across several libraries.
-- Recall@5 and MRR for vector-only, BM25-only, hybrid, and hybrid with reranker.
-- Target: **Recall@5 ≥ 0.85**, with search **p95 < 300 ms** when no reranker is used.
+Results (crawled 2026-11-13; 167 pages, 1,008 chunks; `bge-small-en-v1.5`; k = 10):
 
-The results table will be published here.
+| Config | Recall@1 | Recall@3 | Recall@5 | Recall@10 | MRR@10 | p50 ms | p95 ms |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| vector | 0.762 | 0.881 | 0.917 | 0.952 | 0.832 | 34 | 114 |
+| bm25 | 0.643 | 0.786 | 0.881 | 0.940 | 0.736 | 7 | 15 |
+| **hybrid** (default) | **0.774** | **0.917** | **0.940** | **0.976** | **0.847** | 49 | 105 |
+| hybrid + rerank | 0.798 | 0.905 | 0.952 | 0.976 | 0.855 | 3241 | 4819 |
+
+- **Hybrid beats either retriever alone** on every metric. BM25 and vectors miss different
+  questions, so fusing them recovers most of each one's misses.
+- **Targets met:** Recall@5 0.940 against a target of ≥ 0.85; p95 105 ms against < 300 ms.
+- **The reranker** adds a little at the top (Recall@1 +0.024, MRR +0.008) but costs seconds per
+  query on the CPU used here, which is a slow one (about 1,800 tokens/s for bge-small). It
+  stays opt-in.
+- Latency is one CLI-process search call, query embedding included, measured on the same
+  machine. Raw per-question results: `docurag/eval/results/2026-11-13.json`.
+
+How the metrics work: a hit is relevant when its page URL is one of the question's expected
+pages. Recall@k is the share of questions with a relevant hit in the top k. MRR@10 is the mean
+of 1 / rank of the first relevant hit.
+
+One label was corrected after the first run. Typer's "Nested SubCommands" page also answers
+`ty-17` and had been left out of its expected pages. No other labels were changed after
+seeing results.
+
+Reproduce it (about 10 minutes of crawling and embedding on a laptop):
+
+```bash
+export DOCURAG_HOME=~/.docurag-eval        # keep the corpus apart from your own libraries
+for lib in fastapi httpx typer; do uv run docurag -c docurag/eval/corpus.yaml update $lib; done
+uv run docurag -c docurag/eval/corpus.yaml eval --out results.json
+uv run docurag -c docurag/eval/corpus.yaml eval --configs hybrid   # faster: skip the reranker
+```
+
+Docs sites change, so expect small drifts from the table above.
 
 ---
 
@@ -301,7 +362,8 @@ uv run ruff check .     # lint
 The tests serve a fake docs site through `httpx.MockTransport`, so they never touch the
 network. They cover robots rules, redirects, duplicates, conditional re-crawls, the
 `include` filter, `max_pages`, resuming after an interruption, chunk boundaries, both
-vector stores, incremental indexing and the CLI. They use the `hash` embedder, so no
+vector stores, incremental indexing, BM25/FTS5 sync and migration, rank fusion, reranking,
+the eval metrics and the CLI. They use the `hash` embedder, so no
 model download is needed.
 
 CI runs lint and tests on Ubuntu and Windows (`.github/workflows/ci.yml`).
@@ -310,7 +372,8 @@ CI runs lint and tests on Ubuntu and Windows (`.github/workflows/ci.yml`).
 
 ## Known limitations
 
-- Search is dense-vector only; BM25 + reciprocal rank fusion arrives in M3, MCP serving in M4.
+- MCP serving and the REST API arrive in M4.
+- The reranker is slow on weak CPUs; it stays off by default.
 - Pages crawled before section anchors existed get them only when their content changes
   (a `304 Not Modified` carries no HTML). `docurag remove` + `add` refreshes them.
 - JavaScript-rendered sites need Playwright (M5). Today `render_js: true` only logs a warning.

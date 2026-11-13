@@ -10,8 +10,9 @@ from typer.testing import CliRunner
 from docurag.config import ChunkConfig, EmbedderConfig, StoreConfig
 from docurag.crawler.crawler import Crawler
 from docurag.extract.dedup import content_hash, simhash
+from docurag.index.chunker import context_line
 from docurag.index.embedder import HashEmbedder, OpenAIEmbedder, embedder_name, make_embedder
-from docurag.index.pipeline import Indexer, context_line
+from docurag.index.pipeline import Indexer
 from docurag.index.search import Searcher, UnknownLibrary
 from docurag.index.store import QdrantVectorStore, SQLiteVectorStore, VectorItem
 

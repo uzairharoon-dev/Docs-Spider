@@ -1,0 +1,28 @@
+# Docs corpus for the retrieval eval (docurag/eval/dataset/questions.jsonl).
+#
+# Build it in a separate data dir so it doesn't mix with your own libraries:
+#   export DOCURAG_HOME=~/.docurag-eval
+#   for lib in fastapi httpx typer; do docurag -c docurag/eval/corpus.yaml update $lib; done
+#   docurag -c docurag/eval/corpus.yaml eval
+#
+# Docs sites change, so scores drift a little over time. The README records the crawl date.
+concurrency: 8
+
+libraries:
+  - name: fastapi
+    start_urls: [https://fastapi.tiangolo.com/]
+    include: ["/tutorial/", "/advanced/"]
+    rate_limit: 2
+
+  - name: httpx
+    start_urls: [https://www.python-httpx.org/]
+    rate_limit: 2
+
+  - name: typer
+    start_urls: [https://typer.tiangolo.com/]
+    include: ["/tutorial/"]
+    rate_limit: 2
+
+embedder: {provider: local, model: BAAI/bge-small-en-v1.5}
+store: {type: sqlite}
+chunking: {min_tokens: 300, max_tokens: 512, overlap: 0.12}

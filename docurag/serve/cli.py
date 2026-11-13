@@ -85,6 +85,30 @@ def _index_parts(settings: Settings, db: Database):
     return embedder, store
 
 
+def _searcher(settings: Settings, db: Database, modes: set[str], rerank: bool) -> Searcher:
+    """Load only what the requested modes need: BM25 alone needs no model."""
+    embedder = store = reranker = None
+    if modes & {"vector", "hybrid"}:
+        embedder, store = _index_parts(settings, db)
+    if rerank:
+        from docurag.index.rerank import FastEmbedReranker
+
+        try:
+            with console.status(f"Loading reranker {settings.search.reranker_model}..."):
+                reranker = FastEmbedReranker(
+                    settings.search.reranker_model, settings.embedder.cache_dir
+                    or settings.data_dir / "models",
+                )
+        except Exception as exc:
+            err.print(f"[red]Can't load the reranker:[/red] {exc}")
+            raise typer.Exit(1) from exc
+    cfg = settings.search
+    return Searcher(
+        db, embedder, store, reranker,
+        candidates=cfg.candidates, rrf_k=cfg.rrf_k, rerank_candidates=cfg.rerank_candidates,
+    )
+
+
 def _run_index(
     db: Database, settings: Settings, library_id: int, name: str, force: bool = False
 ) -> IndexStats:
@@ -238,19 +262,32 @@ def search(
     lib: Annotated[str | None, typer.Option("--lib", "-l", help="Library name.")] = None,
     version: Annotated[str | None, typer.Option(help="Only this version.")] = None,
     k: Annotated[int, typer.Option("--k", "-k", min=1, max=50, help="Results to show.")] = 5,
+    mode: Annotated[
+        str | None, typer.Option(help="vector, bm25 or hybrid (default from config: hybrid).")
+    ] = None,
+    rerank: Annotated[
+        bool | None, typer.Option("--rerank/--no-rerank", help="Cross-encoder reranking.")
+    ] = None,
     as_json: Annotated[bool, typer.Option("--json", help="Print JSON.")] = False,
     full: Annotated[bool, typer.Option(help="Print whole chunks, not snippets.")] = False,
 ) -> None:
-    """Search indexed docs."""
+    """Search indexed docs (hybrid vector + BM25 by default)."""
     import time
 
+    from docurag.index.search import MODES
+
     settings = _settings()
+    mode = mode or settings.search.mode
+    if mode not in MODES:
+        err.print(f"[red]--mode must be one of:[/red] {', '.join(MODES)}")
+        raise typer.Exit(2)
+    rerank = settings.search.rerank if rerank is None else rerank
     db = _db(settings)
     try:
-        embedder, store = _index_parts(settings, db)
+        searcher = _searcher(settings, db, {mode}, rerank)
         started = time.perf_counter()
         try:
-            hits = Searcher(db, embedder, store).search(query, lib, version, k)
+            hits = searcher.search(query, lib, version, k, mode=mode, rerank=rerank)
         except UnknownLibrary:
             err.print(f"[red]Unknown library:[/red] {lib}")
             raise typer.Exit(1) from None
@@ -275,7 +312,82 @@ def search(
         )
         console.print(Markdown(body) if full else f"   {body}", highlight=False)
         console.print()
-    console.print(f"[dim]{len(hits)} results in {elapsed_ms:.0f} ms[/dim]")
+    label = mode + ("+rerank" if rerank else "")
+    console.print(f"[dim]{len(hits)} results in {elapsed_ms:.0f} ms ({label})[/dim]")
+
+
+@app.command("eval")
+def eval_cmd(
+    dataset: Annotated[
+        Path | None, typer.Option(help="Questions JSONL (default: bundled eval set).")
+    ] = None,
+    configs: Annotated[
+        str, typer.Option(help="Comma-separated: vector, bm25, hybrid, hybrid+rerank.")
+    ] = "vector,bm25,hybrid,hybrid+rerank",
+    k: Annotated[int, typer.Option("--k", "-k", min=1, max=50)] = 10,
+    out: Annotated[Path | None, typer.Option(help="Write full results as JSON.")] = None,
+) -> None:
+    """Measure retrieval quality: Recall@k, MRR and latency per configuration."""
+    from docurag.eval.run_eval import (
+        DEFAULT_DATASET,
+        RunConfig,
+        evaluate,
+        load_dataset,
+        missing_pages,
+        to_json,
+        to_markdown,
+    )
+
+    settings = _settings()
+    try:
+        runs = [RunConfig.parse(c) for c in configs.split(",") if c.strip()]
+        questions = load_dataset(dataset or DEFAULT_DATASET)
+    except (ValueError, OSError) as exc:
+        err.print(f"[red]{exc}[/red]")
+        raise typer.Exit(2) from exc
+
+    db = _db(settings)
+    try:
+        known = {r[0] for r in db.conn.execute("SELECT url FROM pages")}
+        missing = missing_pages(questions, known)
+        if missing:
+            err.print(
+                f"[yellow]{len(missing)} of {len(questions)} questions skipped: none of their "
+                "expected pages are indexed.[/yellow] Build the corpus first, see "
+                "docurag/eval/corpus.yaml."
+            )
+            questions = [q for q in questions if q.id not in missing]
+        if not questions:
+            raise typer.Exit(1)
+        searcher = _searcher(
+            settings, db, {r.mode for r in runs}, any(r.rerank for r in runs)
+        )
+
+        def run(q, cfg, top_k):
+            return searcher.search(q.question, q.library, q.version, top_k,
+                                   mode=cfg.mode, rerank=cfg.rerank)
+
+        with console.status("Evaluating...") as status:
+            reports = evaluate(
+                run, questions, runs, k,
+                on_progress=lambda c, i, n: status.update(f"Evaluating {c.label}: {i}/{n}"),
+            )
+    finally:
+        db.close()
+
+    console.print(f"{len(questions)} questions · embedder {settings.embedder.model}"
+                  + (f" · reranker {settings.search.reranker_model}"
+                     if any(r.rerank for r in runs) else ""))
+    typer.echo(to_markdown(reports))
+    if out:
+        meta = {
+            "questions": len(questions), "skipped": sorted(missing), "k": k,
+            "embedder": settings.embedder.model_dump(mode="json"),
+            "search": settings.search.model_dump(mode="json"),
+            "chunking": settings.chunking.model_dump(mode="json"),
+        }
+        out.write_text(to_json(reports, meta), encoding="utf-8")
+        console.print(f"[dim]Full results: {out}[/dim]")
 
 
 @app.command("libraries")
