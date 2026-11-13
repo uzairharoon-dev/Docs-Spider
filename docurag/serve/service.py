@@ -98,6 +98,7 @@ class DocuRAGService:
                 self._reranker = FastEmbedReranker(
                     self.settings.search.reranker_model,
                     self.settings.embedder.cache_dir or self.settings.data_dir / "models",
+                    cpu_mem_arena=self.settings.embedder.cpu_mem_arena,
                 )
             return self._reranker
 

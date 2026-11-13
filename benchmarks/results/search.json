@@ -1,0 +1,52 @@
+{
+  "machine": {
+    "cpu": "Intel64 Family 6 Model 142 Stepping 10, GenuineIntel",
+    "cores": 8,
+    "ram_gb": 17.0,
+    "os": "Windows 11",
+    "python": "3.12.13"
+  },
+  "corpus": {
+    "pages": 167,
+    "chunks": 1008
+  },
+  "latency": {
+    "bm25": {
+      "n": 252,
+      "p50_ms": 3.8,
+      "p95_ms": 7.4,
+      "p99_ms": 9.6
+    },
+    "vector": {
+      "n": 252,
+      "p50_ms": 12.2,
+      "p95_ms": 17.2,
+      "p99_ms": 28.3
+    },
+    "hybrid": {
+      "n": 252,
+      "p50_ms": 18.5,
+      "p95_ms": 26.4,
+      "p99_ms": 36.5
+    },
+    "hybrid+rerank": {
+      "n": 20,
+      "p50_ms": 2890.3,
+      "p95_ms": 4090.6,
+      "p99_ms": 5366.2
+    }
+  },
+  "embedding": {
+    "model": "BAAI/bge-small-en-v1.5",
+    "load_s": 2.0,
+    "chunks_per_s": 2.3
+  },
+  "footprint": {
+    "rss_baseline_mb": 60.3,
+    "rss_with_model_mb": 227.3,
+    "rss_after_queries_mb": 357.8,
+    "db_mb": 7.9,
+    "db_kb_per_chunk": 7.9,
+    "model_files_mb": 158.9
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "domains": 12,
+  "pages_per_domain": 60,
+  "concurrency": 32,
+  "polite": {
+    "rate_limit_per_domain": 2.0,
+    "pages_fetched": 732,
+    "pages_saved": 718,
+    "seconds": 30.75,
+    "pages_per_second": 23.8,
+    "status": "completed"
+  },
+  "unthrottled": {
+    "rate_limit_per_domain": 10000.0,
+    "pages_fetched": 732,
+    "pages_saved": 718,
+    "seconds": 17.79,
+    "pages_per_second": 41.2,
+    "status": "completed"
+  }
+}

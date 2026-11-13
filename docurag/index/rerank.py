@@ -19,12 +19,17 @@ class Reranker(Protocol):
 
 
 class FastEmbedReranker:
-    def __init__(self, model: str, cache_dir: Path, batch_size: int = 16):
+    def __init__(
+        self, model: str, cache_dir: Path, batch_size: int = 16, cpu_mem_arena: bool = False
+    ):
         os.environ.setdefault("HF_HUB_DISABLE_SYMLINKS_WARNING", "1")
         from fastembed.rerank.cross_encoder import TextCrossEncoder
 
         cache_dir.mkdir(parents=True, exist_ok=True)
-        self._model = TextCrossEncoder(model_name=model, cache_dir=str(cache_dir))
+        # The arena would hold ~1 GB after a few reranks of 20 long candidates.
+        self._model = TextCrossEncoder(
+            model_name=model, cache_dir=str(cache_dir), enable_cpu_mem_arena=cpu_mem_arena
+        )
         self.name = f"local:{model}"
         self.batch_size = batch_size
 

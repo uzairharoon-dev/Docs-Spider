@@ -115,3 +115,11 @@ async def test_markdown_pages_from_llms_txt(db, settings, site, lib):
     await crawl(db, lib, settings, site)
     assert stored(db) == {f"{BASE}/intro.md"}
     assert db.find_pages_by_url(f"{BASE}/intro.md")[0]["title"] == "Intro"
+
+
+async def test_full_crawl_with_extraction_process_pool(db, lib, settings, site):
+    settings = settings.model_copy(update={"extract_processes": 2})
+    job = db.get_job(await crawl(db, lib, settings, site))
+    assert job["status"] == "completed" and job["stats"]["saved"] == 4
+    md = db.find_pages_by_url(f"{BASE}/guide/advanced")[0]["markdown"]
+    assert "```python\nx = 1\n```" in md

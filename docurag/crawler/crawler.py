@@ -7,6 +7,7 @@ import json
 import logging
 from collections import Counter
 from collections.abc import Callable
+from concurrent.futures import ProcessPoolExecutor
 from dataclasses import dataclass
 from datetime import UTC, datetime
 from urllib.parse import urlsplit
@@ -106,6 +107,7 @@ class Crawler:
         self.job_id: int | None = None
         self._renderer = renderer
         self._own_renderer = False
+        self._pool: ProcessPoolExecutor | None = None
         self._dedups: dict[str, DedupIndex] = {}  # per version: v2 is no duplicate of v1
         # An explicit version labels every page; otherwise URLs may carry one.
         self._detect = library.version == "latest" and library.version_detection == "auto"
@@ -162,6 +164,8 @@ class Crawler:
         if self.lib.render_js and self._renderer is None:
             self._renderer = PlaywrightRenderer(self.settings.user_agent)
             self._own_renderer = True
+        if self.settings.extract_workers > 0:
+            self._pool = ProcessPoolExecutor(self.settings.extract_workers)
 
         status = "failed"
         try:
@@ -193,7 +197,16 @@ class Crawler:
                 await client.aclose()
             if self._own_renderer and self._renderer is not None:
                 await self._renderer.aclose()
+            if self._pool is not None:
+                self._pool.shutdown(wait=False, cancel_futures=True)
+                self._pool = None
         return job_id
+
+    async def _extract(self, fn, text: str, url: str) -> ExtractedPage:
+        """Run CPU-bound extraction in the process pool (all cores) or a thread."""
+        if self._pool is not None:
+            return await asyncio.get_running_loop().run_in_executor(self._pool, fn, text, url)
+        return await asyncio.to_thread(fn, text, url)
 
     # ------------------------------------------------------------------
     async def _worker(self) -> None:
@@ -331,7 +344,7 @@ class Crawler:
         if kind is None:
             return SKIPPED, f"unsupported content type {res.content_type or '?'}"
         html = res.text
-        page: ExtractedPage = await asyncio.to_thread(
+        page = await self._extract(
             extract_html if kind == "html" else extract_markdown, html, final
         )
         if kind == "html" and self._should_render(html, page):  # F3
@@ -339,7 +352,7 @@ class Crawler:
             if rendered is not None:
                 html = rendered[1]
                 static_links = page.links
-                page = await asyncio.to_thread(extract_html, html, final)
+                page = await self._extract(extract_html, html, final)
                 page.links = list(dict.fromkeys(static_links + page.links))
         self._enqueue(page.links, depth + 1)
 

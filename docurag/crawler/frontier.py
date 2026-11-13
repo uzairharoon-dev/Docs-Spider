@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from collections.abc import Iterable
+from urllib.parse import urlsplit
 
 from docurag.db import Database
 
@@ -13,11 +14,34 @@ class Frontier:
     Every URL is inserted at most once per job, so the table doubles as the
     "seen" set. Claiming flips a row to ``in_progress``; on resume those rows
     go back to ``pending``.
+
+    Within one depth level, URLs are handed out round-robin across hosts
+    (``host_rank`` counts each host's URLs). Without that, a page's links (all one
+    host) are claimed back to back, and most workers queue on that host's rate
+    limiter while every other host sits idle.
     """
 
     def __init__(self, db: Database, job_id: int):
         self.db = db
         self.job_id = job_id
+        self._ranks: dict[str, int] | None = None  # host -> next host_rank
+
+    def _load_ranks(self) -> dict[str, int]:
+        if self._ranks is None:
+            self._ranks = {}
+            for url, rank in self.db.conn.execute(
+                "SELECT url, host_rank FROM frontier WHERE job_id=?", (self.job_id,)
+            ):
+                host = urlsplit(url).netloc
+                self._ranks[host] = max(self._ranks.get(host, 0), rank + 1)
+        return self._ranks
+
+    def _rank(self, url: str) -> int:
+        ranks = self._load_ranks()
+        host = urlsplit(url).netloc
+        rank = ranks.get(host, 0)
+        ranks[host] = rank + 1
+        return rank
 
     def reset_in_progress(self) -> int:
         return self.db.conn.execute(
@@ -30,13 +54,17 @@ class Frontier:
 
         Returns how many were new.
         """
-        rows = [(self.job_id, it[0], it[1], it[2] if len(it) > 2 else None) for it in items]
+        rows = [
+            (self.job_id, it[0], it[1], it[2] if len(it) > 2 else None, self._rank(it[0]))
+            for it in items
+        ]
         if not rows:
             return 0
         with self.db.transaction() as conn:
             before = conn.total_changes
             conn.executemany(
-                "INSERT OR IGNORE INTO frontier (job_id, url, depth, lastmod) VALUES (?, ?, ?, ?)",
+                """INSERT OR IGNORE INTO frontier (job_id, url, depth, lastmod, host_rank)
+                   VALUES (?, ?, ?, ?, ?)""",
                 rows,
             )
             return conn.total_changes - before
@@ -54,7 +82,7 @@ class Frontier:
             """UPDATE frontier SET status='in_progress', attempts=attempts+1
                WHERE rowid = (SELECT rowid FROM frontier
                               WHERE job_id=? AND status='pending'
-                              ORDER BY depth, rowid LIMIT 1)
+                              ORDER BY depth, host_rank, rowid LIMIT 1)
                RETURNING url, depth, lastmod""",
             (self.job_id,),
         ).fetchone()

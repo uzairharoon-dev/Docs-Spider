@@ -114,7 +114,7 @@ def site() -> FakeSite:
 
 @pytest.fixture
 def settings(tmp_path) -> Settings:
-    return Settings(data_dir=tmp_path, concurrency=4, max_retries=1)
+    return Settings(data_dir=tmp_path, concurrency=4, max_retries=1, extract_processes=0)
 
 
 @pytest.fixture

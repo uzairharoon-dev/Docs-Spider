@@ -80,6 +80,10 @@ class EmbedderConfig(BaseModel):
     dim: int | None = Field(default=None, ge=1)  # hash provider size / openai `dimensions`
     query_prefix: str | None = None  # default: BGE retrieval instruction for BGE models
     cache_dir: Path | None = None  # local model files; default <data_dir>/models
+    # ONNX Runtime's CPU arena keeps the largest buffer each input shape ever needed.
+    # With varying batch and text sizes (indexing, reranking) that grows RSS to over
+    # 2 GB, for no measurable speed gain. Applies to the local embedder and reranker.
+    cpu_mem_arena: bool = False
 
 
 class StoreConfig(BaseModel):
@@ -129,6 +133,9 @@ class Settings(BaseModel):
     request_timeout: float = Field(default=20.0, gt=0)
     max_retries: int = Field(default=3, ge=0)
     max_page_bytes: int = Field(default=5_000_000, gt=0)
+    # HTML -> Markdown is CPU-bound; separate processes use more than one core.
+    # None: min(4, CPUs - 1). 0: extract in a thread of the crawler process.
+    extract_processes: int | None = Field(default=None, ge=0, le=64)
     libraries: list[LibraryConfig] = Field(default_factory=list)
     embedder: EmbedderConfig = Field(default_factory=EmbedderConfig)
     store: StoreConfig = Field(default_factory=StoreConfig)
@@ -139,6 +146,12 @@ class Settings(BaseModel):
     @classmethod
     def _expand(cls, v: object) -> object:
         return Path(v).expanduser() if isinstance(v, str | Path) else v
+
+    @property
+    def extract_workers(self) -> int:
+        if self.extract_processes is not None:
+            return self.extract_processes
+        return max(0, min(4, (os.cpu_count() or 1) - 1))
 
     @property
     def db_path(self) -> Path:

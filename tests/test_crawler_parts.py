@@ -104,3 +104,14 @@ def test_frontier_dedup_claim_and_resume(db):
     # simulate a crash: both URLs in progress -> back to pending
     assert fr.reset_in_progress() == 2
     assert fr.pending() == 2
+
+
+def test_frontier_round_robins_hosts_within_a_depth(db):
+    lib_id = db.upsert_library("demo", "http://a.test/", {})
+    fr = Frontier(db, db.create_job(lib_id))
+    fr.add([(f"http://a.test/{i}", 1) for i in range(3)] + [("http://b.test/0", 1)])
+    fr.add([("http://c.test/0", 1), ("http://a.test/root", 0)])
+    order = [fr.claim()[0] for _ in range(6)]
+    assert order[0] == "http://a.test/root"  # depth first
+    assert order[1:4] == ["http://a.test/0", "http://b.test/0", "http://c.test/0"]
+    assert order[4:] == ["http://a.test/1", "http://a.test/2"]

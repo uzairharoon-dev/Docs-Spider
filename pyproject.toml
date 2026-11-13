@@ -31,11 +31,17 @@ qdrant = [
 docurag = "docurag.serve.cli:app"
 
 [dependency-groups]
+bench = [
+    "psutil>=7.2.2",
+]
 dev = [
     "pytest>=8.2",
     "pytest-asyncio>=0.23",
     "qdrant-client>=1.10",
     "ruff>=0.5",
+]
+docs = [
+    "mkdocs-material>=9.8.1",
 ]
 
 [build-system]
@@ -56,3 +62,5 @@ target-version = "py312"
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "B", "UP", "SIM"]
+# SIM905 wants "a b c".split() as a list literal; the string form reads better for word lists.
+ignore = ["SIM905"]

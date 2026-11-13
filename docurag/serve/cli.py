@@ -98,6 +98,7 @@ def _searcher(settings: Settings, db: Database, modes: set[str], rerank: bool) -
                 reranker = FastEmbedReranker(
                     settings.search.reranker_model, settings.embedder.cache_dir
                     or settings.data_dir / "models",
+                    cpu_mem_arena=settings.embedder.cpu_mem_arena,
                 )
         except Exception as exc:
             err.print(f"[red]Can't load the reranker:[/red] {exc}")

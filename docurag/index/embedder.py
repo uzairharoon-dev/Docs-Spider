@@ -90,7 +90,9 @@ class FastEmbedEmbedder:
         except ImportError as exc:  # pragma: no cover - fastembed is a core dependency
             raise RuntimeError("provider 'local' needs fastembed: pip install fastembed") from exc
         cache_dir.mkdir(parents=True, exist_ok=True)
-        self._model = TextEmbedding(model_name=cfg.model, cache_dir=str(cache_dir))
+        self._model = TextEmbedding(
+            model_name=cfg.model, cache_dir=str(cache_dir), enable_cpu_mem_arena=cfg.cpu_mem_arena
+        )
         self.name = embedder_name(cfg)
         self.batch_size = cfg.batch_size
         is_bge = "bge" in cfg.model.lower() and "-m3" not in cfg.model.lower()

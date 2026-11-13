@@ -66,9 +66,10 @@ CREATE TABLE IF NOT EXISTS frontier (
     attempts   INTEGER NOT NULL DEFAULT 0,
     note       TEXT,
     lastmod    TEXT,                    -- <lastmod> from the sitemap, if any
+    host_rank  INTEGER NOT NULL DEFAULT 0,  -- per-host sequence: round-robin across hosts
     PRIMARY KEY (job_id, url)
 );
-CREATE INDEX IF NOT EXISTS frontier_claim ON frontier(job_id, status, depth);
+CREATE INDEX IF NOT EXISTS frontier_claim_rr ON frontier(job_id, status, depth, host_rank);
 
 CREATE TABLE IF NOT EXISTS chunks (
     id            INTEGER PRIMARY KEY,
@@ -125,6 +126,7 @@ MIGRATIONS = {
     },
     "frontier": {
         "lastmod": "TEXT",
+        "host_rank": "INTEGER NOT NULL DEFAULT 0",
     },
     "chunks": {
         "context": "TEXT NOT NULL DEFAULT ''",
