@@ -85,29 +85,18 @@ class Crawler:
         self._fetched = 0
         self._reserved = 0  # fetch slots taken against max_pages
         self._stop = False
+        self.job_id: int | None = None
 
     # ------------------------------------------------------------------
-    async def run(self, *, fresh: bool = False) -> int:
-        """Crawl the library and return the job id. Resumes an unfinished job unless ``fresh``."""
+    def prepare(self, *, fresh: bool = False) -> int:
+        """Register the library and create or resume its job, without any network I/O.
+
+        Returns the job id, so callers (e.g. the REST API) can report it before crawling.
+        """
         lib_id = self.db.upsert_library(
             self.lib.name, self.lib.start_urls[0], self.lib.model_dump(mode="json")
         )
         self.library_id = lib_id
-        own_client = self._client is None
-        client = self._client or httpx.AsyncClient(
-            timeout=self.settings.request_timeout,
-            limits=httpx.Limits(max_connections=self.settings.concurrency * 2),
-            headers={"User-Agent": self.settings.user_agent},
-        )
-        self.limiter = DomainRateLimiter(self.lib.rate_limit)
-        self.robots = RobotsCache(client, self.settings.user_agent)
-        self.fetcher = Fetcher(
-            client,
-            self.limiter,
-            user_agent=self.settings.user_agent,
-            max_retries=self.settings.max_retries,
-            max_bytes=self.settings.max_page_bytes,
-        )
         self.dedup = DedupIndex()
         for url, chash, h in self.db.page_fingerprints(lib_id, self.lib.version):
             self.dedup.add(url, chash, h)
@@ -123,11 +112,34 @@ class Crawler:
         else:
             job_id = self.db.create_job(lib_id)
             self.frontier = Frontier(self.db, job_id)
+        # A job that died before its seeds were stored has an empty frontier: seed it again.
+        self._needs_seeds = job is None or not self.frontier.counts()
         self.job_id = job_id
+        return job_id
+
+    async def run(self, *, fresh: bool = False) -> int:
+        """Crawl the library and return the job id. Resumes an unfinished job unless ``fresh``."""
+        job_id = self.job_id if self.job_id is not None else self.prepare(fresh=fresh)
+        lib_id = self.library_id
+        own_client = self._client is None
+        client = self._client or httpx.AsyncClient(
+            timeout=self.settings.request_timeout,
+            limits=httpx.Limits(max_connections=self.settings.concurrency * 2),
+            headers={"User-Agent": self.settings.user_agent},
+        )
+        self.limiter = DomainRateLimiter(self.lib.rate_limit)
+        self.robots = RobotsCache(client, self.settings.user_agent)
+        self.fetcher = Fetcher(
+            client,
+            self.limiter,
+            user_agent=self.settings.user_agent,
+            max_retries=self.settings.max_retries,
+            max_bytes=self.settings.max_page_bytes,
+        )
 
         status = "failed"
         try:
-            if job is None:
+            if self._needs_seeds:
                 seeds = await expand_seeds(
                     self.lib.start_urls, self.scope, self.fetcher, self.robots,
                     discover_sitemaps=self.lib.discover_sitemaps,

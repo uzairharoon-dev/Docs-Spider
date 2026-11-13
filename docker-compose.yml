@@ -1,0 +1,28 @@
+# docker compose up -d          -> DocuRAG on http://localhost:8000 (MCP: /mcp)
+# docker compose --profile qdrant up -d   -> also start Qdrant (set store.type: qdrant,
+#                                            store.url: http://qdrant:6333 in docurag.yaml)
+services:
+  docurag:
+    build: .
+    image: docurag:latest
+    ports:
+      - "127.0.0.1:8000:8000"   # loopback only; set DOCURAG_API_KEY before exposing it
+    environment:
+      DOCURAG_API_KEY: ${DOCURAG_API_KEY:-}
+    volumes:
+      - docurag-data:/data                       # SQLite DB, vectors, model files
+      - ./docurag.yaml:/app/docurag.yaml:ro      # libraries, embedder, store, search
+    restart: unless-stopped
+
+  qdrant:
+    image: qdrant/qdrant:v1.15.0
+    profiles: [qdrant]
+    ports:
+      - "127.0.0.1:6333:6333"
+    volumes:
+      - qdrant-data:/qdrant/storage
+    restart: unless-stopped
+
+volumes:
+  docurag-data:
+  qdrant-data:

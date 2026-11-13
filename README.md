@@ -2,7 +2,7 @@
 
 [![CI](https://github.com/uzairharoon-dev/Docs-Spider/actions/workflows/ci.yml/badge.svg)](https://github.com/uzairharoon-dev/Docs-Spider/actions/workflows/ci.yml)
 ![Python 3.12+](https://img.shields.io/badge/python-3.12%2B-blue)
-![Status: M3](https://img.shields.io/badge/status-M3%20hybrid%20search-orange)
+![Status: M4](https://img.shields.io/badge/status-M4%20MCP%20server-orange)
 
 **Up-to-date, versioned library docs for AI coding assistants. Self-hosted, and it works on private docs too.**
 
@@ -40,19 +40,19 @@ Assistant:  (calls search_docs("cookie parameters", library="fastapi"))
 
 ## Status
 
-The project is built in milestones. **M1–M3 are done:** crawler, chunking and embeddings, hybrid search with a measured eval.
+The project is built in milestones. **M1–M4 are done:** crawler, chunking and embeddings, hybrid search with a measured eval, and the MCP server, REST API and Docker setup.
 
 | # | Deliverable | Status |
 | --- | --- | --- |
 | M1 | Async crawler, robots.txt, resumable frontier, HTML to Markdown | ✅ Done |
 | M2 | Heading-aware chunker, embedder, vector index, `docurag search` | ✅ Done |
 | M3 | Hybrid search (vector + BM25), reranker, eval harness | ✅ Done |
-| M4 | MCP server, REST API, Docker Compose | ⏳ Next |
-| M5 | Full incremental re-crawl, version detection, Playwright for JS sites | Planned |
+| M4 | MCP server, REST API, Docker Compose | ✅ Done |
+| M5 | Full incremental re-crawl, version detection, Playwright for JS sites | ⏳ Next |
 | M6 | Demo GIF, benchmarks, docs site | Planned |
 
-Today you can crawl a docs site, keep it fresh, and search it from the CLI with
-hybrid retrieval and cited results. MCP serving for coding assistants comes in M4.
+Today you can crawl a docs site, keep it fresh, and let Claude Code, Cursor or any MCP
+client search it, with cited results. A REST API and `docker compose up` cover the rest.
 
 ---
 
@@ -84,6 +84,83 @@ into `~/.docurag/models`. Everything runs locally on CPU: no API key, no server.
 
 > **Windows / Git Bash:** Git Bash turns arguments like `/tutorial/` into file paths
 > (`C:/Program Files/Git/tutorial/`). Run `export MSYS_NO_PATHCONV=1` first, or use PowerShell.
+
+### Or with Docker
+
+```bash
+docker compose up -d                       # API + MCP on http://localhost:8000
+curl -X POST localhost:8000/crawl -H 'content-type: application/json' \
+     -d '{"name": "fastapi", "url": "https://fastapi.tiangolo.com/", "include": ["/tutorial/"]}'
+curl localhost:8000/jobs/1                 # wait for "status": "completed", "index": "done"
+```
+
+Data and model files live in the `docurag-data` volume. `docurag.yaml` is mounted read-only.
+
+---
+
+## Use it from your AI assistant
+
+DocuRAG is an [MCP](https://modelcontextprotocol.io) server with three tools:
+
+| Tool | What it returns |
+| --- | --- |
+| `search_docs(query, library?, version?, k?)` | The most relevant sections as Markdown, each with a `Source: url#section` citation |
+| `list_libraries()` | Indexed libraries with versions, page and chunk counts |
+| `get_page(url, max_chars?)` | A whole page as Markdown |
+
+The server also sends instructions telling the assistant to check `list_libraries`, search
+before answering, and cite its sources.
+
+**Claude Code**, local (stdio):
+
+```bash
+claude mcp add docurag -- uv run --directory /path/to/Docs-Spider docurag serve --mcp
+```
+
+**Claude Code**, against a running server or the Docker container (HTTP):
+
+```bash
+claude mcp add --transport http docurag http://localhost:8000/mcp
+# with DOCURAG_API_KEY set: add  --header "Authorization: Bearer $DOCURAG_API_KEY"
+```
+
+**Cursor** (`.cursor/mcp.json`) and other MCP clients:
+
+```json
+{
+  "mcpServers": {
+    "docurag": {
+      "command": "uv",
+      "args": ["run", "--directory", "/path/to/Docs-Spider", "docurag", "serve", "--mcp"]
+    }
+  }
+}
+```
+
+or `{"mcpServers": {"docurag": {"url": "http://localhost:8000/mcp"}}}` for the HTTP server.
+
+## REST API
+
+`docurag serve` (or the Docker image) starts the API on port 8000. OpenAPI docs are at `/docs`.
+
+| Endpoint | Description |
+| --- | --- |
+| `POST /search` | `{"query", "library"?, "version"?, "k"?, "mode"?, "rerank"?}` → cited results with every retriever's score |
+| `POST /crawl` | `{"name", "url"?, "include"?, "exclude"?, "max_pages"?, ...}` → `202 {"job_id"}`; crawls and then indexes in the background |
+| `GET /jobs/{id}` | Job status, crawl stats, errors and indexing state |
+| `GET /libraries` | Indexed libraries |
+| `GET /pages?url=` | One page as Markdown |
+| `GET /health` | Liveness (never needs a key) |
+| `/mcp` | MCP over streamable HTTP |
+
+```bash
+curl -s -X POST localhost:8000/search -H 'content-type: application/json' \
+     -d '{"query": "set a cookie on the response", "library": "fastapi", "k": 3}'
+```
+
+> **Security:** the server binds to `127.0.0.1` by default. `POST /crawl` makes the server
+> fetch any URL you give it, so before exposing the port set `DOCURAG_API_KEY`. Every route
+> except `/health`, `/mcp` included, then requires `Authorization: Bearer <key>`.
 
 ---
 
@@ -152,6 +229,8 @@ into `~/.docurag/models`. Everything runs locally on CPU: no API key, no server.
 | `docurag index [NAME] [--force]` | Chunk and embed new or changed pages (all libraries by default). |
 | `docurag search QUERY --lib NAME` | Search. Options: `--mode`, `--rerank`, `--version`, `-k`, `--json`, `--full`. |
 | `docurag eval` | Run the retrieval eval: Recall@k, MRR and latency per search mode. |
+| `docurag serve [--host] [--port]` | REST API with MCP mounted at `/mcp` (default `127.0.0.1:8000`). |
+| `docurag serve --mcp` | MCP server over stdio, for Claude Code, Cursor and other MCP clients. |
 | `docurag libraries` | List libraries with page, indexed-page and chunk counts. |
 | `docurag jobs [NAME]` | Show recent crawl jobs and their stats. |
 | `docurag page URL [--raw]` | Print the stored Markdown for a page. |
@@ -247,11 +326,16 @@ flowchart LR
     V --> H[Hybrid<br/>RRF fusion]
     B --> H
     H --> RR[Reranker<br/>optional]
-    RR --> CLI[docurag search]
-    RR -.M4.-> M[MCP server] & A[REST API]
+    RR --> SV[DocuRAG service]
+    SV --> M[MCP server<br/>stdio · HTTP /mcp]
+    SV --> A[REST API<br/>FastAPI]
+    SV --> CLI[CLI]
+    M --> AI[Claude Code · Cursor · any MCP client]
 ```
 
-Solid lines exist today. Dotted lines are planned.
+The REST API and the MCP server share one service. It loads models once, serialises use of
+the read connection, and runs each crawl as a background task with its own SQLite connection,
+so searches keep working while a crawl writes.
 
 ### Data model
 
@@ -298,7 +382,12 @@ docurag/
     run_eval.py       Recall@k, MRR and latency per configuration
     dataset/          questions.jsonl: the bundled eval set
     corpus.yaml       the docs the eval set is answered from
-  serve/cli.py        Typer CLI
+  serve/
+    service.py        shared service: models, search, background crawl + index jobs
+    mcp_server.py     MCP tools: search_docs, list_libraries, get_page
+    api.py            FastAPI REST API, MCP mounted at /mcp, optional API key
+    cli.py            Typer CLI
+Dockerfile, docker-compose.yml
 tests/                pytest suite, using an in-memory fake docs site
 ```
 
@@ -363,16 +452,20 @@ The tests serve a fake docs site through `httpx.MockTransport`, so they never to
 network. They cover robots rules, redirects, duplicates, conditional re-crawls, the
 `include` filter, `max_pages`, resuming after an interruption, chunk boundaries, both
 vector stores, incremental indexing, BM25/FTS5 sync and migration, rank fusion, reranking,
-the eval metrics and the CLI. They use the `hash` embedder, so no
+the eval metrics, the REST API, the MCP tools (in memory and as a real stdio
+subprocess) and the CLI. They use the `hash` embedder, so no
 model download is needed.
 
-CI runs lint and tests on Ubuntu and Windows (`.github/workflows/ci.yml`).
+CI runs lint and tests on Ubuntu and Windows, and builds the Docker image
+(`.github/workflows/ci.yml`).
 
 ---
 
 ## Known limitations
 
-- MCP serving and the REST API arrive in M4.
+- The Docker image is about 1 GB, mostly onnxruntime and numpy.
+- Crawls started through the API are not resumed after a server restart; the next
+  `POST /crawl` for that library resumes the interrupted job.
 - The reranker is slow on weak CPUs; it stays off by default.
 - Pages crawled before section anchors existed get them only when their content changes
   (a `304 Not Modified` carries no HTML). `docurag remove` + `add` refreshes them.

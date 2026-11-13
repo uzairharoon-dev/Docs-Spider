@@ -178,27 +178,21 @@ def add(
     no_index: Annotated[bool, typer.Option(help="Crawl only; skip chunking/embedding.")] = False,
 ) -> None:
     """Add a docs site, crawl it and index it. Re-running resumes an unfinished crawl."""
+    from docurag.serve.service import resolve_library
+
     settings = _settings()
-    if normalize_url(url) is None:
-        err.print(f"[red]Not an http(s) URL:[/red] {url}")
-        raise typer.Exit(2)
-    base = settings.library(name)
-    data = base.model_dump() if base else {"name": name}
-    data["start_urls"] = [url]
     overrides = {
         "include": include or None, "exclude": exclude or None, "version": version,
         "rate_limit": rate_limit, "max_pages": max_pages, "max_depth": max_depth,
+        "discover_sitemaps": False if no_sitemap else None,
     }
-    data.update({k: v for k, v in overrides.items() if v is not None})
-    if no_sitemap:
-        data["discover_sitemaps"] = False
-    try:
-        lib = LibraryConfig.model_validate(data)
-    except Exception as exc:
-        err.print(f"[red]Invalid options:[/red] {exc}")
-        raise typer.Exit(2) from exc
     db = _db(settings)
     try:
+        try:
+            lib = resolve_library(settings, db, name, url, overrides)
+        except Exception as exc:
+            err.print(f"[red]Invalid options:[/red] {exc}")
+            raise typer.Exit(2) from exc
         _run_crawl(db, lib, settings, fresh)
         if not no_index:
             _run_index(db, settings, db.get_library(lib.name)["id"], lib.name)
@@ -213,16 +207,16 @@ def update(
     no_index: Annotated[bool, typer.Option(help="Crawl only; skip chunking/embedding.")] = False,
 ) -> None:
     """Re-crawl and re-index a library. Unchanged pages are skipped."""
+    from docurag.serve.service import resolve_library
+
     settings = _settings()
     db = _db(settings)
     try:
-        lib = settings.library(name)
-        if lib is None:
-            row = db.get_library(name)
-            if row is None:
-                err.print(f"[red]Unknown library:[/red] {name}. Add it with `docurag add`.")
-                raise typer.Exit(1)
-            lib = LibraryConfig.model_validate(json.loads(row["config_json"]))
+        try:
+            lib = resolve_library(settings, db, name)
+        except LookupError:
+            err.print(f"[red]Unknown library:[/red] {name}. Add it with `docurag add`.")
+            raise typer.Exit(1) from None
         _run_crawl(db, lib, settings, fresh)
         if not no_index:
             _run_index(db, settings, db.get_library(lib.name)["id"], lib.name)
@@ -487,6 +481,51 @@ def remove(name: Annotated[str, typer.Argument(help="Library to delete.")]) -> N
     finally:
         db.close()
     console.print(f"Removed {name}.")
+
+
+@app.command()
+def serve(
+    mcp: Annotated[
+        bool, typer.Option("--mcp", help="Run the MCP server over stdio (for Claude Code, Cursor).")
+    ] = False,
+    host: Annotated[str, typer.Option(help="HTTP bind address.")] = "127.0.0.1",
+    port: Annotated[int, typer.Option(help="HTTP port.")] = 8000,
+    no_mcp_http: Annotated[
+        bool, typer.Option(help="Don't mount MCP at /mcp on the HTTP server.")
+    ] = False,
+) -> None:
+    """Serve the docs: REST API + MCP at /mcp over HTTP, or MCP over stdio with --mcp."""
+    import os
+    import threading
+
+    from docurag.serve.service import DocuRAGService
+
+    settings = _settings()
+    if mcp:
+        # stdout belongs to the MCP protocol: everything else goes to stderr.
+        from docurag.serve.mcp_server import create_mcp_server
+
+        service = DocuRAGService(settings)
+        threading.Thread(target=service.warm_up, daemon=True).start()
+        try:
+            create_mcp_server(service).run("stdio")
+        finally:
+            service.db.close()
+        return
+
+    import uvicorn
+
+    from docurag.serve.api import API_KEY_ENV, create_app
+
+    if host not in ("127.0.0.1", "localhost", "::1") and not os.environ.get(API_KEY_ENV):
+        err.print(
+            f"[yellow]Warning:[/yellow] listening on {host} without {API_KEY_ENV}. Anyone who "
+            "can reach this port can search your docs and make the server crawl any URL."
+        )
+    app_ = create_app(settings, mount_mcp=not no_mcp_http, host=host)
+    err.print(f"DocuRAG API on http://{host}:{port}  (docs: /docs"
+              + ("" if no_mcp_http else ", MCP: /mcp") + ")")
+    uvicorn.run(app_, host=host, port=port, log_level="warning")
 
 
 @app.command()

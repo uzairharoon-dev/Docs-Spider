@@ -1,0 +1,13 @@
+.git
+.github
+.venv
+.docurag
+.pytest_cache
+.ruff_cache
+**/__pycache__
+**/*.pyc
+*.db
+*.db-wal
+*.db-shm
+tests
+docurag/eval/results
