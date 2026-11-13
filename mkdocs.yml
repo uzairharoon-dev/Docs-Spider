@@ -1,0 +1,54 @@
+site_name: DocuRAG
+site_description: Crawl any docs site, index it by version, and serve it to AI coding assistants over MCP.
+site_url: https://uzairharoon-dev.github.io/Docs-Spider/
+repo_url: https://github.com/uzairharoon-dev/Docs-Spider
+repo_name: uzairharoon-dev/Docs-Spider
+edit_uri: edit/main/docs/
+
+theme:
+  name: material
+  features:
+    - navigation.sections
+    - navigation.top
+    - content.code.copy
+    - search.suggest
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      toggle: {icon: material/weather-night, name: Dark mode}
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
+      toggle: {icon: material/weather-sunny, name: Light mode}
+
+nav:
+  - Home: index.md
+  - Getting started: getting-started.md
+  - Use it from your assistant: assistants.md
+  - Guides:
+      - CLI: cli.md
+      - Configuration: configuration.md
+      - REST API: rest-api.md
+  - How it works: how-it-works.md
+  - Results:
+      - Retrieval evaluation: evaluation.md
+      - Benchmarks: benchmarks.md
+  - Limitations: limitations.md
+  - Development: development.md
+
+markdown_extensions:
+  - admonition
+  - tables
+  - toc: {permalink: true}
+  - pymdownx.highlight
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+
+validation:
+  links:
+    not_found: warn
+    anchors: warn

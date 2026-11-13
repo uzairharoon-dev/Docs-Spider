@@ -11,3 +11,7 @@
 *.db-shm
 tests
 docurag/eval/results
+benchmarks
+demo
+docs
+site
