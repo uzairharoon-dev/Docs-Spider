@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from dataclasses import asdict, dataclass, field
 
+from docurag.crawler.versions import pick_latest
 from docurag.db import Database
 from docurag.index.chunker import context_line
 from docurag.index.embedder import Embedder
@@ -77,6 +78,12 @@ class Searcher:
             raise UnknownLibrary(library)
         return row["id"]
 
+    def resolve_version(self, library_id: int | None, version: str | None) -> str | None:
+        """'latest' means the newest indexed version unless pages carry that literal label."""
+        if version != "latest" or library_id is None:
+            return version
+        return pick_latest(self.db.library_versions(library_id)) or version
+
     def _vector(self, query: str, k: int, lib: int | None, version: str | None) -> Ranked:
         if self.embedder is None or self.store is None:
             raise ValueError("vector and hybrid search need an embedder and a vector store")
@@ -97,6 +104,7 @@ class Searcher:
         if rerank and self.reranker is None:
             raise ValueError("rerank=True needs a reranker")
         lib = self._library_id(library)
+        version = self.resolve_version(lib, version)
         query = query.strip()
         if not query:
             return []

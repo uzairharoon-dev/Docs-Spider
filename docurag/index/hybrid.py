@@ -52,7 +52,8 @@ def bm25_search(
         return []
     sql = f"""SELECT c.id, bm25(chunks_fts, {BM25_WEIGHTS[0]}, {BM25_WEIGHTS[1]}) AS score
               FROM chunks_fts JOIN chunks c ON c.id = chunks_fts.rowid
-              WHERE chunks_fts MATCH ?"""
+              JOIN pages p ON p.id = c.page_id
+              WHERE chunks_fts MATCH ? AND p.gone = 0"""
     params: list = [match]
     if library_id is not None:
         sql += " AND c.library_id = ?"

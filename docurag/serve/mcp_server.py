@@ -73,7 +73,8 @@ def create_mcp_server(service: DocuRAGService) -> MCPServer:
         Args:
             query: A specific question or API name, e.g. "declare cookie parameters".
             library: Library name from list_libraries, e.g. "fastapi". Omit to search all.
-            version: Only this version, e.g. "0.115". Omit for all indexed versions.
+            version: Only this version, e.g. "0.115"; "latest" means the newest indexed
+                one. Omit to search all indexed versions.
             k: Number of sections to return (1-20).
         """
         k = max(1, min(MAX_K, k))

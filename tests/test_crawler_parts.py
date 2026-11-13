@@ -88,7 +88,7 @@ def test_parse_sitemap_index_and_urlset():
         "<url><loc> http://x.test/p </loc><image:image><image:loc>http://x.test/i.png"
         "</image:loc></image:image></url></urlset>"
     )
-    assert pages == ["http://x.test/p"] and children == []
+    assert pages == [("http://x.test/p", None)] and children == []
     assert parse_sitemap("not xml") == ([], [])
 
 
@@ -98,8 +98,8 @@ def test_frontier_dedup_claim_and_resume(db):
     fr = Frontier(db, job)
     assert fr.add([("http://docs.test/a", 1), ("http://docs.test/", 0)]) == 2
     assert fr.add([("http://docs.test/a", 0)]) == 0
-    assert fr.claim() == ("http://docs.test/", 0)  # lowest depth first
-    assert fr.claim() == ("http://docs.test/a", 1)
+    assert fr.claim() == ("http://docs.test/", 0, None)  # lowest depth first
+    assert fr.claim() == ("http://docs.test/a", 1, None)
     assert fr.claim() is None
     # simulate a crash: both URLs in progress -> back to pending
     assert fr.reset_in_progress() == 2

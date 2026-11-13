@@ -124,7 +124,9 @@ def _run_index(
         stats = indexer.index_library(library_id, force=force, on_page=on_page)
     console.print(
         f"[green]Indexed[/green] [bold]{name}[/bold]: {stats.pages_indexed} pages "
-        f"({stats.chunks_written} chunks), {stats.pages_skipped} unchanged · {embedder.name}"
+        f"({stats.chunks_written} chunks), {stats.pages_skipped} unchanged"
+        + (f", {stats.pages_removed} removed" if stats.pages_removed else "")
+        + f" · {embedder.name}"
     )
     return stats
 
@@ -139,7 +141,9 @@ def _run_crawl(db: Database, lib: LibraryConfig, settings: Settings, fresh: bool
             stats_line["text"] = (
                 f"saved {s.get('saved', 0)} · unchanged {s.get('unchanged', 0)} · "
                 f"dup {s.get('duplicate', 0)} · skipped {s.get('skipped', 0)} · "
-                f"failed {s.get('failed', 0)} · queued {ev.queued}"
+                f"failed {s.get('failed', 0)}"
+                + (f" · removed {s['removed']}" if s.get("removed") else "")
+                + f" · queued {ev.queued}"
             )
             status.update(f"[bold]{lib.name}[/bold] {stats_line['text']}")
             if ev.outcome == FAILED:
@@ -174,6 +178,15 @@ def add(
     max_pages: Annotated[int | None, typer.Option(help="Stop after this many fetches.")] = None,
     max_depth: Annotated[int | None, typer.Option(help="Maximum link depth.")] = None,
     no_sitemap: Annotated[bool, typer.Option(help="Don't auto-discover sitemaps.")] = False,
+    render_js: Annotated[
+        str | None,
+        typer.Option(help="Render pages in Chromium: off, on, or auto (only JS-shell pages)."),
+    ] = None,
+    version_pattern: Annotated[
+        str | None,
+        typer.Option(help=r"Regex with one group reading the version from the URL path, "
+                          r"e.g. '^/docs/(\d+\.\d+)/'."),
+    ] = None,
     fresh: Annotated[bool, typer.Option(help="Start a new job instead of resuming.")] = False,
     no_index: Annotated[bool, typer.Option(help="Crawl only; skip chunking/embedding.")] = False,
 ) -> None:
@@ -185,7 +198,14 @@ def add(
         "include": include or None, "exclude": exclude or None, "version": version,
         "rate_limit": rate_limit, "max_pages": max_pages, "max_depth": max_depth,
         "discover_sitemaps": False if no_sitemap else None,
+        "version_pattern": version_pattern,
     }
+    if render_js is not None:
+        modes = {"off": False, "on": True, "auto": "auto"}
+        if render_js not in modes:
+            err.print("[red]--render-js must be off, on or auto[/red]")
+            raise typer.Exit(2)
+        overrides["render_js"] = modes[render_js]
     db = _db(settings)
     try:
         try:
@@ -205,6 +225,9 @@ def update(
     name: Annotated[str, typer.Argument(help="Library to re-crawl.")],
     fresh: Annotated[bool, typer.Option(help="Start a new job instead of resuming.")] = False,
     no_index: Annotated[bool, typer.Option(help="Crawl only; skip chunking/embedding.")] = False,
+    full: Annotated[
+        bool, typer.Option(help="Ignore sitemap <lastmod> and ask the server about every page.")
+    ] = False,
 ) -> None:
     """Re-crawl and re-index a library. Unchanged pages are skipped."""
     from docurag.serve.service import resolve_library
@@ -213,7 +236,8 @@ def update(
     db = _db(settings)
     try:
         try:
-            lib = resolve_library(settings, db, name)
+            overrides = {"trust_sitemap_lastmod": False} if full else None
+            lib = resolve_library(settings, db, name, overrides=overrides)
         except LookupError:
             err.print(f"[red]Unknown library:[/red] {name}. Add it with `docurag add`.")
             raise typer.Exit(1) from None

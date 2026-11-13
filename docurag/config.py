@@ -30,12 +30,31 @@ class LibraryConfig(BaseModel):
     exclude: list[str] = Field(default_factory=list)
     # Path prefixes the crawl is confined to. Derived from start_urls when empty.
     scope_prefixes: list[str] = Field(default_factory=list)
-    render_js: bool = False
+    # False: plain HTTP. True: render every page in Chromium. "auto": render only pages
+    # whose static HTML looks like a JavaScript shell (needs the `js` extra).
+    render_js: bool | Literal["auto"] = False
     rate_limit: float = Field(default=2.0, gt=0)
     max_pages: int | None = Field(default=None, gt=0)
     max_depth: int = Field(default=20, ge=0)
     discover_sitemaps: bool = True
+    # Skip pages whose sitemap <lastmod> predates our last fetch. Turn off (or run
+    # `docurag update --full`) for sites whose sitemaps carry stale dates.
+    trust_sitemap_lastmod: bool = True
+    # Label for pages with no version in their URL; an explicit value labels every page.
     version: str = "latest"
+    # "auto": read the version from URLs like /0.115/ or /en/stable/ when `version` is
+    # left at "latest". `version_pattern` (regex with one group) replaces the heuristic.
+    version_detection: Literal["auto", "off"] = "auto"
+    version_pattern: str | None = None
+
+    @field_validator("version_pattern")
+    @classmethod
+    def _pattern_ok(cls, v: str | None) -> str | None:
+        if v is not None:
+            from docurag.crawler.versions import compile_pattern
+
+            compile_pattern(v)
+        return v
 
     @field_validator("name")
     @classmethod

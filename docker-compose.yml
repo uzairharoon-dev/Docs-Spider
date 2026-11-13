@@ -3,7 +3,10 @@
 #                                            store.url: http://qdrant:6333 in docurag.yaml)
 services:
   docurag:
-    build: .
+    build:
+      context: .
+      args:
+        WITH_JS: ${DOCURAG_WITH_JS:-false}   # DOCURAG_WITH_JS=true: Chromium for render_js
     image: docurag:latest
     ports:
       - "127.0.0.1:8000:8000"   # loopback only; set DOCURAG_API_KEY before exposing it

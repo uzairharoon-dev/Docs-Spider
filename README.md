@@ -2,7 +2,7 @@
 
 [![CI](https://github.com/uzairharoon-dev/Docs-Spider/actions/workflows/ci.yml/badge.svg)](https://github.com/uzairharoon-dev/Docs-Spider/actions/workflows/ci.yml)
 ![Python 3.12+](https://img.shields.io/badge/python-3.12%2B-blue)
-![Status: M4](https://img.shields.io/badge/status-M4%20MCP%20server-orange)
+![Status: M5](https://img.shields.io/badge/status-M5%20versions%20%2B%20JS-orange)
 
 **Up-to-date, versioned library docs for AI coding assistants. Self-hosted, and it works on private docs too.**
 
@@ -40,7 +40,7 @@ Assistant:  (calls search_docs("cookie parameters", library="fastapi"))
 
 ## Status
 
-The project is built in milestones. **M1–M4 are done:** crawler, chunking and embeddings, hybrid search with a measured eval, and the MCP server, REST API and Docker setup.
+The project is built in milestones. **M1–M5 are done:** crawler, chunking and embeddings, hybrid search with a measured eval, the MCP server, REST API and Docker setup, and versioned docs, incremental re-crawls and JavaScript-rendered sites.
 
 | # | Deliverable | Status |
 | --- | --- | --- |
@@ -48,8 +48,8 @@ The project is built in milestones. **M1–M4 are done:** crawler, chunking and 
 | M2 | Heading-aware chunker, embedder, vector index, `docurag search` | ✅ Done |
 | M3 | Hybrid search (vector + BM25), reranker, eval harness | ✅ Done |
 | M4 | MCP server, REST API, Docker Compose | ✅ Done |
-| M5 | Full incremental re-crawl, version detection, Playwright for JS sites | ⏳ Next |
-| M6 | Demo GIF, benchmarks, docs site | Planned |
+| M5 | Full incremental re-crawl, version detection, Playwright for JS sites | ✅ Done |
+| M6 | Demo GIF, benchmarks, docs site | ⏳ Next |
 
 Today you can crawl a docs site, keep it fresh, and let Claude Code, Cursor or any MCP
 client search it, with cited results. A REST API and `docker compose up` cover the rest.
@@ -176,8 +176,20 @@ curl -s -X POST localhost:8000/search -H 'content-type: application/json' \
 - **Resumable.** The frontier and job state live in SQLite. Stop a crawl with Ctrl-C,
   or let it crash, then run the same command again: it continues the same job and
   does not refetch finished pages.
-- **Cheap re-crawls.** `update` sends `If-None-Match` / `If-Modified-Since`.
-  A `304 Not Modified` costs one request and still follows the page's stored links.
+- **Cheap re-crawls.** `update` skips pages whose sitemap `<lastmod>` is older than the
+  last fetch, without sending a request at all. For the rest it sends `If-None-Match` /
+  `If-Modified-Since`: a `304 Not Modified` costs one request. Either way the page's stored
+  links are still followed. Re-crawling the 23-page httpx docs fetched zero pages.
+  `update --full` ignores `<lastmod>` for sites whose sitemaps carry stale dates.
+- **Removed pages disappear.** A page that now returns 404/410 is hidden from search at once
+  and deleted, with its chunks and vectors, at the next index. If it comes back, so does it.
+- **Versions.** The version is read from the URL: `/0.115/`, `/v2/`, `/3.12/`, `/en/stable/`.
+  Use `--version-pattern` for unusual layouts, or `--version 2.0` to label a whole crawl.
+  Duplicate detection runs per version, so near-identical v1 and v2 pages are both kept.
+  Searching with `version: latest` picks the newest release that is indexed.
+- **JavaScript-rendered sites.** `--render-js auto` re-renders pages in headless Chromium
+  when their static HTML is an empty app shell; `on` renders every page. Needs the `js`
+  extra: `uv sync --extra js && uv run playwright install chromium`.
 
 ### Extraction
 - **Finds the main content.** Recognises MkDocs Material, Sphinx, Docusaurus and generic
@@ -225,7 +237,7 @@ curl -s -X POST localhost:8000/search -H 'content-type: application/json' \
 | Command | Description |
 | --- | --- |
 | `docurag add URL --name NAME` | Add a library, crawl it and index it. Re-running resumes an unfinished crawl. |
-| `docurag update NAME` | Re-crawl and re-index a library incrementally. |
+| `docurag update NAME [--full]` | Re-crawl and re-index incrementally. `--full` ignores sitemap `<lastmod>`. |
 | `docurag index [NAME] [--force]` | Chunk and embed new or changed pages (all libraries by default). |
 | `docurag search QUERY --lib NAME` | Search. Options: `--mode`, `--rerank`, `--version`, `-k`, `--json`, `--full`. |
 | `docurag eval` | Run the retrieval eval: Recall@k, MRR and latency per search mode. |
@@ -246,7 +258,9 @@ Options for `add`:
 | `--max-pages` | unlimited | Stop after this many fetches. |
 | `--max-depth` | 20 | Maximum link depth from the start page. |
 | `--rate-limit` | 2 | Requests per second per domain. |
-| `--version` | `latest` | Version label stored with the pages. |
+| `--version` | `latest` | Label every page with this version (turns off detection). |
+| `--version-pattern` | — | Regex with one group that reads the version from the URL path. |
+| `--render-js` | `off` | `auto` renders JS-shell pages in Chromium, `on` renders all. |
 | `--no-sitemap` | off | Don't auto-discover sitemaps. |
 | `--fresh` | off | Start a new job instead of resuming. |
 | `--no-index` | off | Crawl only; run `docurag index` later. |
@@ -269,12 +283,15 @@ libraries:
     start_urls: [https://fastapi.tiangolo.com/]
     include: ["/tutorial/", "/advanced/"]
     exclude: ["/zh/", "/ja/"]
-    render_js: false          # Playwright fallback arrives in M5
+    render_js: false          # false | auto | true (auto/true need the `js` extra)
     rate_limit: 2
     # max_pages: 500
     # max_depth: 20
-    # version: latest
+    # version: latest          # a fixed label for every page turns detection off
+    # version_detection: auto  # auto | off
+    # version_pattern: '^/docs/(?P<version>[^/]+)/'
     # discover_sitemaps: true
+    # trust_sitemap_lastmod: true
     # scope_prefixes: ["/docs/"]   # default: derived from start_urls
 
 embedder:
@@ -365,7 +382,9 @@ docurag/
     frontier.py       persistent BFS queue
     ratelimit.py      per-domain request spacing
     robots.py         robots.txt cache (RFC 9309)
-    seeds.py          sitemap.xml / llms.txt expansion
+    seeds.py          sitemap.xml (with lastmod) / llms.txt expansion
+    versions.py       version detection from URLs, "latest" resolution
+    renderer.py       optional Playwright rendering for JS-built pages
   extract/
     cleaner.py        main-content detection, chrome removal
     markdown.py       HTML to Markdown with tagged code fences
@@ -469,10 +488,14 @@ CI runs lint and tests on Ubuntu and Windows, and builds the Docker image
 - The reranker is slow on weak CPUs; it stays off by default.
 - Pages crawled before section anchors existed get them only when their content changes
   (a `304 Not Modified` carries no HTML). `docurag remove` + `add` refreshes them.
-- JavaScript-rendered sites need Playwright (M5). Today `render_js: true` only logs a warning.
+- Rendering in Chromium is slower than plain HTTP, and the browser's own sub-requests
+  (scripts, XHR) are not counted against the per-domain rate limit.
+- The Docker image has no browser by default; build with `DOCURAG_WITH_JS=true docker compose
+  build` to enable `render_js` (about 3 GB instead of 1 GB: Chromium and its system libraries).
 - Code blocks have a language tag only when the site's HTML provides one.
   FastAPI's HTML does not, so its code fences are untagged.
-- Versions come only from the `--version` label. Detection from URLs is planned for M5.
+- Version detection looks at the first three directory levels only, so `/api/v1/`
+  reference paths deeper in a site aren't mistaken for docs versions.
 
 ## License
 

@@ -25,15 +25,19 @@ class Frontier:
             (self.job_id,),
         ).rowcount
 
-    def add(self, items: Iterable[tuple[str, int]]) -> int:
-        """Insert ``(url, depth)`` pairs not seen before. Returns how many were new."""
-        rows = [(self.job_id, url, depth) for url, depth in items]
+    def add(self, items: Iterable[tuple]) -> int:
+        """Insert ``(url, depth)`` or ``(url, depth, lastmod)`` items not seen before.
+
+        Returns how many were new.
+        """
+        rows = [(self.job_id, it[0], it[1], it[2] if len(it) > 2 else None) for it in items]
         if not rows:
             return 0
         with self.db.transaction() as conn:
             before = conn.total_changes
             conn.executemany(
-                "INSERT OR IGNORE INTO frontier (job_id, url, depth) VALUES (?, ?, ?)", rows
+                "INSERT OR IGNORE INTO frontier (job_id, url, depth, lastmod) VALUES (?, ?, ?, ?)",
+                rows,
             )
             return conn.total_changes - before
 
@@ -45,16 +49,16 @@ class Frontier:
         )
         return cur.rowcount > 0
 
-    def claim(self) -> tuple[str, int] | None:
+    def claim(self) -> tuple[str, int, str | None] | None:
         row = self.db.conn.execute(
             """UPDATE frontier SET status='in_progress', attempts=attempts+1
                WHERE rowid = (SELECT rowid FROM frontier
                               WHERE job_id=? AND status='pending'
                               ORDER BY depth, rowid LIMIT 1)
-               RETURNING url, depth""",
+               RETURNING url, depth, lastmod""",
             (self.job_id,),
         ).fetchone()
-        return (row[0], row[1]) if row else None
+        return (row[0], row[1], row[2]) if row else None
 
     def complete(self, url: str, status: str = "done", note: str | None = None) -> None:
         self.db.conn.execute(

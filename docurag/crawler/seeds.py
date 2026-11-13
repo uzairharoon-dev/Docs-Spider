@@ -21,21 +21,27 @@ def _local(tag: str) -> str:
     return tag.rsplit("}", 1)[-1].lower()
 
 
-def parse_sitemap(xml_text: str) -> tuple[list[str], list[str]]:
-    """Return ``(page_urls, child_sitemap_urls)``; empty lists for invalid XML."""
+def parse_sitemap(xml_text: str) -> tuple[list[tuple[str, str | None]], list[str]]:
+    """Return ``([(page_url, lastmod), ...], child_sitemap_urls)``; empty for invalid XML."""
     try:
-        root = ET.fromstring(xml_text.lstrip("﻿ \r\n\t").encode("utf-8"))
+        root = ET.fromstring(xml_text.lstrip("\ufeff \r\n\t").encode("utf-8"))
     except ET.ParseError:
         return [], []
-    locs = []
-    for entry in root:  # <url> or <sitemap>; skips nested image:loc etc.
+    entries: list[tuple[str, str | None]] = []
+    for entry in root:  # <url> or <sitemap>; direct children only, so image:loc is skipped
+        loc = lastmod = None
         for child in entry:
-            if _local(child.tag) == "loc" and child.text and child.text.strip():
-                locs.append(child.text.strip())
-                break
+            tag = _local(child.tag)
+            text = (child.text or "").strip()
+            if tag == "loc" and text and loc is None:
+                loc = text
+            elif tag == "lastmod" and text:
+                lastmod = text
+        if loc:
+            entries.append((loc, lastmod))
     if _local(root.tag) == "sitemapindex":
-        return [], locs
-    return locs, []
+        return [], [loc for loc, _ in entries]
+    return entries, []
 
 
 async def _fetch_text(url: str, fetcher: Fetcher, robots: RobotsCache) -> str | None:
@@ -49,8 +55,10 @@ async def _fetch_text(url: str, fetcher: Fetcher, robots: RobotsCache) -> str | 
     return res.text
 
 
-async def sitemap_urls(sitemap: str, fetcher: Fetcher, robots: RobotsCache) -> list[str]:
-    pages: list[str] = []
+async def sitemap_urls(
+    sitemap: str, fetcher: Fetcher, robots: RobotsCache
+) -> list[tuple[str, str | None]]:
+    pages: list[tuple[str, str | None]] = []
     queue, seen = [(sitemap, 0)], {sitemap}
     while queue and len(pages) < MAX_SITEMAP_URLS:
         url, depth = queue.pop(0)
@@ -74,14 +82,22 @@ async def expand_seeds(
     robots: RobotsCache,
     *,
     discover_sitemaps: bool = True,
-) -> list[tuple[str, int]]:
-    """Return ``(url, depth)`` seeds. Start pages get depth 0, which bypasses ``include``."""
-    seeds: dict[str, int] = {}
+) -> list[tuple[str, int, str | None]]:
+    """Return ``(url, depth, lastmod)`` seeds. Start pages get depth 0, bypassing ``include``.
 
-    def keep(raw: str, depth: int) -> None:
+    ``lastmod`` comes from the sitemap; re-crawls use it to skip unchanged pages.
+    """
+    seeds: dict[str, tuple[int, str | None]] = {}
+
+    def keep(raw: str, depth: int, lastmod: str | None = None) -> None:
         url = normalize_url(raw)
-        if url and url not in seeds and scope.in_scope(url) and scope.is_included(url):
-            seeds[url] = depth
+        if url is None:
+            return
+        if url in seeds:
+            if seeds[url][1] is None and lastmod:  # e.g. a start page that is also listed
+                seeds[url] = (seeds[url][0], lastmod)
+        elif scope.in_scope(url) and scope.is_included(url):
+            seeds[url] = (depth, lastmod)
 
     for raw in start_urls:
         start = normalize_url(raw)
@@ -89,14 +105,14 @@ async def expand_seeds(
             log.warning("ignoring invalid start URL %r", raw)
             continue
         if is_sitemap_url(start):
-            for u in await sitemap_urls(start, fetcher, robots):
-                keep(u, 1)
+            for u, lastmod in await sitemap_urls(start, fetcher, robots):
+                keep(u, 1, lastmod)
         elif is_llms_txt_url(start):
             text = await _fetch_text(start, fetcher, robots)
             for u in markdown_links(text or "", start):
                 keep(u, 1)
         else:
-            seeds.setdefault(start, 0)
+            seeds.setdefault(start, (0, None))
             if discover_sitemaps:
                 origin = "{0.scheme}://{0.netloc}".format(urlsplit(start))
                 candidates = list(dict.fromkeys([*await robots.sitemaps(start),
@@ -104,6 +120,6 @@ async def expand_seeds(
                 for sm in candidates:
                     sm_url = normalize_url(sm)
                     if sm_url and urlsplit(sm_url).netloc in scope.netlocs:
-                        for u in await sitemap_urls(sm_url, fetcher, robots):
-                            keep(u, 1)
-    return list(seeds.items())
+                        for u, lastmod in await sitemap_urls(sm_url, fetcher, robots):
+                            keep(u, 1, lastmod)
+    return [(url, depth, lastmod) for url, (depth, lastmod) in seeds.items()]

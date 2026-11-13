@@ -13,13 +13,24 @@ ENV UV_COMPILE_BYTECODE=1 \
 
 WORKDIR /app
 
+# WITH_JS=true adds Playwright + Chromium for render_js (image ~3 GB instead of ~1 GB).
+ARG WITH_JS=false
+ENV PLAYWRIGHT_BROWSERS_PATH=/ms-playwright
+
 # Dependencies first, so code changes don't reinstall them.
 COPY pyproject.toml uv.lock ./
-RUN uv sync --frozen --no-dev --extra qdrant --no-install-project
+RUN uv sync --frozen --no-dev --extra qdrant $([ "$WITH_JS" = "true" ] && echo --extra js) \
+        --no-install-project
 
 COPY README.md ./
 COPY docurag ./docurag
-RUN uv sync --frozen --no-dev --extra qdrant
+RUN uv sync --frozen --no-dev --extra qdrant $([ "$WITH_JS" = "true" ] && echo --extra js)
+# Playwright's bundled Node needs libatomic1, which the slim image lacks.
+RUN if [ "$WITH_JS" = "true" ]; then \
+        apt-get update && apt-get install -y --no-install-recommends libatomic1 \
+        && playwright install --with-deps chromium \
+        && rm -rf /var/lib/apt/lists/*; \
+    fi
 
 RUN useradd --create-home --uid 1000 docurag && mkdir -p /data && chown docurag /data
 USER docurag

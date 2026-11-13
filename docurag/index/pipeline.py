@@ -21,6 +21,7 @@ class IndexStats:
     pages_skipped: int = 0
     chunks_written: int = 0
     chunks_deleted: int = 0
+    pages_removed: int = 0
 
 
 def embedding_text(title: str | None, heading_path: list[str], text: str) -> str:
@@ -55,7 +56,10 @@ class Indexer:
         stats = IndexStats()
         pages = self.db.pages_for_index(library_id, version)
         for i, page in enumerate(pages, 1):
-            if force or self.needs_index(page):
+            if page["gone"]:
+                stats.chunks_deleted += self.remove_page(page)
+                stats.pages_removed += 1
+            elif force or self.needs_index(page):
                 written, deleted = self.index_page(page)
                 stats.pages_indexed += 1
                 stats.chunks_written += written
@@ -96,6 +100,13 @@ class Indexer:
         # Marked last: a crash before this line just means the page is redone next time.
         self.db.mark_indexed(page["id"], page["content_hash"], self.embedder.name)
         return len(new_ids), len(old_ids)
+
+    def remove_page(self, page: sqlite3.Row) -> int:
+        """Drop a page that disappeared from the docs, with its chunks and vectors."""
+        ids = self.db.chunk_ids_for_page(page["id"])
+        self.store.delete(ids)
+        self.db.delete_page(page["id"])
+        return len(ids)
 
     def remove_library(self, library_id: int) -> None:
         self.store.delete_library(library_id)

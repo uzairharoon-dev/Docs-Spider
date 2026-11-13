@@ -35,6 +35,7 @@ CREATE TABLE IF NOT EXISTS pages (
     anchors_json  TEXT NOT NULL DEFAULT '[]',  -- [[heading text, html id], ...]
     indexed_hash  TEXT,                        -- content_hash when last chunked + embedded
     indexed_model TEXT,                        -- embedder that produced the vectors
+    gone          INTEGER NOT NULL DEFAULT 0,  -- 404/410 on re-crawl; pruned at next index
     UNIQUE (library_id, version, url)
 );
 CREATE INDEX IF NOT EXISTS pages_url ON pages(url);
@@ -64,6 +65,7 @@ CREATE TABLE IF NOT EXISTS frontier (
     status     TEXT NOT NULL DEFAULT 'pending',  -- pending | in_progress | done | skipped | failed
     attempts   INTEGER NOT NULL DEFAULT 0,
     note       TEXT,
+    lastmod    TEXT,                    -- <lastmod> from the sitemap, if any
     PRIMARY KEY (job_id, url)
 );
 CREATE INDEX IF NOT EXISTS frontier_claim ON frontier(job_id, status, depth);
@@ -119,6 +121,10 @@ MIGRATIONS = {
         "anchors_json": "TEXT NOT NULL DEFAULT '[]'",
         "indexed_hash": "TEXT",
         "indexed_model": "TEXT",
+        "gone": "INTEGER NOT NULL DEFAULT 0",
+    },
+    "frontier": {
+        "lastmod": "TEXT",
     },
     "chunks": {
         "context": "TEXT NOT NULL DEFAULT ''",
@@ -220,7 +226,7 @@ class Database:
                       (SELECT COUNT(*) FROM chunks c WHERE c.library_id = l.id) AS chunks,
                       GROUP_CONCAT(DISTINCT p.version) AS versions,
                       MAX(p.fetched_at) AS last_fetched
-               FROM libraries l LEFT JOIN pages p ON p.library_id = l.id
+               FROM libraries l LEFT JOIN pages p ON p.library_id = l.id AND p.gone = 0
                GROUP BY l.id ORDER BY l.name"""
         ).fetchall()
         out = []
@@ -312,21 +318,21 @@ class Database:
     def find_pages_by_url(self, url: str) -> list[sqlite3.Row]:
         return self.conn.execute(
             """SELECT p.*, l.name AS library FROM pages p JOIN libraries l ON l.id = p.library_id
-               WHERE p.url=? ORDER BY p.fetched_at DESC""",
+               WHERE p.url=? AND p.gone = 0 ORDER BY p.fetched_at DESC""",
             (url,),
         ).fetchall()
 
-    def page_urls(self, library_id: int, version: str) -> list[str]:
-        return [
-            r[0]
-            for r in self.conn.execute(
-                "SELECT url FROM pages WHERE library_id=? AND version=?", (library_id, version)
-            )
-        ]
+    def page_urls(self, library_id: int, version: str | None = None) -> list[str]:
+        sql, params = "SELECT url FROM pages WHERE library_id=?", [library_id]
+        if version is not None:
+            sql += " AND version=?"
+            params.append(version)
+        return [r[0] for r in self.conn.execute(sql, params)]
 
     def page_fingerprints(self, library_id: int, version: str) -> Iterator[tuple[str, str, int]]:
         for r in self.conn.execute(
-            "SELECT url, content_hash, simhash FROM pages WHERE library_id=? AND version=?",
+            "SELECT url, content_hash, simhash FROM pages"
+            " WHERE library_id=? AND version=? AND gone = 0",
             (library_id, version),
         ):
             yield r[0], r[1], to_unsigned64(r[2])
@@ -355,7 +361,7 @@ class Database:
                    simhash=excluded.simhash, etag=excluded.etag,
                    last_modified=excluded.last_modified, fetched_at=excluded.fetched_at,
                    markdown=excluded.markdown, links_json=excluded.links_json,
-                   anchors_json=excluded.anchors_json""",
+                   anchors_json=excluded.anchors_json, gone=0""",
             (
                 library_id, version, url, title, content_hash, to_signed64(simhash), etag,
                 last_modified, now(), markdown, json.dumps(links), json.dumps(anchors or []),
@@ -367,13 +373,13 @@ class Database:
     ) -> None:
         if links is None:
             self.conn.execute(
-                "UPDATE pages SET fetched_at=?, etag=COALESCE(?, etag),"
+                "UPDATE pages SET fetched_at=?, etag=COALESCE(?, etag), gone=0,"
                 " last_modified=COALESCE(?, last_modified) WHERE id=?",
                 (now(), etag, last_modified, page_id),
             )
         else:
             self.conn.execute(
-                "UPDATE pages SET fetched_at=?, etag=COALESCE(?, etag),"
+                "UPDATE pages SET fetched_at=?, etag=COALESCE(?, etag), gone=0,"
                 " last_modified=COALESCE(?, last_modified), links_json=? WHERE id=?",
                 (now(), etag, last_modified, json.dumps(links), page_id),
             )
@@ -381,7 +387,7 @@ class Database:
     # ---- chunks (M2) -----------------------------------------------------
     def pages_for_index(self, library_id: int, version: str | None = None) -> list[sqlite3.Row]:
         sql = """SELECT id, library_id, version, url, title, markdown, content_hash,
-                        anchors_json, indexed_hash, indexed_model
+                        anchors_json, indexed_hash, indexed_model, gone
                  FROM pages WHERE library_id=?"""
         params: tuple[Any, ...] = (library_id,)
         if version is not None:
@@ -415,6 +421,22 @@ class Database:
             ids.append(cur.lastrowid)
         return ids
 
+    def mark_page_gone(self, page_id: int) -> None:
+        """Hide a page that now returns 404/410. The next index run deletes it for good."""
+        self.conn.execute("UPDATE pages SET gone=1, fetched_at=? WHERE id=?", (now(), page_id))
+
+    def delete_page(self, page_id: int) -> None:
+        self.conn.execute("DELETE FROM pages WHERE id=?", (page_id,))  # chunks cascade
+
+    def library_versions(self, library_id: int) -> list[str]:
+        return [
+            r[0]
+            for r in self.conn.execute(
+                "SELECT DISTINCT version FROM pages WHERE library_id=? AND gone = 0",
+                (library_id,),
+            )
+        ]
+
     def mark_indexed(self, page_id: int, content_hash: str | None, model: str | None) -> None:
         self.conn.execute(
             "UPDATE pages SET indexed_hash=?, indexed_model=? WHERE id=?",
@@ -432,7 +454,7 @@ class Database:
                            p.url, p.title, l.name AS library
                     FROM chunks c JOIN pages p ON p.id = c.page_id
                     JOIN libraries l ON l.id = c.library_id
-                    WHERE c.id IN ({marks})""",
+                    WHERE c.id IN ({marks}) AND p.gone = 0""",
                 part,
             ):
                 d = dict(r)
