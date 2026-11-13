@@ -32,6 +32,9 @@ CREATE TABLE IF NOT EXISTS pages (
     fetched_at    TEXT NOT NULL,
     markdown      TEXT NOT NULL,
     links_json    TEXT NOT NULL DEFAULT '[]',
+    anchors_json  TEXT NOT NULL DEFAULT '[]',  -- [[heading text, html id], ...]
+    indexed_hash  TEXT,                        -- content_hash when last chunked + embedded
+    indexed_model TEXT,                        -- embedder that produced the vectors
     UNIQUE (library_id, version, url)
 );
 CREATE INDEX IF NOT EXISTS pages_url ON pages(url);
@@ -64,7 +67,41 @@ CREATE TABLE IF NOT EXISTS frontier (
     PRIMARY KEY (job_id, url)
 );
 CREATE INDEX IF NOT EXISTS frontier_claim ON frontier(job_id, status, depth);
+
+CREATE TABLE IF NOT EXISTS chunks (
+    id            INTEGER PRIMARY KEY,
+    page_id       INTEGER NOT NULL REFERENCES pages(id) ON DELETE CASCADE,
+    library_id    INTEGER NOT NULL REFERENCES libraries(id) ON DELETE CASCADE,
+    version       TEXT NOT NULL,
+    position      INTEGER NOT NULL,
+    heading_path  TEXT NOT NULL,      -- JSON list, e.g. ["Guide", "Auth", "OAuth2"]
+    anchor        TEXT,               -- HTML id of the section heading, if known
+    text          TEXT NOT NULL,
+    token_count   INTEGER NOT NULL
+);
+CREATE INDEX IF NOT EXISTS chunks_page ON chunks(page_id);
+CREATE INDEX IF NOT EXISTS chunks_lib ON chunks(library_id, version);
+
+-- Used by the built-in "sqlite" vector store.
+CREATE TABLE IF NOT EXISTS chunk_vectors (
+    chunk_id   INTEGER PRIMARY KEY,   -- no FK: stores own their cleanup, like Qdrant
+    model      TEXT NOT NULL,
+    library_id INTEGER NOT NULL,
+    version    TEXT NOT NULL,
+    seq        INTEGER NOT NULL,       -- write sequence; lets readers detect replaced rows
+    vector     BLOB NOT NULL
+);
+CREATE INDEX IF NOT EXISTS chunk_vectors_lib ON chunk_vectors(model, library_id, version);
 """
+
+# Columns added after M1; created on open for databases made by older versions.
+MIGRATIONS = {
+    "pages": {
+        "anchors_json": "TEXT NOT NULL DEFAULT '[]'",
+        "indexed_hash": "TEXT",
+        "indexed_model": "TEXT",
+    },
+}
 
 RESUMABLE_STATUSES = ("running", "interrupted", "failed")
 
@@ -90,7 +127,17 @@ class Database:
         self.conn.execute("PRAGMA journal_mode=WAL")
         self.conn.execute("PRAGMA synchronous=NORMAL")
         self.conn.execute("PRAGMA foreign_keys=ON")
+        self._migrate_columns()
         self.conn.executescript(SCHEMA)
+
+    def _migrate_columns(self) -> None:
+        for table, columns in MIGRATIONS.items():
+            existing = {r[1] for r in self.conn.execute(f"PRAGMA table_info({table})")}
+            if not existing:  # fresh database: SCHEMA creates the table
+                continue
+            for name, decl in columns.items():
+                if name not in existing:
+                    self.conn.execute(f"ALTER TABLE {table} ADD COLUMN {name} {decl}")
 
     def close(self) -> None:
         self.conn.close()
@@ -122,6 +169,8 @@ class Database:
         rows = self.conn.execute(
             """SELECT l.id, l.name, l.base_url,
                       COUNT(p.id) AS pages,
+                      COALESCE(SUM(p.indexed_hash = p.content_hash), 0) AS pages_indexed,
+                      (SELECT COUNT(*) FROM chunks c WHERE c.library_id = l.id) AS chunks,
                       GROUP_CONCAT(DISTINCT p.version) AS versions,
                       MAX(p.fetched_at) AS last_fetched
                FROM libraries l LEFT JOIN pages p ON p.library_id = l.id
@@ -135,7 +184,13 @@ class Database:
         return out
 
     def delete_library(self, name: str) -> bool:
-        return self.conn.execute("DELETE FROM libraries WHERE name=?", (name,)).rowcount > 0
+        row = self.get_library(name)
+        if row is None:
+            return False
+        with self.transaction() as conn:
+            conn.execute("DELETE FROM chunk_vectors WHERE library_id=?", (row["id"],))
+            conn.execute("DELETE FROM libraries WHERE id=?", (row["id"],))
+        return True
 
     # ---- jobs ------------------------------------------------------------
     def create_job(self, library_id: int) -> int:
@@ -242,19 +297,21 @@ class Database:
         etag: str | None,
         last_modified: str | None,
         links: list[str],
+        anchors: list[tuple[str, str]] | None = None,
     ) -> None:
         self.conn.execute(
             """INSERT INTO pages (library_id, version, url, title, content_hash, simhash, etag,
-                                  last_modified, fetched_at, markdown, links_json)
-               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                                  last_modified, fetched_at, markdown, links_json, anchors_json)
+               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                ON CONFLICT(library_id, version, url) DO UPDATE SET
                    title=excluded.title, content_hash=excluded.content_hash,
                    simhash=excluded.simhash, etag=excluded.etag,
                    last_modified=excluded.last_modified, fetched_at=excluded.fetched_at,
-                   markdown=excluded.markdown, links_json=excluded.links_json""",
+                   markdown=excluded.markdown, links_json=excluded.links_json,
+                   anchors_json=excluded.anchors_json""",
             (
                 library_id, version, url, title, content_hash, to_signed64(simhash), etag,
-                last_modified, now(), markdown, json.dumps(links),
+                last_modified, now(), markdown, json.dumps(links), json.dumps(anchors or []),
             ),
         )
 
@@ -273,3 +330,63 @@ class Database:
                 " last_modified=COALESCE(?, last_modified), links_json=? WHERE id=?",
                 (now(), etag, last_modified, json.dumps(links), page_id),
             )
+
+    # ---- chunks (M2) -----------------------------------------------------
+    def pages_for_index(self, library_id: int, version: str | None = None) -> list[sqlite3.Row]:
+        sql = """SELECT id, library_id, version, url, title, markdown, content_hash,
+                        anchors_json, indexed_hash, indexed_model
+                 FROM pages WHERE library_id=?"""
+        params: tuple[Any, ...] = (library_id,)
+        if version is not None:
+            sql += " AND version=?"
+            params += (version,)
+        return self.conn.execute(sql + " ORDER BY id", params).fetchall()
+
+    def chunk_ids_for_page(self, page_id: int) -> list[int]:
+        sql = "SELECT id FROM chunks WHERE page_id=?"
+        return [r[0] for r in self.conn.execute(sql, (page_id,))]
+
+    def chunk_ids_for_library(self, library_id: int) -> list[int]:
+        sql = "SELECT id FROM chunks WHERE library_id=?"
+        return [r[0] for r in self.conn.execute(sql, (library_id,))]
+
+    def replace_chunks(self, page: sqlite3.Row, chunks: list[dict[str, Any]]) -> list[int]:
+        """Delete a page's chunks and insert new ones. Returns the new chunk ids in order."""
+        self.conn.execute("DELETE FROM chunks WHERE page_id=?", (page["id"],))
+        ids = []
+        for pos, ch in enumerate(chunks):
+            cur = self.conn.execute(
+                """INSERT INTO chunks (page_id, library_id, version, position, heading_path,
+                                       anchor, text, token_count)
+                   VALUES (?, ?, ?, ?, ?, ?, ?, ?)""",
+                (
+                    page["id"], page["library_id"], page["version"], pos,
+                    json.dumps(ch["heading_path"]), ch["anchor"], ch["text"], ch["token_count"],
+                ),
+            )
+            ids.append(cur.lastrowid)
+        return ids
+
+    def mark_indexed(self, page_id: int, content_hash: str | None, model: str | None) -> None:
+        self.conn.execute(
+            "UPDATE pages SET indexed_hash=?, indexed_model=? WHERE id=?",
+            (content_hash, model, page_id),
+        )
+
+    def get_chunks(self, chunk_ids: list[int]) -> dict[int, dict[str, Any]]:
+        out: dict[int, dict[str, Any]] = {}
+        for start in range(0, len(chunk_ids), 500):
+            part = chunk_ids[start : start + 500]
+            marks = ",".join("?" * len(part))
+            for r in self.conn.execute(
+                f"""SELECT c.id, c.heading_path, c.anchor, c.text, c.token_count, c.version,
+                           p.url, p.title, l.name AS library
+                    FROM chunks c JOIN pages p ON p.id = c.page_id
+                    JOIN libraries l ON l.id = c.library_id
+                    WHERE c.id IN ({marks})""",
+                part,
+            ):
+                d = dict(r)
+                d["heading_path"] = json.loads(d["heading_path"])
+                out[d["id"]] = d
+        return out

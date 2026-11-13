@@ -10,6 +10,17 @@ libraries:
     render_js: false
     rate_limit: 2            # requests per second per domain
 
-# Used from M2 on.
-embedder: {provider: local, model: BAAI/bge-small-en-v1.5}
-store: {type: qdrant, url: http://localhost:6333}
+embedder:
+  provider: local              # local (fastembed, CPU) | openai (any compatible API) | hash
+  model: BAAI/bge-small-en-v1.5
+  # provider: openai
+  # model: text-embedding-3-small
+  # base_url: https://api.openai.com/v1
+  # api_key_env: OPENAI_API_KEY
+
+store:
+  type: sqlite                 # no server needed
+  # type: qdrant
+  # url: http://localhost:6333 # or omit url to run Qdrant embedded under data_dir
+
+chunking: {min_tokens: 300, max_tokens: 512, overlap: 0.12}

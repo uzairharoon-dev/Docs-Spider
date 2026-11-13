@@ -266,6 +266,7 @@ class Crawler:
             library_id=self.library_id, version=version, url=final, title=page.title,
             markdown=page.markdown, content_hash=chash, simhash=h,
             etag=res.etag, last_modified=res.last_modified, links=page.links,
+            anchors=page.anchors,
         )
         self.dedup.add(final, chash, h)
         return SAVED, page.title

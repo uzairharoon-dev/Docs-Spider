@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import os
 from pathlib import Path
+from typing import Literal
 
 import yaml
 from pydantic import BaseModel, ConfigDict, Field, field_validator
@@ -45,8 +46,48 @@ class LibraryConfig(BaseModel):
         return v
 
 
+class EmbedderConfig(BaseModel):
+    """Which embedding model turns chunks into vectors (F13)."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    # local: fastembed (ONNX, CPU). openai: any OpenAI-compatible /embeddings API.
+    # hash: dependency-free feature hashing, for tests and offline smoke runs.
+    provider: Literal["local", "openai", "hash"] = "local"
+    model: str = "BAAI/bge-small-en-v1.5"
+    batch_size: int = Field(default=32, ge=1, le=2048)
+    base_url: str = "https://api.openai.com/v1"
+    api_key_env: str = "OPENAI_API_KEY"
+    dim: int | None = Field(default=None, ge=1)  # hash provider size / openai `dimensions`
+    query_prefix: str | None = None  # default: BGE retrieval instruction for BGE models
+    cache_dir: Path | None = None  # local model files; default <data_dir>/models
+
+
+class StoreConfig(BaseModel):
+    """Where vectors live. ``sqlite`` needs no server; ``qdrant`` scales further."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    type: Literal["sqlite", "qdrant"] = "sqlite"
+    url: str | None = None  # qdrant server, e.g. http://localhost:6333
+    path: Path | None = None  # qdrant embedded mode; default <data_dir>/qdrant
+    api_key_env: str = "QDRANT_API_KEY"
+    collection_prefix: str = "docurag"
+
+
+class ChunkConfig(BaseModel):
+    """Heading-aware chunking (F10). Sizes are estimated tokens."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    min_tokens: int = Field(default=300, ge=16)
+    # 512 stays inside the spec's 300-800 range and matches bge-small's input limit.
+    max_tokens: int = Field(default=512, ge=32)
+    overlap: float = Field(default=0.12, ge=0, le=0.5)
+
+
 class Settings(BaseModel):
-    """Top-level settings. Unknown sections (embedder, store, ...) are kept for later milestones."""
+    """Top-level settings. Unknown sections are kept for later milestones."""
 
     model_config = ConfigDict(extra="allow")
 
@@ -57,6 +98,9 @@ class Settings(BaseModel):
     max_retries: int = Field(default=3, ge=0)
     max_page_bytes: int = Field(default=5_000_000, gt=0)
     libraries: list[LibraryConfig] = Field(default_factory=list)
+    embedder: EmbedderConfig = Field(default_factory=EmbedderConfig)
+    store: StoreConfig = Field(default_factory=StoreConfig)
+    chunking: ChunkConfig = Field(default_factory=ChunkConfig)
 
     @field_validator("data_dir", mode="before")
     @classmethod

@@ -19,6 +19,8 @@ from docurag import __version__
 from docurag.config import LibraryConfig, Settings, load_settings
 from docurag.crawler.crawler import FAILED, Crawler, CrawlEvent
 from docurag.db import Database
+from docurag.index.pipeline import Indexer, IndexStats
+from docurag.index.search import Searcher, UnknownLibrary
 from docurag.urls import normalize_url
 
 app = typer.Typer(
@@ -68,6 +70,41 @@ def _db(settings: Settings) -> Database:
     return Database(settings.db_path)
 
 
+def _index_parts(settings: Settings, db: Database):
+    """Embedder + vector store, imported lazily so crawl-only commands stay fast."""
+    from docurag.index.embedder import make_embedder
+    from docurag.index.store import make_store
+
+    try:
+        with console.status(f"Loading embedder {settings.embedder.model}..."):
+            embedder = make_embedder(settings.embedder, settings.data_dir)
+        store = make_store(settings.store, db, settings.data_dir, embedder.name)
+    except Exception as exc:
+        err.print(f"[red]Can't set up the index:[/red] {exc}")
+        raise typer.Exit(1) from exc
+    return embedder, store
+
+
+def _run_index(
+    db: Database, settings: Settings, library_id: int, name: str, force: bool = False
+) -> IndexStats:
+    embedder, store = _index_parts(settings, db)
+    indexer = Indexer(db, embedder, store, settings.chunking)
+    with console.status(f"Indexing {name}...") as status:
+
+        def on_page(i: int, total: int, st: IndexStats) -> None:
+            status.update(
+                f"Indexing [bold]{name}[/bold] {i}/{total} pages · {st.chunks_written} chunks"
+            )
+
+        stats = indexer.index_library(library_id, force=force, on_page=on_page)
+    console.print(
+        f"[green]Indexed[/green] [bold]{name}[/bold]: {stats.pages_indexed} pages "
+        f"({stats.chunks_written} chunks), {stats.pages_skipped} unchanged · {embedder.name}"
+    )
+    return stats
+
+
 def _run_crawl(db: Database, lib: LibraryConfig, settings: Settings, fresh: bool) -> None:
     stats_line = {"text": ""}
 
@@ -114,8 +151,9 @@ def add(
     max_depth: Annotated[int | None, typer.Option(help="Maximum link depth.")] = None,
     no_sitemap: Annotated[bool, typer.Option(help="Don't auto-discover sitemaps.")] = False,
     fresh: Annotated[bool, typer.Option(help="Start a new job instead of resuming.")] = False,
+    no_index: Annotated[bool, typer.Option(help="Crawl only; skip chunking/embedding.")] = False,
 ) -> None:
-    """Add a docs site and crawl it. Re-running resumes an unfinished crawl."""
+    """Add a docs site, crawl it and index it. Re-running resumes an unfinished crawl."""
     settings = _settings()
     if normalize_url(url) is None:
         err.print(f"[red]Not an http(s) URL:[/red] {url}")
@@ -138,6 +176,8 @@ def add(
     db = _db(settings)
     try:
         _run_crawl(db, lib, settings, fresh)
+        if not no_index:
+            _run_index(db, settings, db.get_library(lib.name)["id"], lib.name)
     finally:
         db.close()
 
@@ -146,8 +186,9 @@ def add(
 def update(
     name: Annotated[str, typer.Argument(help="Library to re-crawl.")],
     fresh: Annotated[bool, typer.Option(help="Start a new job instead of resuming.")] = False,
+    no_index: Annotated[bool, typer.Option(help="Crawl only; skip chunking/embedding.")] = False,
 ) -> None:
-    """Re-crawl a library. Unchanged pages are skipped via ETag / Last-Modified."""
+    """Re-crawl and re-index a library. Unchanged pages are skipped."""
     settings = _settings()
     db = _db(settings)
     try:
@@ -159,8 +200,82 @@ def update(
                 raise typer.Exit(1)
             lib = LibraryConfig.model_validate(json.loads(row["config_json"]))
         _run_crawl(db, lib, settings, fresh)
+        if not no_index:
+            _run_index(db, settings, db.get_library(lib.name)["id"], lib.name)
     finally:
         db.close()
+
+
+@app.command()
+def index(
+    name: Annotated[str | None, typer.Argument(help="Library to index (default: all).")] = None,
+    force: Annotated[bool, typer.Option(help="Re-chunk and re-embed every page.")] = False,
+) -> None:
+    """Chunk and embed crawled pages. Only new or changed pages are processed."""
+    settings = _settings()
+    db = _db(settings)
+    try:
+        if name:
+            row = db.get_library(name)
+            if row is None:
+                err.print(f"[red]Unknown library:[/red] {name}")
+                raise typer.Exit(1)
+            targets = [(row["id"], name)]
+        else:
+            targets = [(r["id"], r["name"]) for r in db.list_libraries()]
+        if not targets:
+            err.print("No libraries yet. Add one with `docurag add`.")
+            raise typer.Exit(1)
+        for lib_id, lib_name in targets:
+            _run_index(db, settings, lib_id, lib_name, force=force)
+    finally:
+        db.close()
+
+
+@app.command()
+def search(
+    query: Annotated[str, typer.Argument(help="What to look for.")],
+    lib: Annotated[str | None, typer.Option("--lib", "-l", help="Library name.")] = None,
+    version: Annotated[str | None, typer.Option(help="Only this version.")] = None,
+    k: Annotated[int, typer.Option("--k", "-k", min=1, max=50, help="Results to show.")] = 5,
+    as_json: Annotated[bool, typer.Option("--json", help="Print JSON.")] = False,
+    full: Annotated[bool, typer.Option(help="Print whole chunks, not snippets.")] = False,
+) -> None:
+    """Search indexed docs."""
+    import time
+
+    settings = _settings()
+    db = _db(settings)
+    try:
+        embedder, store = _index_parts(settings, db)
+        started = time.perf_counter()
+        try:
+            hits = Searcher(db, embedder, store).search(query, lib, version, k)
+        except UnknownLibrary:
+            err.print(f"[red]Unknown library:[/red] {lib}")
+            raise typer.Exit(1) from None
+        elapsed_ms = (time.perf_counter() - started) * 1000
+    finally:
+        db.close()
+
+    if as_json:
+        typer.echo(json.dumps([h.as_dict() for h in hits], ensure_ascii=False, indent=2))
+        return
+    if not hits:
+        console.print("No results. Is the library indexed? Try `docurag index`.")
+        return
+    for rank, h in enumerate(hits, 1):
+        console.print(
+            f"[bold cyan]{rank}.[/bold cyan] [bold]{h.section}[/bold] "
+            f"[dim]({h.library}@{h.version}, score {h.score:.3f})[/dim]"
+        )
+        console.print(f"   [link={h.citation}]{h.citation}[/link]", style="blue")
+        body = h.text if full else " ".join(h.text.split())[:280] + (
+            "…" if len(h.text) > 280 else ""
+        )
+        console.print(Markdown(body) if full else f"   {body}", highlight=False)
+        console.print()
+    console.print(f"[dim]{len(hits)} results in {elapsed_ms:.0f} ms[/dim]")
 
 
 @app.command("libraries")
@@ -177,11 +292,11 @@ def libraries() -> None:
             "No libraries yet. Try: docurag add https://fastapi.tiangolo.com --name fastapi"
         )
         return
-    table = Table("name", "pages", "versions", "base url", "last fetched")
+    table = Table("name", "pages", "indexed", "chunks", "versions", "base url", "last fetched")
     for r in rows:
         table.add_row(
-            r["name"], str(r["pages"]), ", ".join(r["versions"]) or "-", r["base_url"],
-            r["last_fetched"] or "-",
+            r["name"], str(r["pages"]), str(r["pages_indexed"]), str(r["chunks"]),
+            ", ".join(r["versions"]) or "-", r["base_url"], r["last_fetched"] or "-",
         )
     console.print(table)
 
@@ -246,6 +361,14 @@ def remove(name: Annotated[str, typer.Argument(help="Library to delete.")]) -> N
     settings = _settings()
     db = _db(settings)
     try:
+        row = db.get_library(name)
+        if row is not None and settings.store.type == "qdrant":
+            from docurag.index.embedder import embedder_name
+            from docurag.index.store import make_store
+
+            # sqlite vectors go with the cascade; Qdrant points must be removed explicitly
+            model = embedder_name(settings.embedder)
+            make_store(settings.store, db, settings.data_dir, model).delete_library(row["id"])
         if not db.delete_library(name):
             err.print(f"[red]Unknown library:[/red] {name}")
             raise typer.Exit(1)

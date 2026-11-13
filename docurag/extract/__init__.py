@@ -21,6 +21,8 @@ class ExtractedPage:
     title: str
     markdown: str
     links: list[str] = field(default_factory=list)
+    # (heading text, html id) in document order, for #fragment citations
+    anchors: list[tuple[str, str]] = field(default_factory=list)
 
 
 def _dedupe(urls: list[str]) -> list[str]:
@@ -49,7 +51,27 @@ def extract_html(html: str, url: str) -> ExtractedPage:
     tree = LexborHTMLParser(html)
     links = extract_links(tree, url)  # before cleaning: nav menus are how we discover pages
     cleaned = clean_html(tree, url)
-    return ExtractedPage(title=cleaned.title, markdown=to_markdown(cleaned.root), links=links)
+    anchors = heading_anchors(cleaned.root)
+    return ExtractedPage(
+        title=cleaned.title, markdown=to_markdown(cleaned.root), links=links, anchors=anchors
+    )
+
+
+def heading_anchors(root) -> list[tuple[str, str]]:
+    """Heading ids, taken from the heading, a child anchor, or a wrapping <section>."""
+    out = []
+    for h in root.css("h1, h2, h3, h4, h5, h6"):
+        hid = h.attributes.get("id")
+        if not hid:
+            inner = h.css_first("[id]") or h.css_first("a[name]")
+            if inner is not None:
+                hid = inner.attributes.get("id") or inner.attributes.get("name")
+        if not hid and h.parent is not None and h.parent.tag == "section":
+            hid = h.parent.attributes.get("id")
+        text = " ".join(h.text(deep=True).split()).strip("¶# ")
+        if hid and text:
+            out.append((text, hid))
+    return out
 
 
 def markdown_links(text: str, base_url: str) -> list[str]:
