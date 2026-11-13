@@ -1,0 +1,15 @@
+# DocuRAG configuration. CLI flags override these values.
+# data_dir: ~/.docurag        # where the SQLite DB lives (or set DOCURAG_HOME)
+concurrency: 16              # concurrent fetches across all domains
+
+libraries:
+  - name: fastapi
+    start_urls: [https://fastapi.tiangolo.com/]
+    include: ["/tutorial/", "/advanced/"]
+    exclude: ["/zh/", "/ja/", "/ko/", "/pt/", "/ru/", "/es/", "/de/", "/tr/", "/uk/", "/fr/"]
+    render_js: false
+    rate_limit: 2            # requests per second per domain
+
+# Used from M2 on.
+embedder: {provider: local, model: BAAI/bge-small-en-v1.5}
+store: {type: qdrant, url: http://localhost:6333}
