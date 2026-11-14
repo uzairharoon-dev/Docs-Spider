@@ -3,7 +3,6 @@
 [![CI](https://github.com/uzairharoon-dev/Docs-Spider/actions/workflows/ci.yml/badge.svg)](https://github.com/uzairharoon-dev/Docs-Spider/actions/workflows/ci.yml)
 [![Docs](https://img.shields.io/badge/docs-site-indigo)](https://uzairharoon-dev.github.io/Docs-Spider/)
 ![Python 3.12+](https://img.shields.io/badge/python-3.12%2B-blue)
-![License: MIT](https://img.shields.io/badge/license-MIT-green)
 
 **Up-to-date, versioned library docs for AI coding assistants. Self-hosted, and it works on private docs too.**
 
@@ -148,6 +147,3 @@ uv run ruff check .     # lint
 CI runs lint and tests on Ubuntu and Windows and builds the Docker image. More in
 [Development](https://uzairharoon-dev.github.io/Docs-Spider/development/).
 
-## License
-
-MIT
